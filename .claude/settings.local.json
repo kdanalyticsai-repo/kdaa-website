@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Start-Process powershell -ArgumentList '-NoExit', '-Command', 'cd \"c:\\\\Users\\\\user\\\\Desktop\\\\projects\\\\KDAA\\\\KDA-Analytics-Final\\\\kda-final\\\\frontend\"; npm run dev' -WindowStyle Normal)"
+    ]
+  }
+}

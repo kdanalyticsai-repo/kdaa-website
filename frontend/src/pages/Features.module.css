@@ -1,0 +1,85 @@
+.page { min-height: 100vh; }
+
+.hero {
+  background: var(--surface);
+  padding: 6rem 5% 5rem;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+.glow {
+  position: absolute; top: -40%; right: 5%;
+  width: 500px; height: 400px;
+  background: radial-gradient(ellipse, rgba(0,212,255,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+.heroTitle { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.15; max-width: 680px; }
+.heroSub   { color: var(--muted); font-size: 1.05rem; line-height: 1.8; max-width: 540px; margin-bottom: 0.5rem; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 1.5rem;
+  padding: 5rem 5%;
+  background: var(--bg);
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  animation: fadeUp 0.6s ease both;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(0,212,255,0.04), transparent);
+  opacity: 0; transition: opacity 0.3s;
+}
+.card:hover { border-color: rgba(0,212,255,0.3); transform: translateY(-3px); }
+.card:hover::before { opacity: 1; }
+
+.icon {
+  width: 52px; height: 52px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem;
+}
+.title { font-family: var(--font-display); font-size: 1.15rem; font-weight: 700; }
+.desc   { color: var(--muted); font-size: 0.92rem; line-height: 1.7; }
+.detail {
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.7;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--border);
+  opacity: 0.8;
+}
+
+.cta {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 5rem 5%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.cta h2 { font-size: 2rem; font-weight: 800; }
+.cta p  { color: var(--muted); margin-bottom: 0.5rem; }
+.ctaActions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+
+@media (max-width: 600px) {
+  .grid { grid-template-columns: 1fr; padding: 3rem 5%; }
+}

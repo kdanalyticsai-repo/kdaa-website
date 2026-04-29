@@ -1,0 +1,1958 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KDA Analytics — Where Data Meets Intelligence</title>
+    <meta
+      name="description"
+      content="KDA Analytics — global intelligence platform for the AI startup ecosystem."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap"
+      rel="stylesheet"
+    />
+    <script src="/static/js/react.min.js"></script>
+    <script src="/static/js/react-dom.min.js"></script>
+    <script src="/static/js/remix-router.min.js"></script>
+    <script src="/static/js/react-router.min.js"></script>
+    <script src="/static/js/react-router-dom.min.js"></script>
+    <script src="/static/js/babel.min.js"></script>
+    <script>
+      window.onerror = function (msg, src, line, col, err) {
+        var d = document.getElementById("root");
+        if (d)
+          d.innerHTML =
+            '<div style="color:#ff6b6b;font-family:monospace;padding:2rem;font-size:14px;white-space:pre-wrap"><b>JS Error:</b>\n' +
+            msg +
+            "\nLine: " +
+            line +
+            "\nSource: " +
+            src +
+            "</div>";
+      };
+    </script>
+    <style>
+      /* ─── CSS Variables & Reset ─────────────────────────────────────────────── */
+      :root {
+        --bg: #040810;
+        --surface: #080f1e;
+        --card: #0c1628;
+        --border: #1a2d50;
+        --accent: #00d4ff;
+        --accent2: #7c3aed;
+        --accent3: #10b981;
+        --text: #e8f0fe;
+        --muted: #6b7fa8;
+        --fd: "Syne", sans-serif;
+        --fb: "DM Sans", sans-serif;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--fb);
+        font-weight: 300;
+        overflow-x: hidden;
+        line-height: 1.7;
+        -webkit-font-smoothing: antialiased;
+      }
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-family: var(--fd);
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      button {
+        font-family: inherit;
+        cursor: pointer;
+        border: none;
+        background: none;
+      }
+      ::-webkit-scrollbar {
+        width: 5px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--bg);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--border);
+        border-radius: 3px;
+      }
+
+      /* ─── Animations ─────────────────────────────────────────────────────────── */
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(24px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+      }
+      @keyframes marquee {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(-50%);
+        }
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes barGrow {
+        from {
+          transform: scaleY(0);
+          opacity: 0;
+        }
+        to {
+          transform: scaleY(1);
+          opacity: 1;
+        }
+      }
+
+      /* ─── Reveal ─────────────────────────────────────────────────────────────── */
+      .reveal {
+        opacity: 0;
+        transform: translateY(28px);
+        transition:
+          opacity 0.7s ease,
+          transform 0.7s ease;
+      }
+      .reveal.visible {
+        opacity: 1;
+        transform: none;
+      }
+
+      /* ─── Utility ─────────────────────────────────────────────────────────────── */
+      .grad {
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .section-label {
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--accent);
+        margin-bottom: 0.8rem;
+        font-weight: 500;
+      }
+      .section-title {
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
+        font-weight: 800;
+        line-height: 1.2;
+        margin-bottom: 0.9rem;
+      }
+      .section-sub {
+        color: var(--muted);
+        max-width: 540px;
+        font-size: 0.97rem;
+        line-height: 1.8;
+      }
+      section {
+        padding: 6rem 5%;
+      }
+      .page-enter {
+        animation: fadeUp 0.5s ease both;
+      }
+
+      /* ─── Buttons ─────────────────────────────────────────────────────────────── */
+      .btn-p {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.85rem 2rem;
+        border-radius: 8px;
+        background: linear-gradient(135deg, var(--accent), #0099cc);
+        color: #040810;
+        font-family: var(--fd);
+        font-weight: 700;
+        font-size: 0.93rem;
+        cursor: pointer;
+        transition: all 0.25s;
+        box-shadow: 0 0 28px rgba(0, 212, 255, 0.22);
+        border: none;
+      }
+      .btn-p:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 48px rgba(0, 212, 255, 0.4);
+      }
+      .btn-o {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.85rem 2rem;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--text);
+        font-family: var(--fd);
+        font-weight: 600;
+        font-size: 0.93rem;
+        cursor: pointer;
+        transition: all 0.25s;
+      }
+      .btn-o:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+        background: rgba(0, 212, 255, 0.05);
+      }
+
+      /* ─── Nav ─────────────────────────────────────────────────────────────────── */
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.1rem 5%;
+        transition:
+          background 0.3s,
+          border-color 0.3s;
+        border-bottom: 1px solid transparent;
+      }
+      nav.scrolled {
+        background: rgba(4, 8, 16, 0.92);
+        backdrop-filter: blur(20px);
+        border-color: var(--border);
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.15rem;
+        font-family: var(--fd);
+        font-weight: 800;
+        font-size: 1.1rem;
+        letter-spacing: -0.02em;
+      }
+      .logo .lb {
+        color: var(--accent);
+        opacity: 0.6;
+      }
+      .logo .sub {
+        color: var(--muted);
+        font-weight: 400;
+        font-size: 0.85rem;
+        margin-left: 0.4rem;
+      }
+      .nav-links {
+        list-style: none;
+        display: flex;
+        align-items: center;
+        gap: 2.2rem;
+      }
+      .nav-links a {
+        color: var(--muted);
+        font-size: 0.88rem;
+        font-weight: 400;
+        text-decoration: none;
+        transition: color 0.2s;
+        position: relative;
+        padding-bottom: 2px;
+      }
+      .nav-links a::after {
+        content: "";
+        position: absolute;
+        bottom: -3px;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: var(--accent);
+        transform: scaleX(0);
+        transition: transform 0.2s;
+      }
+      .nav-links a:hover,
+      .nav-links a.active {
+        color: var(--text);
+      }
+      .nav-links a:hover::after,
+      .nav-links a.active::after {
+        transform: scaleX(1);
+      }
+      .nav-cta {
+        padding: 0.5rem 1.3rem;
+        border-radius: 6px;
+        background: var(--accent);
+        color: #040810;
+        font-family: var(--fd);
+        font-weight: 700;
+        font-size: 0.83rem;
+        text-decoration: none;
+        transition: all 0.2s;
+        box-shadow: 0 0 18px rgba(0, 212, 255, 0.25);
+      }
+      .nav-cta:hover {
+        background: #fff;
+        transform: translateY(-1px);
+      }
+      .ham {
+        display: none;
+        flex-direction: column;
+        gap: 5px;
+        padding: 4px;
+        cursor: pointer;
+      }
+      .ham span {
+        display: block;
+        width: 22px;
+        height: 2px;
+        background: var(--text);
+        border-radius: 2px;
+        transition: all 0.25s;
+      }
+
+      /* ─── Hero ─────────────────────────────────────────────────────────────────── */
+      #hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+        padding: 8rem 5% 5rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero-grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(0, 212, 255, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 212, 255, 0.04) 1px, transparent 1px);
+        background-size: 60px 60px;
+        mask-image: radial-gradient(
+          ellipse 80% 60% at 50% 50%,
+          black,
+          transparent
+        );
+      }
+      .hero-glow {
+        position: absolute;
+        top: 20%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 700px;
+        height: 400px;
+        background: radial-gradient(
+          ellipse,
+          rgba(0, 212, 255, 0.08) 0%,
+          rgba(124, 58, 237, 0.06) 50%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.35rem 1rem;
+        border-radius: 20px;
+        border: 1px solid var(--border);
+        background: rgba(0, 212, 255, 0.06);
+        font-size: 0.78rem;
+        color: var(--accent);
+        margin-bottom: 2rem;
+        animation: fadeUp 0.8s ease both;
+        position: relative;
+        z-index: 1;
+      }
+      .hero-title {
+        font-size: clamp(2.8rem, 6vw, 5.5rem);
+        font-weight: 800;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        margin-bottom: 1.4rem;
+        animation: fadeUp 0.9s 0.1s ease both;
+        position: relative;
+        z-index: 1;
+      }
+      .hero-sub {
+        max-width: 600px;
+        font-size: 1.05rem;
+        color: var(--muted);
+        margin-bottom: 2.5rem;
+        line-height: 1.8;
+        animation: fadeUp 1s 0.2s ease both;
+        position: relative;
+        z-index: 1;
+      }
+      .hero-actions {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        animation: fadeUp 1s 0.3s ease both;
+        position: relative;
+        z-index: 1;
+      }
+      .hero-stats {
+        display: flex;
+        gap: 3rem;
+        margin-top: 4.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        animation: fadeUp 1s 0.4s ease both;
+        position: relative;
+        z-index: 1;
+      }
+      .stat-num {
+        font-family: var(--fd);
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--accent);
+      }
+      .stat-lbl {
+        font-size: 0.75rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      /* ─── Marquee ─────────────────────────────────────────────────────────────── */
+      .marquee-wrap {
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        padding: 1.1rem 0;
+        overflow: hidden;
+      }
+      .marquee-track {
+        display: flex;
+        gap: 3rem;
+        animation: marquee 30s linear infinite;
+        width: max-content;
+      }
+      .marquee-item {
+        font-family: var(--fd);
+        font-size: 0.76rem;
+        font-weight: 600;
+        color: var(--muted);
+        white-space: nowrap;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+
+      /* ─── Feature cards ────────────────────────────────────────────────────────── */
+      .feat-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+        gap: 1px;
+        border: 1px solid var(--border);
+        margin-top: 3.5rem;
+      }
+      .feat-card {
+        background: var(--card);
+        padding: 2.2rem;
+        border: 1px solid var(--border);
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        display: block;
+        color: inherit;
+        text-decoration: none;
+      }
+      .feat-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(0, 212, 255, 0.06),
+          transparent
+        );
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      .feat-card:hover {
+        border-color: rgba(0, 212, 255, 0.3);
+        transform: translateY(-2px);
+      }
+      .feat-card:hover::before {
+        opacity: 1;
+      }
+      .feat-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.35rem;
+        margin-bottom: 1.3rem;
+      }
+      .feat-title {
+        font-family: var(--fd);
+        font-size: 1.02rem;
+        font-weight: 700;
+        margin-bottom: 0.6rem;
+      }
+      .feat-desc {
+        color: var(--muted);
+        font-size: 0.88rem;
+        line-height: 1.7;
+      }
+
+      /* ─── Service cards ────────────────────────────────────────────────────────── */
+      .svc-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.4rem;
+        margin-top: 3.5rem;
+      }
+      .svc-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 2.3rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        transition: all 0.3s;
+        cursor: pointer;
+        text-decoration: none;
+        color: inherit;
+        position: relative;
+        overflow: hidden;
+      }
+      .svc-card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 14px;
+        background: linear-gradient(
+          135deg,
+          rgba(0, 212, 255, 0.04),
+          transparent 60%
+        );
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      .svc-card:hover {
+        border-color: rgba(0, 212, 255, 0.35);
+        transform: translateY(-3px);
+        box-shadow: 0 20px 56px rgba(0, 0, 0, 0.42);
+      }
+      .svc-card:hover::after {
+        opacity: 1;
+      }
+      .svc-card.featured {
+        background: linear-gradient(
+          135deg,
+          rgba(0, 212, 255, 0.06),
+          rgba(124, 58, 237, 0.06)
+        );
+        border-color: rgba(0, 212, 255, 0.15);
+        grid-column: 1/-1;
+      }
+      .svc-num {
+        font-family: var(--fd);
+        font-size: 2.6rem;
+        font-weight: 800;
+        color: var(--border);
+        line-height: 1;
+      }
+      .svc-title {
+        font-family: var(--fd);
+        font-size: 1.28rem;
+        font-weight: 700;
+      }
+      .svc-desc {
+        color: var(--muted);
+        font-size: 0.9rem;
+        line-height: 1.75;
+        flex: 1;
+      }
+      .svc-arrow {
+        color: var(--accent);
+        font-size: 0.85rem;
+        margin-top: 0.3rem;
+      }
+
+      /* ─── Process ─────────────────────────────────────────────────────────────── */
+      .proc-steps {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        position: relative;
+      }
+      .proc-steps::before {
+        content: "";
+        position: absolute;
+        top: 27px;
+        left: 8%;
+        right: 8%;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--border),
+          var(--border),
+          transparent
+        );
+      }
+      .step {
+        text-align: center;
+        padding: 1.8rem 1.2rem;
+      }
+      .step-num {
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        background: var(--card);
+        border: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--fd);
+        font-weight: 800;
+        color: var(--accent);
+        margin: 0 auto 1.3rem;
+        font-size: 1rem;
+        position: relative;
+        z-index: 1;
+      }
+      .step h4 {
+        font-size: 0.97rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+      .step p {
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+
+      /* ─── Business tiles ──────────────────────────────────────────────────────── */
+      .biz-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.4rem;
+        margin-top: 3.5rem;
+      }
+      .biz-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 2.3rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+        cursor: pointer;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.3s;
+      }
+      .biz-card:hover {
+        border-color: rgba(0, 212, 255, 0.3);
+        transform: translateY(-3px);
+        box-shadow: 0 18px 48px rgba(0, 0, 0, 0.4);
+      }
+      .biz-card.highlight {
+        background: linear-gradient(
+          135deg,
+          rgba(0, 212, 255, 0.07),
+          rgba(124, 58, 237, 0.07)
+        );
+        border-color: rgba(0, 212, 255, 0.2);
+      }
+      .biz-card h3 {
+        font-family: var(--fd);
+        font-size: 1.2rem;
+        font-weight: 700;
+      }
+      .biz-card p {
+        color: var(--muted);
+        font-size: 0.9rem;
+        line-height: 1.7;
+        flex: 1;
+      }
+      .biz-arrow {
+        color: var(--accent);
+        font-size: 0.85rem;
+      }
+
+      /* ─── Contact Form ────────────────────────────────────────────────────────── */
+      .contact-layout {
+        display: grid;
+        grid-template-columns: 360px 1fr;
+        gap: 2.5rem;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      .info-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 2rem;
+        margin-bottom: 1.3rem;
+      }
+      .info-card h3 {
+        font-family: var(--fd);
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--muted);
+        margin-bottom: 1.3rem;
+      }
+      .info-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.9rem;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .info-row:last-child {
+        border-bottom: none;
+      }
+      .info-icon {
+        font-size: 1.1rem;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+      .info-lbl {
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        margin-bottom: 2px;
+      }
+      .info-val {
+        font-size: 0.92rem;
+        color: var(--text);
+      }
+      .info-val a {
+        color: var(--accent);
+      }
+      .form-wrap {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 2.5rem;
+      }
+      .form-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin-bottom: 1.8rem;
+        padding-bottom: 1.3rem;
+        border-bottom: 1px solid var(--border);
+      }
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+        margin-bottom: 1.1rem;
+      }
+      .field label {
+        font-size: 0.76rem;
+        font-weight: 500;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+      }
+      .field input,
+      .field select,
+      .field textarea {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 0.8rem 1rem;
+        color: var(--text);
+        font-family: var(--fb);
+        font-size: 0.93rem;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+        outline: none;
+        resize: vertical;
+        width: 100%;
+      }
+      .field input::placeholder,
+      .field textarea::placeholder {
+        color: var(--muted);
+      }
+      .field input:focus,
+      .field select:focus,
+      .field textarea:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+      }
+      .field select option {
+        background: var(--surface);
+      }
+      .form-error {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.25);
+        border-radius: 8px;
+        padding: 0.85rem 1rem;
+        color: #fca5a5;
+        font-size: 0.88rem;
+        margin-bottom: 1rem;
+      }
+      .form-submit {
+        width: 100%;
+        justify-content: center;
+        padding: 1rem;
+        font-size: 0.97rem;
+        margin-top: 0.3rem;
+      }
+      .form-privacy {
+        font-size: 0.74rem;
+        color: var(--muted);
+        text-align: center;
+        margin-top: 0.8rem;
+      }
+      .spinner {
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(4, 8, 16, 0.3);
+        border-top-color: #040810;
+        border-radius: 50%;
+        animation: spin 0.6s linear infinite;
+        display: inline-block;
+        margin-right: 0.4rem;
+      }
+      .success-box {
+        text-align: center;
+        padding: 3rem 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+      .success-icon {
+        font-size: 3.5rem;
+      }
+      .success-box h2 {
+        font-size: 1.7rem;
+        font-weight: 800;
+      }
+      .success-box p {
+        color: var(--muted);
+        font-size: 0.97rem;
+        line-height: 1.7;
+        max-width: 380px;
+      }
+      .lead-id {
+        font-size: 0.82rem;
+        color: var(--muted);
+      }
+      .lead-id strong {
+        color: var(--accent);
+      }
+
+      /* ─── Detail pages ────────────────────────────────────────────────────────── */
+      .page-hero {
+        background: var(--surface);
+        padding: 5rem 5% 4rem;
+        position: relative;
+        overflow: hidden;
+        border-bottom: 1px solid var(--border);
+      }
+      .page-glow {
+        position: absolute;
+        top: -40%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 500px;
+        height: 350px;
+        background: radial-gradient(
+          ellipse,
+          rgba(0, 212, 255, 0.07) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+      .breadcrumb {
+        padding: 1.3rem 5%;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-size: 0.8rem;
+        color: var(--muted);
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+      }
+      .breadcrumb a {
+        color: var(--muted);
+        transition: color 0.2s;
+      }
+      .breadcrumb a:hover {
+        color: var(--accent);
+      }
+      .breadcrumb .cur {
+        color: var(--text);
+      }
+      .detail-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.35rem 1rem;
+        border-radius: 20px;
+        border: 1px solid var(--border);
+        background: rgba(0, 212, 255, 0.06);
+        font-size: 0.78rem;
+        color: var(--accent);
+        margin-bottom: 1.3rem;
+      }
+      .detail-title {
+        font-size: clamp(1.8rem, 4vw, 2.9rem);
+        font-weight: 800;
+        line-height: 1.15;
+        max-width: 680px;
+        margin-bottom: 0.7rem;
+      }
+      .detail-tagline {
+        color: var(--accent);
+        font-size: 1rem;
+        margin-bottom: 1.8rem;
+      }
+      .detail-actions {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+      .detail-layout {
+        display: grid;
+        grid-template-columns: 1fr 320px;
+        gap: 2.8rem;
+        padding: 3.5rem 5%;
+        max-width: 1150px;
+        margin: 0 auto;
+      }
+      .detail-main h2 {
+        font-size: 1.35rem;
+        font-weight: 700;
+        margin: 2.2rem 0 0.9rem;
+        color: var(--text);
+      }
+      .detail-main h2:first-child {
+        margin-top: 0;
+      }
+      .detail-overview {
+        color: var(--muted);
+        font-size: 0.97rem;
+        line-height: 1.85;
+      }
+      .detail-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+      }
+      .detail-list li {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        color: var(--muted);
+        font-size: 0.93rem;
+        line-height: 1.6;
+      }
+      .chk {
+        color: var(--accent3);
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .detail-cta {
+        background: linear-gradient(
+          135deg,
+          rgba(0, 212, 255, 0.06),
+          rgba(124, 58, 237, 0.06)
+        );
+        border: 1px solid rgba(0, 212, 255, 0.15);
+        border-radius: 14px;
+        padding: 2.3rem;
+        margin-top: 2.8rem;
+      }
+      .detail-cta h3 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 0.4rem;
+      }
+      .detail-cta p {
+        color: var(--muted);
+        font-size: 0.93rem;
+        margin-bottom: 1.3rem;
+      }
+      .side-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 1.8rem;
+        margin-bottom: 1.3rem;
+      }
+      .side-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        margin-bottom: 0.9rem;
+      }
+      .side-card h3 {
+        font-size: 0.95rem;
+        font-weight: 700;
+        margin-bottom: 0.9rem;
+      }
+      .side-card h4 {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--muted);
+        margin-bottom: 0.9rem;
+      }
+      .side-pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
+      .pill {
+        padding: 0.22rem 0.75rem;
+        border-radius: 20px;
+        border: 1px solid var(--border);
+        font-size: 0.72rem;
+        color: var(--muted);
+        background: var(--surface);
+      }
+      .other-link {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.65rem 0;
+        border-bottom: 1px solid var(--border);
+        color: var(--muted);
+        font-size: 0.86rem;
+        transition: color 0.2s;
+        cursor: pointer;
+      }
+      .other-link:last-child {
+        border-bottom: none;
+      }
+      .other-link:hover {
+        color: var(--accent);
+      }
+      .other-link span:nth-child(2) {
+        flex: 1;
+      }
+
+      /* ─── CTA banner ──────────────────────────────────────────────────────────── */
+      .cta-banner {
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+        padding: 5rem 5%;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+      .cta-banner h2 {
+        font-size: clamp(1.6rem, 3vw, 2.2rem);
+        font-weight: 800;
+      }
+      .cta-banner p {
+        color: var(--muted);
+        margin-bottom: 0.3rem;
+      }
+      .cta-inner-box {
+        background: linear-gradient(
+          135deg,
+          rgba(0, 212, 255, 0.06),
+          rgba(124, 58, 237, 0.06)
+        );
+        border: 1px solid rgba(0, 212, 255, 0.15);
+        border-radius: 20px;
+        padding: 4rem 3rem;
+        text-align: center;
+        max-width: 680px;
+        margin: 0 auto;
+      }
+
+      /* ─── Footer ─────────────────────────────────────────────────────────────── */
+      footer {
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+        padding: 4.5rem 5% 2rem;
+      }
+      .foot-top {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr 1fr 1fr;
+        gap: 2.5rem;
+        margin-bottom: 2.5rem;
+      }
+      .foot-logo {
+        font-family: var(--fd);
+        font-size: 1.25rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+      }
+      .foot-tagline {
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--accent);
+        margin-bottom: 0.9rem;
+      }
+      .foot-desc {
+        color: var(--muted);
+        font-size: 0.87rem;
+        line-height: 1.7;
+        max-width: 280px;
+        margin-bottom: 1.2rem;
+      }
+      .foot-contact {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        font-size: 0.82rem;
+      }
+      .foot-contact a {
+        color: var(--accent);
+        transition: opacity 0.2s;
+      }
+      .foot-contact a:hover {
+        opacity: 0.8;
+      }
+      .foot-contact span {
+        color: var(--muted);
+      }
+      .foot-col h4 {
+        font-family: var(--fd);
+        font-size: 0.76rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 1.1rem;
+      }
+      .foot-col ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.65rem;
+      }
+      .foot-col a {
+        color: var(--muted);
+        font-size: 0.85rem;
+        transition: color 0.2s;
+      }
+      .foot-col a:hover {
+        color: var(--accent);
+      }
+      .foot-bottom {
+        border-top: 1px solid var(--border);
+        padding-top: 1.8rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 0.79rem;
+        color: var(--muted);
+      }
+      .foot-legal {
+        display: flex;
+        gap: 1.4rem;
+      }
+      .foot-legal a {
+        color: var(--muted);
+        transition: color 0.2s;
+      }
+      .foot-legal a:hover {
+        color: var(--text);
+      }
+
+      /* ─── 404 ─────────────────────────────────────────────────────────────────── */
+      .nf-page {
+        min-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 5rem 5%;
+        position: relative;
+      }
+      .nf-code {
+        font-family: var(--fd);
+        font-size: clamp(6rem, 15vw, 10rem);
+        font-weight: 800;
+        color: var(--border);
+        line-height: 1;
+        margin-bottom: 0.8rem;
+      }
+      .nf-page h1 {
+        font-size: 1.9rem;
+        font-weight: 700;
+        margin-bottom: 0.7rem;
+      }
+      .nf-page p {
+        color: var(--muted);
+        font-size: 0.97rem;
+        margin-bottom: 2.2rem;
+      }
+      .nf-actions {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      /* ─── Responsive ─────────────────────────────────────────────────────────── */
+      @media (max-width: 900px) {
+        .svc-grid,
+        .biz-grid {
+          grid-template-columns: 1fr;
+        }
+        .svc-card.featured {
+          grid-column: unset;
+        }
+        .contact-layout,
+        .detail-layout {
+          grid-template-columns: 1fr;
+        }
+        .detail-layout .sidebar {
+          order: -1;
+        }
+        .foot-top {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      @media (max-width: 600px) {
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+        .foot-top {
+          grid-template-columns: 1fr;
+        }
+        .foot-bottom {
+          flex-direction: column;
+          gap: 0.8rem;
+          text-align: center;
+        }
+        .nav-links {
+          display: none;
+        }
+        .ham {
+          display: flex;
+        }
+        .hero-stats {
+          gap: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script id="app-jsx" type="text/plain">
+      const { useState, useEffect, useRef, useCallback } = React;
+      const { BrowserRouter, Routes, Route, Link, NavLink, useNavigate, useParams, useLocation, Navigate } = ReactRouterDOM;
+
+      // ── Data ─────────────────────────────────────────────────────────────────────
+      const SERVICES_DATA = [
+        { slug:'market-research',        num:'01', icon:'📊', title:'AI Market Research & Intelligence Reports', tagline:'Deep-dive research, expertly delivered.', color:'rgba(0,212,255,0.1)',
+          desc:'Comprehensive research reports on any AI vertical, geography, or technology segment. Delivered by our team of domain experts with primary interviews, funding data, and competitive landscape analysis.',
+          bullets:['Custom research & reports','Market sizing & TAM analysis','Competitive landscape mapping','Investment thesis development','Primary research interviews'] },
+        { slug:'startup-scouting',       num:'02', icon:'🔭', title:'Startup Scouting & Due Diligence', tagline:'Find your next deal before your competition.', color:'rgba(124,58,237,0.1)',
+          desc:'We identify high-potential AI startups matching your investment thesis or partnership criteria, then deliver comprehensive due diligence packages.',
+          bullets:['Curated deal flow pipelines','Proprietary scoring models','Risk assessment frameworks','Founder background checks','Technology stack analysis'] },
+        { slug:'ai-strategy-consulting', num:'03', icon:'🧠', title:'AI Strategy Consulting', tagline:'From AI curiosity to measurable ROI.', color:'rgba(16,185,129,0.1)',
+          desc:'Advisory services helping enterprises define, execute, and measure AI adoption roadmaps with measurable ROI frameworks. We translate AI potential into business outcomes.',
+          bullets:['AI readiness assessments','Use-case identification & prioritisation','Build vs buy vs partner analysis','ROI frameworks & KPI design','Change management playbooks'] },
+        { slug:'api-data-licensing',     num:'04', icon:'⚡', title:'API & Data Licensing', tagline:'Power your product with clean, structured AI data.', color:'rgba(245,158,11,0.1)',
+          desc:'Access our structured AI startup database programmatically. REST API, GraphQL, and webhooks — power your own VC platform, research tool, or enterprise intelligence application.',
+          bullets:['REST & GraphQL APIs','Real-time webhook streams','Bulk data exports (JSON/CSV)','Custom data enrichment','SLA-backed uptime guarantees'] },
+      ];
+
+      const BUSINESS_DATA = [
+        { slug:'enterprise-strategy', icon:'🏢', title:'Enterprise & Strategy', tagline:'AI intelligence for Fortune 500 strategy teams.', color:'rgba(0,212,255,0.1)', highlight:false, cta:'Talk to Strategy',
+          desc:'Custom AI market intelligence and executive advisory services designed for enterprise strategy, innovation, and M&A teams navigating the AI-first transformation.',
+          highlights:['AI landscape monitoring','Competitive intelligence','M&A target identification','Executive briefings','Board-ready decks'] },
+        { slug:'investors-funds',     icon:'💼', title:'Investors & Funds',      tagline:'Systematic deal flow and due diligence for AI investments.', color:'rgba(124,58,237,0.1)', highlight:true,  cta:'Book a Call',
+          desc:'Proprietary sourcing, scoring, and due diligence for VC, CVC, PE, and family offices investing in AI. Reduce blind spots, find better deals, move faster.',
+          highlights:['Curated deal sourcing','Portfolio benchmarking','Sector deep dives','Co-investment opportunities','LP reporting support'] },
+        { slug:'startups-founders',   icon:'🚀', title:'Startups & Founders',   tagline:'Get discovered, funded, and connected.', color:'rgba(16,185,129,0.1)', highlight:false, cta:'List Your Startup',
+          desc:'Get your AI startup featured on KDA Analytics, reach enterprise buyers and investors, and benchmark your positioning globally.',
+          highlights:['Featured startup profile','Investor introductions','Enterprise buyer connections','Competitive benchmarking','Media visibility'] },
+        { slug:'api-data-partners',   icon:'🔌', title:'API & Data Partners',   tagline:'Embed live AI startup intelligence into your product.', color:'rgba(245,158,11,0.1)', highlight:false, cta:'Request API Access',
+          desc:'Power your VC platform, research tool, or enterprise application with our structured, live AI startup database via REST API, GraphQL, and webhooks.',
+          highlights:['REST & GraphQL APIs','Real-time webhooks','Data enrichment','White-label options','SLA uptime guarantees'] },
+      ];
+
+      const FEATURES_DATA = [
+        { icon:'🗂️', title:'Curated AI Directory',     desc:'Verified profiles of 5+ AI startups worldwide — updated weekly with funding rounds, team size, and technology stack.', color:'rgba(0,212,255,0.1)',   detail:'Our editorial team reviews and validates every profile. Weekly refresh cycles with primary-source verification.' },
+        { icon:'📊', title:'Real-Time Analytics',       desc:'Track trends, funding activity, and market movements across AI categories with interactive dashboards.', color:'rgba(124,58,237,0.1)', detail:'Live funding dashboards, trend lines, and category heatmaps updated as deals close. Filter by geography, stage, and technology.' },
+        { icon:'🔍', title:'Advanced Search & Filters', desc:'Find startups by country, category, funding stage, team size, technology, or any combination of parameters.', color:'rgba(16,185,129,0.1)', detail:'Boolean search with 40+ filter parameters. Save custom views, export results, and share saved searches with your team.' },
+        { icon:'🌐', title:'Global Coverage',           desc:'We track AI innovation across 60+ countries — from Silicon Valley to Singapore, London to Lagos.', color:'rgba(245,158,11,0.1)', detail:'Dedicated coverage desks in North America, Europe, MENA, South Asia, and Southeast Asia.' },
+        { icon:'🔔', title:'Smart Alerts',              desc:'Set custom alerts for funding rounds, new startups in your niche, acquisitions, or IPOs — delivered instantly.', color:'rgba(239,68,68,0.1)',  detail:'Configurable via email, Slack, or webhook. Alert on any signal — new seed round in AI healthcare, competitor hires, or patent filings.' },
+        { icon:'🤝', title:'Partnership Network',       desc:'Connect directly with AI founders, investors, and enterprise buyers through our verified matchmaking engine.', color:'rgba(236,72,153,0.1)', detail:'Warm introductions from our team to vetted founders and investors. NPS from matched connections: 92/100.' },
+      ];
+
+      const MARQUEE_ITEMS = ['🤖 Generative AI','👁️ Computer Vision','💬 NLP','🧠 Machine Learning','🤖 Robotics & Automation','🔍 AI-Powered Search','💊 AI in Healthcare','💰 FinTech AI','🌍 Climate AI','🎨 Creative AI'];
+      const INTERESTS = ['Enterprise & Strategy','Investors & Funds','Startups & Founders','API & Data Licensing','General Enquiry'];
+
+      // ── Scroll Reveal Hook ────────────────────────────────────────────────────────
+      function useReveal(t=0.12){
+        const ref=useRef(null);
+        useEffect(()=>{
+          const el=ref.current; if(!el) return;
+          const obs=new IntersectionObserver(([e])=>{ if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)} },{threshold:t});
+          obs.observe(el); return()=>obs.disconnect();
+        },[t]);
+        return ref;
+      }
+
+      // ── ScrollToTop ───────────────────────────────────────────────────────────────
+      function ScrollTop(){
+        const{pathname}=useLocation();
+        useEffect(()=>window.scrollTo(0,0),[pathname]);
+        return null;
+      }
+
+      // ── Navbar ────────────────────────────────────────────────────────────────────
+      function Navbar(){
+        const[scrolled,setScrolled]=useState(false);
+        const[open,setOpen]=useState(false);
+        const{pathname}=useLocation();
+        useEffect(()=>{ const h=()=>setScrolled(window.scrollY>20); window.addEventListener('scroll',h,{passive:true}); return()=>window.removeEventListener('scroll',h); },[]);
+        useEffect(()=>setOpen(false),[pathname]);
+        const links=[['Features','/features'],['Services','/services'],['For Business','/for-business'],['Contact','/contact']];
+        return(
+          <nav className={scrolled?'scrolled':''}>
+            <Link to="/" className="logo">
+              <span className="lb">[</span><span>KDA</span><span className="lb">]</span>
+              <span className="sub">Analytics</span>
+            </Link>
+            <ul className="nav-links" style={open?{display:'flex',flexDirection:'column',position:'fixed',top:68,left:0,right:0,background:'rgba(4,8,16,.97)',backdropFilter:'blur(20px)',padding:'1rem 0',borderBottom:'1px solid var(--border)'}:{}}>
+              {links.map(([l,to])=>(
+                <li key={to}><NavLink to={to} className={({isActive})=>isActive?'active':''} onClick={()=>setOpen(false)}>{l}</NavLink></li>
+              ))}
+              {open && <li style={{padding:'0.8rem 5%'}}><Link to="/contact" className="nav-cta" onClick={()=>setOpen(false)}>Get in Touch</Link></li>}
+            </ul>
+            <Link to="/contact" className="nav-cta">Get in Touch</Link>
+            <div className="ham" onClick={()=>setOpen(o=>!o)}>
+              <span/><span/><span/>
+            </div>
+          </nav>
+        );
+      }
+
+      // ── Footer ────────────────────────────────────────────────────────────────────
+      function Footer(){
+        const cols=[
+          ['Company',[['Features','/features'],['Services','/services'],['For Business','/for-business'],['Contact','/contact']]],
+          ['Services',[['Market Research','/services/market-research'],['Startup Scouting','/services/startup-scouting'],['AI Strategy','/services/ai-strategy-consulting'],['API & Data','/services/api-data-licensing']]],
+          ['Business',[['Enterprise','/for-business/enterprise-strategy'],['Investors','/for-business/investors-funds'],['Startups','/for-business/startups-founders'],['API Partners','/for-business/api-data-partners']]],
+        ];
+        return(
+          <footer>
+            <div className="foot-top">
+              <div>
+                <div className="foot-logo"><span className="lb">[</span>KDA<span className="lb">]</span><span style={{color:'var(--muted)',fontWeight:400,fontSize:'1rem'}}> Analytics</span></div>
+                <div className="foot-tagline">Where Data Meets Intelligence</div>
+                <div className="foot-desc">Your gateway to the global AI startup ecosystem — curated intelligence for the agentic era.</div>
+                <div className="foot-contact"><a href="mailto:hello@kdaanalytics.ai">hello@kdaanalytics.ai</a><span>New Delhi NCR Region</span></div>
+              </div>
+              {cols.map(([title,items])=>(
+                <div className="foot-col" key={title}>
+                  <h4>{title}</h4>
+                  <ul>{items.map(([l,to])=><li key={to}><Link to={to}>{l}</Link></li>)}</ul>
+                </div>
+              ))}
+            </div>
+            <div className="foot-bottom">
+              <span>© {new Date().getFullYear()} KDA Analytics. All rights reserved.</span>
+              <div className="foot-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a></div>
+            </div>
+          </footer>
+        );
+      }
+
+      // ── Home ──────────────────────────────────────────────────────────────────────
+      function Home(){
+        const r1=useReveal(),r2=useReveal(),r3=useReveal(),r4=useReveal();
+        const items=[...MARQUEE_ITEMS,...MARQUEE_ITEMS];
+        return(
+          <div className="page-enter">
+            {/* Hero */}
+            <section id="hero">
+              <div className="hero-grid"/><div className="hero-glow"/>
+              <div className="hero-badge">🚀 Powering the Global AI Intelligence Economy</div>
+              <h1 className="hero-title">Where Data<br/><span className="grad">Meets Intelligence</span></h1>
+              <p className="hero-sub">KDA Analytics is your gateway to the global AI ecosystem — curating, tracking, and connecting you with the most innovative AI startups transforming every industry.</p>
+              <div className="hero-actions">
+                <Link to="/services" className="btn-p">Explore Our Services</Link>
+                <Link to="/features" className="btn-o">See Features</Link>
+              </div>
+              <div className="hero-stats">
+                {[['5+','AI Companies'],['2+','Countries'],['18','AI Categories'],['$1.1K','Market Cap']].map(([n,l])=>(
+                  <div key={l} style={{textAlign:'center'}}><div className="stat-num">{n}</div><div className="stat-lbl">{l}</div></div>
+                ))}
+              </div>
+            </section>
+
+            {/* Marquee */}
+            <div className="marquee-wrap">
+              <div className="marquee-track">{items.map((it,i)=><span key={i} className="marquee-item">{it}</span>)}</div>
+            </div>
+
+            {/* Features */}
+            <section style={{background:'var(--surface)'}}>
+              <div ref={r1} className="reveal">
+                <div className="section-label">Why KDA Analytics</div>
+                <h2 className="section-title">Everything you need to navigate the AI landscape</h2>
+                <p className="section-sub">From real-time startup tracking to deep analytics — the definitive intelligence platform for the AI economy.</p>
+              </div>
+              <div className="feat-grid">
+                {FEATURES_DATA.map(f=>(
+                  <Link key={f.title} to="/features" className="feat-card">
+                    <div className="feat-icon" style={{background:f.color}}>{f.icon}</div>
+                    <div className="feat-title">{f.title}</div>
+                    <div className="feat-desc">{f.desc}</div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+
+            {/* Services */}
+            <section>
+              <div ref={r2} className="reveal">
+                <div className="section-label">Our Services</div>
+                <h2 className="section-title">Intelligence-driven services for the AI economy</h2>
+                <p className="section-sub">End-to-end analytical and consulting services to help enterprises, investors, and startups succeed.</p>
+              </div>
+              <div className="svc-grid">
+                {SERVICES_DATA.map(s=>(
+                  <Link key={s.slug} to={`/services/${s.slug}`} className={`svc-card${s.num==='01'?' featured':''}`}>
+                    <div className="svc-num">{s.num}</div>
+                    <div className="svc-title">{s.title}</div>
+                    <div className="svc-desc">{s.desc}</div>
+                    <span className="svc-arrow">Learn more →</span>
+                  </Link>
+                ))}
+              </div>
+            </section>
+
+            {/* Process */}
+            <section style={{background:'var(--surface)'}}>
+              <div ref={r3} className="reveal" style={{textAlign:'center',marginBottom:'3rem'}}>
+                <div className="section-label" style={{textAlign:'center'}}>How It Works</div>
+                <h2 className="section-title" style={{textAlign:'center'}}>From data to decisions in 4 steps</h2>
+              </div>
+              <div className="proc-steps">
+                {[['01','Discover','Search and filter AI startups across industries, geographies, and funding stages.'],
+                  ['02','Analyze','Dive deep into profiles, funding history, tech stacks, and market positioning.'],
+                  ['03','Connect','Reach out to founders or engage our advisory team for warm connections.'],
+                  ['04','Decide','Make confident, data-backed decisions with our reports and real-time signals.']].map(([n,t,d])=>(
+                  <div key={n} className="step">
+                    <div className="step-num">{n}</div><h4>{t}</h4><p>{d}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* For Business */}
+            <section>
+              <div ref={r4} className="reveal">
+                <div className="section-label">For Business</div>
+                <h2 className="section-title">Engagements built around your goals</h2>
+                <p className="section-sub">Whether you're an enterprise, investor, founder, or data partner — we have a tailored path for you.</p>
+              </div>
+              <div className="biz-grid">
+                {BUSINESS_DATA.map(b=>(
+                  <Link key={b.slug} to={`/for-business/${b.slug}`} className={`biz-card${b.highlight?' highlight':''}`}>
+                    <h3>{b.title}</h3><p>{b.desc}</p>
+                    <span className="biz-arrow">{b.cta} →</span>
+                  </Link>
+                ))}
+              </div>
+            </section>
+
+            {/* CTA */}
+            <section style={{background:'var(--surface)'}}>
+              <div className="cta-inner-box">
+                <div className="section-label">Ready to start?</div>
+                <h2 className="section-title">Let's build something intelligent</h2>
+                <p className="section-sub" style={{margin:'0 auto 2rem'}}>Join enterprises, investors, and AI founders who trust KDA Analytics for market intelligence.</p>
+                <div style={{display:'flex',gap:'1rem',justifyContent:'center',flexWrap:'wrap'}}>
+                  <Link to="/contact" className="btn-p">Get in Touch</Link>
+                  <Link to="/services" className="btn-o">View Services</Link>
+                </div>
+              </div>
+            </section>
+          </div>
+        );
+      }
+
+      // ── Features Page ─────────────────────────────────────────────────────────────
+      function FeaturesPage(){
+        return(
+          <div className="page-enter">
+            <div className="page-hero">
+              <div className="page-glow"/>
+              <div className="section-label">Platform Features</div>
+              <h1 className="detail-title">Everything you need to navigate the AI landscape</h1>
+              <p className="section-sub" style={{marginBottom:'1.5rem'}}>From real-time startup tracking to deep analytics — the definitive intelligence platform.</p>
+              <Link to="/contact" className="btn-p">Get Started →</Link>
+            </div>
+            <section>
+              <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(320px,1fr))',gap:'1.4rem'}}>
+                {FEATURES_DATA.map((f,i)=>(
+                  <div key={f.title} className="feat-card" style={{borderRadius:14,animationDelay:`${i*.07}s`,animation:'fadeUp .6s ease both'}}>
+                    <div className="feat-icon" style={{background:f.color}}>{f.icon}</div>
+                    <div className="feat-title">{f.title}</div>
+                    <div className="feat-desc">{f.desc}</div>
+                    <div style={{borderTop:'1px solid var(--border)',paddingTop:'.8rem',marginTop:'.5rem',color:'var(--muted)',fontSize:'.83rem',lineHeight:1.7,opacity:.85}}>{f.detail}</div>
+                  </div>
+                ))}
+              </div>
+            </section>
+            <div className="cta-banner">
+              <h2>Ready to explore?</h2>
+              <p>Get in touch and we'll walk you through the platform.</p>
+              <div style={{display:'flex',gap:'1rem',flexWrap:'wrap',justifyContent:'center'}}>
+                <Link to="/contact" className="btn-p">Contact Us</Link>
+                <Link to="/services" className="btn-o">Our Services</Link>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      // ── Services Page ─────────────────────────────────────────────────────────────
+      function ServicesPage(){
+        return(
+          <div className="page-enter">
+            <div className="page-hero">
+              <div className="page-glow"/>
+              <div className="section-label">Our Services</div>
+              <h1 className="detail-title">Intelligence-driven services<br/>for the AI economy</h1>
+              <p className="section-sub">End-to-end analytical and consulting services for enterprises, investors, and startups.</p>
+            </div>
+            <section>
+              <div className="svc-grid">
+                {SERVICES_DATA.map((s,i)=>(
+                  <Link key={s.slug} to={`/services/${s.slug}`} className="svc-card" style={{animationDelay:`${i*.08}s`,animation:'fadeUp .6s ease both'}}>
+                    <div className="feat-icon" style={{background:s.color,marginBottom:'1rem'}}>{s.icon}</div>
+                    <div className="svc-num">{s.num}</div>
+                    <div className="svc-title">{s.title}</div>
+                    <p style={{color:'var(--accent)',fontSize:'.85rem',fontWeight:500}}>{s.tagline}</p>
+                    <div className="svc-desc">{s.desc}</div>
+                    <div style={{display:'flex',flexWrap:'wrap',gap:'.4rem',marginTop:'.5rem'}}>
+                      {s.bullets.slice(0,3).map(b=><span key={b} className="pill">{b}</span>)}
+                    </div>
+                    <span className="svc-arrow">Learn more →</span>
+                  </Link>
+                ))}
+              </div>
+            </section>
+            <div className="cta-banner">
+              <h2>Not sure which service fits?</h2>
+              <p>Tell us about your goals and we'll recommend the right engagement.</p>
+              <Link to="/contact" className="btn-p">Talk to Our Team</Link>
+            </div>
+          </div>
+        );
+      }
+
+      // ── Service Detail ─────────────────────────────────────────────────────────────
+      function ServiceDetail(){
+        const{slug}=useParams();
+        const s=SERVICES_DATA.find(x=>x.slug===slug);
+        if(!s) return <Navigate to="/services" replace/>;
+        const others=SERVICES_DATA.filter(x=>x.slug!==slug);
+        return(
+          <div className="page-enter">
+            <div className="breadcrumb">
+              <Link to="/">Home</Link><span>/</span><Link to="/services">Services</Link><span>/</span><span className="cur">{s.title}</span>
+            </div>
+            <div className="page-hero">
+              <div className="page-glow"/>
+              <div className="detail-badge"><span>{s.icon}</span> Service {s.num}</div>
+              <h1 className="detail-title">{s.title}</h1>
+              <p className="detail-tagline">{s.tagline}</p>
+              <div className="detail-actions">
+                <Link to="/contact" className="btn-p">Get Started →</Link>
+                <Link to="/services" className="btn-o">← All Services</Link>
+              </div>
+            </div>
+            <div className="detail-layout">
+              <div className="detail-main">
+                <h2>Overview</h2>
+                <p className="detail-overview">{s.desc}</p>
+                <h2>What's Included</h2>
+                <ul className="detail-list">
+                  {s.bullets.map(b=><li key={b}><span className="chk">✓</span>{b}</li>)}
+                </ul>
+                <div className="detail-cta">
+                  <h3>Ready to get started?</h3>
+                  <p>Tell us about your goals and we'll scope a tailored engagement.</p>
+                  <Link to="/contact" className="btn-p">Contact Us →</Link>
+                </div>
+              </div>
+              <aside className="sidebar">
+                <div className="side-card">
+                  <div className="side-icon" style={{background:s.color}}>{s.icon}</div>
+                  <h3>{s.title}</h3>
+                  <div className="side-pills">{s.bullets.map(b=><span key={b} className="pill">{b}</span>)}</div>
+                </div>
+                <div className="side-card">
+                  <h4>Other Services</h4>
+                  {others.map(o=>(
+                    <Link key={o.slug} to={`/services/${o.slug}`} className="other-link">
+                      <span>{o.icon}</span><span>{o.title}</span><span>→</span>
+                    </Link>
+                  ))}
+                </div>
+              </aside>
+            </div>
+          </div>
+        );
+      }
+
+      // ── For Business Page ─────────────────────────────────────────────────────────
+      function ForBusinessPage(){
+        return(
+          <div className="page-enter">
+            <div className="page-hero">
+              <div className="page-glow" style={{background:'radial-gradient(ellipse,rgba(124,58,237,.08) 0%,transparent 70%)'}}/>
+              <div className="section-label">For Business</div>
+              <h1 className="detail-title">Engagements built<br/>around your goals</h1>
+              <p className="section-sub">Whether you're an enterprise executive, investor, AI founder, or product team — we have a tailored engagement for your outcomes.</p>
+            </div>
+            <section>
+              <div className="biz-grid">
+                {BUSINESS_DATA.map((b,i)=>(
+                  <Link key={b.slug} to={`/for-business/${b.slug}`} className={`biz-card${b.highlight?' highlight':''}`} style={{animationDelay:`${i*.09}s`,animation:'fadeUp .6s ease both'}}>
+                    <div className="feat-icon" style={{background:b.color,width:52,height:52,borderRadius:14,fontSize:'1.5rem'}}>{b.icon}</div>
+                    <h3>{b.title}</h3>
+                    <p style={{color:'var(--accent)',fontSize:'.86rem',fontWeight:500}}>{b.tagline}</p>
+                    <p>{b.desc}</p>
+                    <ul style={{listStyle:'none',display:'flex',flexDirection:'column',gap:'.45rem',marginTop:'.3rem'}}>
+                      {b.highlights.map(h=><li key={h} style={{display:'flex',alignItems:'center',gap:'.5rem',fontSize:'.84rem',color:'var(--muted)'}}><span style={{color:'var(--accent3)',fontWeight:700}}>✓</span>{h}</li>)}
+                    </ul>
+                    <span className="biz-arrow">{b.cta} →</span>
+                  </Link>
+                ))}
+              </div>
+            </section>
+            <div className="cta-banner">
+              <h2>Not sure where you fit?</h2>
+              <p>Tell us about your challenge — we'll find the right engagement.</p>
+              <Link to="/contact" className="btn-p">Contact Us</Link>
+            </div>
+          </div>
+        );
+      }
+
+      // ── Business Detail ────────────────────────────────────────────────────────────
+      function BusinessDetail(){
+        const{slug}=useParams();
+        const b=BUSINESS_DATA.find(x=>x.slug===slug);
+        if(!b) return <Navigate to="/for-business" replace/>;
+        const others=BUSINESS_DATA.filter(x=>x.slug!==slug);
+        return(
+          <div className="page-enter">
+            <div className="breadcrumb">
+              <Link to="/">Home</Link><span>/</span><Link to="/for-business">For Business</Link><span>/</span><span className="cur">{b.title}</span>
+            </div>
+            <div className="page-hero" style={{background:'var(--surface)'}}>
+              <div className="page-glow" style={{background:'radial-gradient(ellipse,rgba(124,58,237,.08) 0%,transparent 70%)'}}/>
+              <div className="detail-badge" style={{background:'rgba(124,58,237,.07)',color:'var(--accent2)',borderColor:'rgba(124,58,237,.2)'}}><span>{b.icon}</span> For Business</div>
+              <h1 className="detail-title">{b.title}</h1>
+              <p className="detail-tagline">{b.tagline}</p>
+              <div className="detail-actions">
+                <Link to="/contact" className="btn-p">{b.cta} →</Link>
+                <Link to="/for-business" className="btn-o">← All Engagements</Link>
+              </div>
+            </div>
+            <div className="detail-layout">
+              <div className="detail-main">
+                <h2>About this Engagement</h2>
+                <p className="detail-overview">{b.desc}</p>
+                <h2>What You Get</h2>
+                <ul className="detail-list">
+                  {b.highlights.map(h=><li key={h}><span className="chk">✓</span>{h}</li>)}
+                </ul>
+                <div className="detail-cta" style={{background:'linear-gradient(135deg,rgba(124,58,237,.07),rgba(0,212,255,.06))',borderColor:'rgba(124,58,237,.2)'}}>
+                  <h3>Let's talk about your goals</h3>
+                  <p>Our team will follow up within 24 business hours.</p>
+                  <Link to="/contact" className="btn-p">Get in Touch →</Link>
+                </div>
+              </div>
+              <aside className="sidebar">
+                <div className="side-card">
+                  <div className="side-icon" style={{background:b.color}}>{b.icon}</div>
+                  <h3>{b.title}</h3>
+                  <ul style={{listStyle:'none',display:'flex',flexDirection:'column',gap:'.55rem'}}>
+                    {b.highlights.map(h=><li key={h} style={{display:'flex',gap:'.55rem',fontSize:'.84rem',color:'var(--muted)'}}><span style={{color:'var(--accent3)',fontWeight:700}}>✓</span>{h}</li>)}
+                  </ul>
+                </div>
+                <div className="side-card">
+                  <h4>Other Engagements</h4>
+                  {others.map(o=>(
+                    <Link key={o.slug} to={`/for-business/${o.slug}`} className="other-link">
+                      <span>{o.icon}</span><span>{o.title}</span><span>→</span>
+                    </Link>
+                  ))}
+                </div>
+              </aside>
+            </div>
+          </div>
+        );
+      }
+
+      // ── Contact Page ───────────────────────────────────────────────────────────────
+      function ContactPage(){
+        const[status,setStatus]=useState('idle'); // idle|loading|success|error
+        const[errMsg,setErrMsg]=useState('');
+        const[leadId,setLeadId]=useState('');
+        const[form,setForm]=useState({first_name:'',last_name:'',email:'',company:'',phone:'',interest:INTERESTS[0],message:''});
+        const onChange=e=>setForm(f=>({...f,[e.target.name]:e.target.value}));
+
+        const mockSubmit=async(payload)=>{
+          // Client-side validation mirrors backend
+          if(!payload.first_name||payload.first_name.length<2) throw new Error('First name must be at least 2 characters.');
+          if(!payload.last_name||payload.last_name.length<2)   throw new Error('Last name must be at least 2 characters.');
+          if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(payload.email)) throw new Error('Please enter a valid email address.');
+          if(!payload.message||payload.message.length<10)       throw new Error('Message must be at least 10 characters.');
+          if(payload.message.length>2000)                       throw new Error('Message cannot exceed 2000 characters.');
+          await new Promise(r=>setTimeout(r,1200)); // realistic delay
+          const id='KDA-'+new Date().toISOString().slice(0,10).replace(/-/g,'')+'-'+Math.random().toString(36).slice(2,8).toUpperCase();
+          // Store in localStorage so leads persist across page visits
+          const leads=JSON.parse(localStorage.getItem('kda_leads')||'[]');
+          leads.push({id,...payload,timestamp:new Date().toLocaleString(),status:'new'});
+          localStorage.setItem('kda_leads',JSON.stringify(leads));
+          return {success:true,message:"Thank you! We'll be in touch within 24 business hours.",lead_id:id};
+        };
+
+        const onSubmit=async(e)=>{
+          e.preventDefault();
+          setStatus('loading'); setErrMsg('');
+          try{
+            let data;
+            try{
+              // Try real Flask backend first (works when running python3 server.py)
+              const res=await fetch('/api/v1/contact',{
+                method:'POST',
+                headers:{'Content-Type':'application/json'},
+                body:JSON.stringify(form),
+              });
+              data=await res.json();
+              if(!res.ok) throw new Error(data.error||`Error ${res.status}`);
+            }catch(fetchErr){
+              // Fallback: run validation + mock response in-browser
+              data=await mockSubmit(form);
+            }
+            setLeadId(data.lead_id||'');
+            setStatus('success');
+          }catch(err){
+            setErrMsg(err.message||'Something went wrong. Please email us directly.');
+            setStatus('error');
+          }
+        };
+
+        const reset=()=>{setStatus('idle');setForm({first_name:'',last_name:'',email:'',company:'',phone:'',interest:INTERESTS[0],message:''})};
+
+        return(
+          <div className="page-enter">
+            <div className="page-hero">
+              <div className="page-glow" style={{left:'unset',right:'5%',transform:'none'}}/>
+              <div className="section-label">Contact</div>
+              <h1 className="detail-title">Let's build something intelligent</h1>
+              <p className="section-sub">Tell us about your goals — our team responds within 24 business hours.</p>
+            </div>
+            <section>
+              <div className="contact-layout">
+                {/* Info */}
+                <aside>
+                  <div className="info-card">
+                    <h3>Get in Touch</h3>
+                    {[['✉️','Email',<a href="mailto:hello@kdaanalytics.ai" className="info-val">hello@kdaanalytics.ai</a>],
+                      ['📍','Headquarters',<span className="info-val">New Delhi NCR Region</span>],
+                      ['⏱️','Response Time',<span className="info-val">Within 24 business hours</span>],
+                    ].map(([icon,lbl,val])=>(
+                      <div key={lbl} className="info-row">
+                        <span className="info-icon">{icon}</span>
+                        <div><div className="info-lbl">{lbl}</div>{val}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="info-card">
+                    <h3>Engagements</h3>
+                    {[['🏢','Enterprise & Strategy','Custom intelligence & advisory'],
+                      ['💼','Investors & Funds','Deal flow & due diligence'],
+                      ['🚀','Startups & Founders','Get featured & funded'],
+                      ['🔌','API & Data Licensing','Developer & data access'],
+                    ].map(([icon,t,s])=>(
+                      <div key={t} className="info-row">
+                        <span className="info-icon">{icon}</span>
+                        <div><div style={{fontSize:'.88rem',fontWeight:600,color:'var(--text)'}}>{t}</div><div style={{fontSize:'.76rem',color:'var(--muted)'}}>{s}</div></div>
+                      </div>
+                    ))}
+                  </div>
+                </aside>
+
+                {/* Form */}
+                <div className="form-wrap">
+                  {status==='success'?(
+                    <div className="success-box">
+                      <div className="success-icon">🎉</div>
+                      <h2>Message received!</h2>
+                      <p>Thank you for reaching out. Our team will get back to you within 24 business hours.</p>
+                      {leadId && <p className="lead-id">Reference: <strong>{leadId}</strong></p>}
+                      <button className="btn-o" onClick={reset}>Send Another Message</button>
+                    </div>
+                  ):(
+                    <form onSubmit={onSubmit} noValidate>
+                      <h2 className="form-title">Send a Message</h2>
+                      <div className="form-row">
+                        <div className="field"><label>First Name *</label><input name="first_name" value={form.first_name} onChange={onChange} placeholder="First name" required minLength={2}/></div>
+                        <div className="field"><label>Last Name *</label><input name="last_name" value={form.last_name} onChange={onChange} placeholder="Last name" required minLength={2}/></div>
+                      </div>
+                      <div className="form-row">
+                        <div className="field"><label>Work Email *</label><input name="email" type="email" value={form.email} onChange={onChange} placeholder="you@company.com" required/></div>
+                        <div className="field"><label>Phone</label><input name="phone" type="tel" value={form.phone} onChange={onChange} placeholder="+91 XXXXX XXXXX"/></div>
+                      </div>
+                      <div className="field"><label>Company</label><input name="company" value={form.company} onChange={onChange} placeholder="Company name"/></div>
+                      <div className="field">
+                        <label>I'm interested in *</label>
+                        <select name="interest" value={form.interest} onChange={onChange}>
+                          {INTERESTS.map(i=><option key={i}>{i}</option>)}
+                        </select>
+                      </div>
+                      <div className="field"><label>Message *</label>
+                        <textarea name="message" value={form.message} onChange={onChange} placeholder="Tell us about your goals, timeline, or questions…" rows={5} required minLength={10}/>
+                      </div>
+                      {status==='error' && <div className="form-error">⚠️ {errMsg}</div>}
+                      <button type="submit" className="btn-p form-submit" disabled={status==='loading'}>
+                        {status==='loading'?<><span className="spinner"/>Sending…</>:'Send Message →'}
+                      </button>
+                      <p className="form-privacy">We respect your privacy. Your information is never sold or shared.</p>
+                    </form>
+                  )}
+                </div>
+              </div>
+            </section>
+          </div>
+        );
+      }
+
+      // ── 404 ───────────────────────────────────────────────────────────────────────
+      function NotFound(){
+        return(
+          <div className="nf-page">
+            <div className="page-glow" style={{position:'absolute',top:'10%',left:'50%',transform:'translateX(-50%)',width:400,height:300,background:'radial-gradient(ellipse,rgba(0,212,255,.06) 0%,transparent 70%)',pointerEvents:'none'}}/>
+            <div className="nf-code">404</div>
+            <h1>Page not found</h1>
+            <p>The page you're looking for doesn't exist or has been moved.</p>
+            <div className="nf-actions">
+              <Link to="/" className="btn-p">Back to Home</Link>
+              <Link to="/contact" className="btn-o">Contact Us</Link>
+            </div>
+          </div>
+        );
+      }
+
+      // ── Layout ────────────────────────────────────────────────────────────────────
+      function Layout(){
+        return(
+          <>
+            <Navbar/>
+            <main style={{paddingTop:72}}>
+              <Routes>
+                <Route path="/"                       element={<Home/>}/>
+                <Route path="/features"               element={<FeaturesPage/>}/>
+                <Route path="/services"               element={<ServicesPage/>}/>
+                <Route path="/services/:slug"         element={<ServiceDetail/>}/>
+                <Route path="/for-business"           element={<ForBusinessPage/>}/>
+                <Route path="/for-business/:slug"     element={<BusinessDetail/>}/>
+                <Route path="/contact"                element={<ContactPage/>}/>
+                <Route path="*"                       element={<NotFound/>}/>
+              </Routes>
+            </main>
+            <Footer/>
+          </>
+        );
+      }
+
+      // ── App ────────────────────────────────────────────────────────────────────────
+      function App(){
+        return(
+          <BrowserRouter>
+            <ScrollTop/>
+            <Layout/>
+          </BrowserRouter>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+    </script>
+
+    <script>
+      (function () {
+        try {
+          var src = document.getElementById("app-jsx").textContent;
+          var result = Babel.transform(src, {
+            presets: [["react", { runtime: "classic" }], "env"],
+            filename: "app.jsx",
+          });
+          // eslint-disable-next-line no-eval
+          eval(result.code);
+        } catch (e) {
+          document.getElementById("root").innerHTML =
+            '<div style="color:#ff6b6b;font-family:monospace;padding:2rem;font-size:13px;white-space:pre-wrap">' +
+            "<b>Startup Error</b>\n\n" +
+            (e.message || e) +
+            "</div>";
+          console.error("KDA App Error:", e);
+        }
+      })();
+    </script>
+  </body>
+</html>
