@@ -103,7 +103,7 @@ def _build_confirmation_html(lead: ContactRequest) -> str:
       <p>Hi <span class="highlight">{lead.first_name}</span>, thank you for reaching out about
          <strong class="highlight">{lead.interest}</strong>.<br/>
          Our team will get back to you within <strong class="highlight">24 business hours</strong>.</p>
-      <a href="https://kdaanalytics.ai" class="cta">Explore KDA Analytics →</a>
+      <a href="https://kdaanalytics.com" class="cta">Explore KDA Analytics →</a>
     </div>
     <p style="text-align:center;">In the meantime, feel free to connect with us on LinkedIn
        or reply directly to this email.</p>
