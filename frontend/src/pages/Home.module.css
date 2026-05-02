@@ -56,6 +56,8 @@
   animation: fadeUp 0.9s 0.1s ease both;
   position: relative;
   z-index: 1;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .heroSub {
@@ -295,9 +297,11 @@
   .productsSection,
   .whySection,
   .ctaSection    { padding: 4rem 5%; }
-  .hero          { padding: 6rem 5% 4rem; }
+  .hero          { padding: 5rem 5% 3rem; min-height: auto; }
   .heroSub       { font-size: 1rem; }
+  .heroTitle     { font-size: clamp(1.8rem, 9vw, 2.8rem); }
   .serviceCard,
   .productCard,
   .whyCard       { padding: 1.75rem; }
+  .heroStats     { margin-top: 3rem; gap: 1.5rem; }
 }
