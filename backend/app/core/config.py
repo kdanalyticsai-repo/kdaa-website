@@ -21,6 +21,7 @@ class Settings(BaseSettings):
         "http://localhost:3000",
         "https://kdaanalytics.com",
         "https://www.kdaanalytics.com",
+        "https://kdaanalytics.pages.dev",
     ]
     ALLOWED_HOSTS: List[str] = [
         "kdaanalytics.com",
