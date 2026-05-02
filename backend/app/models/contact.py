@@ -4,16 +4,7 @@ Pydantic models for the contact / lead submission flow.
 
 from pydantic import BaseModel, EmailStr, field_validator
 from typing import Optional
-from enum import Enum
 import html
-
-
-class InterestType(str, Enum):
-    enterprise = "Enterprise & Strategy"
-    investors = "Investors & Funds"
-    startups = "Startups & Founders"
-    api = "API & Data Licensing"
-    general = "General Enquiry"
 
 
 class ContactRequest(BaseModel):
@@ -22,10 +13,10 @@ class ContactRequest(BaseModel):
     email: EmailStr
     company: Optional[str] = ""
     phone: Optional[str] = ""
-    interest: InterestType = InterestType.general
+    interest: str = "General Enquiry"
     message: str
 
-    @field_validator("first_name", "last_name", "company", "message", mode="before")
+    @field_validator("first_name", "last_name", "company", "interest", "message", mode="before")
     @classmethod
     def sanitise(cls, v: str) -> str:
         """Strip HTML tags to prevent injection."""

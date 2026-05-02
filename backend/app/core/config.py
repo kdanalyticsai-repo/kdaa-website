@@ -16,28 +16,33 @@ class Settings(BaseSettings):
     # ── CORS / Hosts ─────────────────────────────────────────────────────────
     ALLOWED_ORIGINS: List[str] = [
         "http://localhost:5173",              # Vite dev server
+        "http://localhost:5174",
+        "http://localhost:5175",
         "http://localhost:3000",
-        "https://kdaanalytics.ai",
-        "https://www.kdaanalytics.ai",
+        "https://kdaanalytics.com",
+        "https://www.kdaanalytics.com",
     ]
-    ALLOWED_HOSTS: List[str] = ["kdaanalytics.ai",
-                                "www.kdaanalytics.ai", "localhost"]
+    ALLOWED_HOSTS: List[str] = [
+        "kdaanalytics.com",
+        "www.kdaanalytics.com",
+        "localhost",
+    ]
 
     # ── Email (SMTP) ─────────────────────────────────────────────────────────
-    # Supports any SMTP provider: Gmail, AWS SES, Mailgun, Postmark, etc.
-    SMTP_HOST: str = "smtp.gmail.com"
+    # Supports any SMTP provider: Titan, Gmail, AWS SES, Mailgun, Postmark, etc.
+    SMTP_HOST: str = "smtp.titan.email"
     SMTP_PORT: int = 587
     SMTP_USE_TLS: bool = True
-    SMTP_USERNAME: str = ""                   # e.g. noreply@kdaanalytics.ai
-    SMTP_PASSWORD: str = ""                   # App password or SMTP key
+    SMTP_USERNAME: str = ""                   # e.g. info@kdaanalytics.com
+    SMTP_PASSWORD: str = ""                   # Titan account password
 
     # Where company receives leads
-    COMPANY_EMAIL: str = "hello@kdaanalytics.ai"
+    COMPANY_EMAIL: str = "info@kdaanalytics.com"
     COMPANY_PHONE: str = "Country Code-XXXXXXXXXX"     # WhatsApp / SMS fallback
 
     # ── SendGrid fallback (optional) ─────────────────────────────────────────
     SENDGRID_API_KEY: str = ""                # Set to enable SendGrid path
-    SENDGRID_FROM_EMAIL: str = "hello@kdaanalytics.ai"
+    SENDGRID_FROM_EMAIL: str = "info@kdaanalytics.com"
 
     # ── Twilio SMS (optional) ────────────────────────────────────────────────
     TWILIO_ACCOUNT_SID: str = ""

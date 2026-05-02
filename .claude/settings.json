@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc *)",
+      "Bash(curl -i http://localhost:5174/)",
+      "Bash(curl -i http://localhost:5174/products)",
+      "Bash(curl -i http://localhost:5174/services)",
+      "Bash(\"c:\\\\Users\\\\user\\\\kdaa-projects\\\\kdaa-web\\\\envn\\\\Scripts\\\\uvicorn.exe\" app.main:app --host 0.0.0.0 --port 8000 --reload)",
+      "Bash(ping -n 4 127.0.0.1)",
+      "WebSearch",
+      "WebFetch(domain:support.titan.email)",
+      "WebFetch(domain:kb.hosting.com)"
+    ]
+  }
+}

@@ -3,43 +3,67 @@ import styles from './Services.module.css'
 
 export const SERVICES_DATA = [
   {
-    slug: 'market-research',
+    slug: 'ai-strategy-consulting',
     num: '01',
-    icon: '📊',
-    title: 'AI Market Research & Intelligence Reports',
-    tagline: 'Deep-dive research, expertly delivered.',
-    desc: 'Comprehensive research reports on any AI vertical, geography, or technology segment. Delivered by our team of domain experts with primary interviews, funding data, and competitive landscape analysis.',
-    bullets: ['Custom research & reports', 'Market sizing & TAM analysis', 'Competitive landscape mapping', 'Investment thesis development', 'Primary research interviews'],
+    icon: '🧠',
+    title: 'AI Strategy & Adoption Consulting',
+    tagline: 'From AI curiosity to measurable ROI.',
+    desc: 'Advisory services helping enterprises identify the right AI use cases, build business cases, and execute adoption roadmaps with clear ROI frameworks. We translate AI potential into concrete business outcomes — across autonomous agents, GenAI, and predictive intelligence.',
+    bullets: [
+      'AI readiness assessment & use-case prioritisation',
+      'Build vs buy vs partner analysis',
+      'ROI frameworks & KPI design',
+      'Change management and workforce enablement',
+      'Vendor and technology selection guidance',
+    ],
     color: 'rgba(0,212,255,0.1)',
   },
   {
-    slug: 'startup-scouting',
+    slug: 'ai-implementation',
     num: '02',
-    icon: '🔭',
-    title: 'Startup Scouting & Due Diligence',
-    tagline: 'Find your next deal before your competition.',
-    desc: 'We identify high-potential AI startups matching your investment thesis or partnership criteria, then deliver comprehensive due diligence packages with financial, technical, and team assessment.',
-    bullets: ['Curated deal flow pipelines', 'Proprietary scoring models', 'Risk assessment frameworks', 'Founder background checks', 'Technology stack analysis'],
+    icon: '⚙️',
+    title: 'AI Implementation & Integration',
+    tagline: 'End-to-end delivery of enterprise AI solutions.',
+    desc: 'Hands-on implementation of AI products across our top 10 use cases — autonomous agents, knowledge copilots, fraud detection, document processing, and more. We integrate seamlessly with your existing enterprise systems and ensure production-ready deployment.',
+    bullets: [
+      'Custom AI solution development & deployment',
+      'Enterprise system integration (ERP, CRM, core banking)',
+      'Model fine-tuning and domain adaptation',
+      'MLOps setup, monitoring, and ongoing optimisation',
+      'Security, compliance, and governance frameworks',
+    ],
     color: 'rgba(124,58,237,0.1)',
   },
   {
-    slug: 'ai-strategy-consulting',
+    slug: 'market-research',
     num: '03',
-    icon: '🧠',
-    title: 'AI Strategy Consulting',
-    tagline: 'From AI curiosity to measurable ROI.',
-    desc: 'Advisory services helping enterprises define, execute, and measure AI adoption roadmaps with measurable ROI frameworks. We translate AI potential into business outcomes.',
-    bullets: ['AI readiness assessments', 'Use-case identification & prioritisation', 'Build vs buy vs partner analysis', 'ROI frameworks & KPI design', 'Change management playbooks'],
+    icon: '📊',
+    title: 'AI Market Research & Intelligence',
+    tagline: 'Deep-dive research, expertly delivered.',
+    desc: 'Comprehensive research reports on any AI vertical, geography, or technology segment. Delivered by our team of domain experts with competitive landscape analysis, market sizing, use-case benchmarking, and actionable strategic insights.',
+    bullets: [
+      'Custom AI research & intelligence reports',
+      'Market sizing, TAM, and opportunity analysis',
+      'Competitive landscape and vendor benchmarking',
+      'Use-case feasibility and ROI research',
+      'Primary research & expert interviews',
+    ],
     color: 'rgba(16,185,129,0.1)',
   },
   {
     slug: 'api-data-licensing',
     num: '04',
     icon: '⚡',
-    title: 'API & Data Licensing',
-    tagline: 'Power your product with clean, structured AI data.',
-    desc: 'Access our structured AI startup database programmatically. REST API, GraphQL, and webhooks — power your own VC platform, research tool, or enterprise intelligence application.',
-    bullets: ['REST & GraphQL APIs', 'Real-time webhook streams', 'Bulk data exports (JSON/CSV)', 'Custom data enrichment', 'SLA-backed uptime guarantees'],
+    title: 'Data Infrastructure & API Solutions',
+    tagline: 'The data foundation your AI products need.',
+    desc: 'Enterprise-grade data pipelines, APIs, and domain-specific datasets to fuel your AI applications. We deliver clean, structured, and reliable data infrastructure so your models, agents, and products perform at their best — at scale.',
+    bullets: [
+      'REST & GraphQL APIs with SLA guarantees',
+      'Domain-specific dataset curation and enrichment',
+      'Real-time data pipelines, streaming & webhooks',
+      'Bulk data exports (JSON/CSV/Parquet)',
+      'Data governance, lineage, and compliance controls',
+    ],
     color: 'rgba(245,158,11,0.1)',
   },
 ]
@@ -47,15 +71,16 @@ export const SERVICES_DATA = [
 export default function ServicesPage() {
   return (
     <div className={`${styles.page} page-enter`}>
-      {/* Header */}
       <div className={styles.hero}>
         <div className={styles.heroGlow} />
         <p className="section-label">Our Services</p>
-        <h1 className={styles.heroTitle}>Intelligence-driven services<br />for the AI economy</h1>
-        <p className={styles.heroSub}>End-to-end analytical and consulting services to help enterprises, investors, and startups succeed in the AI-first world.</p>
+        <h1 className={styles.heroTitle}>End-to-end AI adoption services<br />for the global enterprise</h1>
+        <p className={styles.heroSub}>
+          From strategy and research to hands-on implementation and data infrastructure —
+          we help enterprises across the globe adopt AI capabilities that drive real business outcomes.
+        </p>
       </div>
 
-      {/* Service tiles */}
       <section className={styles.grid}>
         {SERVICES_DATA.map((s, i) => (
           <Link key={s.slug} to={`/services/${s.slug}`} className={styles.card} style={{ animationDelay: `${i * 0.08}s` }}>
@@ -74,10 +99,9 @@ export default function ServicesPage() {
         ))}
       </section>
 
-      {/* CTA */}
       <section className={styles.ctaBanner}>
-        <h2>Not sure which service fits?</h2>
-        <p>Tell us about your goals and we'll recommend the right engagement.</p>
+        <h2>Not sure where to start?</h2>
+        <p>Tell us about your AI goals and we'll recommend the right engagement — from a quick discovery session to a full-scale implementation.</p>
         <Link to="/contact" className="btn-primary">Talk to Our Team</Link>
       </section>
     </div>

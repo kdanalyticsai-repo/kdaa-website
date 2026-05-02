@@ -4,10 +4,10 @@ import { submitContact, ContactPayload } from "@/utils/api";
 import styles from "./Contact.module.css";
 
 const INTERESTS = [
-  "Enterprise & Strategy",
-  "Investors & Funds",
-  "Startups & Founders",
-  "API & Data Licensing",
+  "AI Market Research",
+  "AI Strategy Consulting",
+  "API & Data Solutions",
+  "AI Products Inquiry",
   "General Enquiry",
 ];
 
@@ -57,11 +57,48 @@ export default function ContactPage() {
       {/* Header */}
       <div className={styles.hero}>
         <div className={styles.heroGlow} />
-        <p className="section-label">Contact</p>
-        <h1 className={styles.heroTitle}>Let's build something intelligent</h1>
-        <p className={styles.heroSub}>
-          Tell us about your goals — our team responds within 24 business hours.
-        </p>
+        <div className={styles.heroLeft}>
+          <p className="section-label">Contact</p>
+          <h1 className={styles.heroTitle}>Let's build something intelligent</h1>
+          <p className={styles.heroSub}>
+            Tell us about your goals — our team responds within 24 business hours.
+          </p>
+        </div>
+
+        <div className={styles.heroRight}>
+          <div className={styles.statsGrid}>
+            <div className={styles.statCard}>
+              <div className={styles.statValue}>24h</div>
+              <div className={styles.statLabel}>Response Time</div>
+            </div>
+            <div className={styles.statCard}>
+              <div className={styles.statValue}>100%</div>
+              <div className={styles.statLabel}>Response Rate</div>
+            </div>
+            <div className={styles.statCard}>
+              <div className={styles.statValue}>70%</div>
+              <div className={styles.statLabel}>Ops Cost Reduction</div>
+            </div>
+            <div className={styles.statCard}>
+              <div className={styles.statValue}>Free</div>
+              <div className={styles.statLabel}>Initial Consultation</div>
+            </div>
+          </div>
+
+          <div className={styles.trustPanel}>
+            {[
+              { icon: '🔒', text: 'Enterprise-grade security & compliance' },
+              { icon: '🌐', text: 'Deployable on cloud, on-prem, or hybrid' },
+              { icon: '⚡', text: 'Rapid prototyping to production in weeks' },
+              { icon: '🤝', text: 'Dedicated team for every engagement' },
+            ].map(({ icon, text }) => (
+              <div key={text} className={styles.trustRow}>
+                <span className={styles.trustIcon}>{icon}</span>
+                <span className={styles.trustText}>{text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div className={styles.layout}>
@@ -74,10 +111,10 @@ export default function ContactPage() {
               <div>
                 <div className={styles.infoLabel}>Email</div>
                 <a
-                  href="mailto:hello@kdaanalytics.ai"
+                  href="mailto:info@kdaanalytics.com"
                   className={styles.infoValue}
                 >
-                  hello@kdaanalytics.ai
+                  info@kdaanalytics.com
                 </a>
               </div>
             </div>
@@ -85,7 +122,7 @@ export default function ContactPage() {
               <span className={styles.infoIcon}>📍</span>
               <div>
                 <div className={styles.infoLabel}>Headquarters</div>
-                <div className={styles.infoValue}>New Delhi · Singapore</div>
+                <div className={styles.infoValue}>Delhi NCR Region, India</div>
               </div>
             </div>
             <div className={styles.infoRow}>
@@ -98,31 +135,31 @@ export default function ContactPage() {
           </div>
 
           <div className={styles.infoCard}>
-            <h3>Engagements</h3>
+            <h3>Our Services</h3>
             {[
               [
-                "🏢",
-                "Enterprise & Strategy",
-                "Custom intelligence & advisory",
-                "/for-business/enterprise-strategy",
+                "📊",
+                "AI Market Research",
+                "Deep-dive intelligence reports",
+                "/services/market-research",
               ],
               [
-                "💼",
-                "Investors & Funds",
-                "Deal flow & due diligence",
-                "/for-business/investors-funds",
+                "🧠",
+                "AI Strategy Consulting",
+                "Roadmaps & ROI frameworks",
+                "/services/ai-strategy-consulting",
               ],
               [
-                "🚀",
-                "Startups & Founders",
-                "Get featured & funded",
-                "/for-business/startups-founders",
+                "⚡",
+                "API & Data Solutions",
+                "Enterprise data pipelines",
+                "/services/api-data-licensing",
               ],
               [
-                "🔌",
-                "API & Data Licensing",
-                "Developer & data access",
-                "/for-business/api-data-partners",
+                "🤖",
+                "AI Products",
+                "Chatbot, Fraud, AML & more",
+                "/products",
               ],
             ].map(([icon, title, sub, to]) => (
               <Link

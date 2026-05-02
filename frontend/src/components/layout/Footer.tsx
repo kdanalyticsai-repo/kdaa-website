@@ -3,22 +3,22 @@ import styles from './Footer.module.css'
 
 const LINKS = {
   Company: [
-    { label: 'Features',     to: '/features' },
-    { label: 'Services',     to: '/services' },
-    { label: 'For Business', to: '/for-business' },
-    { label: 'Contact',      to: '/contact' },
+    { label: 'Home',     to: '/' },
+    { label: 'About Us', to: '/about' },
+    { label: 'Services', to: '/services' },
+    { label: 'Products', to: '/products' },
+    { label: 'Contact',  to: '/contact' },
   ],
   Services: [
-    { label: 'Market Research',    to: '/services/market-research' },
-    { label: 'Startup Scouting',   to: '/services/startup-scouting' },
-    { label: 'AI Strategy',        to: '/services/ai-strategy-consulting' },
-    { label: 'API & Data',         to: '/services/api-data-licensing' },
+    { label: 'AI Market Research',      to: '/services/market-research' },
+    { label: 'AI Strategy Consulting',  to: '/services/ai-strategy-consulting' },
+    { label: 'API & Data Solutions',    to: '/services/api-data-licensing' },
   ],
-  Business: [
-    { label: 'Enterprise',         to: '/for-business/enterprise-strategy' },
-    { label: 'Investors & Funds',  to: '/for-business/investors-funds' },
-    { label: 'Startups & Founders',to: '/for-business/startups-founders' },
-    { label: 'API Partners',       to: '/for-business/api-data-partners' },
+  Products: [
+    { label: 'Enterprise Chatbot',  to: '/products' },
+    { label: 'Fraud Detection',     to: '/products' },
+    { label: 'Agentic AI Platform', to: '/products' },
+    { label: 'AML Solution',        to: '/products' },
   ],
 }
 
@@ -28,17 +28,16 @@ export default function Footer() {
       <div className={styles.top}>
         <div className={styles.brand}>
           <div className={styles.logo}>
-            <span className={styles.lb}>[</span>KDA<span className={styles.lb}>]</span>
-            <span className={styles.sub}> Analytics</span>
+            <img src="/logo.png" alt="KDA Analytics" className={styles.logoImg} />
           </div>
           <p className={styles.tagline}>Where Data Meets Intelligence</p>
           <p className={styles.desc}>
-            Your gateway to the global AI startup ecosystem — curated intelligence
-            for the agentic era.
+            Building AI-powered products and delivering data intelligence services
+            to enterprises worldwide.
           </p>
           <div className={styles.contact}>
-            <a href="mailto:hello@kdaanalytics.ai">hello@kdaanalytics.ai</a>
-            <span>New Delhi · Singapore</span>
+            <a href="mailto:info@kdaanalytics.com">info@kdaanalytics.com</a>
+            <span>Delhi NCR Region, India</span>
           </div>
         </div>
 
@@ -47,7 +46,7 @@ export default function Footer() {
             <h4 className={styles.colTitle}>{section}</h4>
             <ul>
               {items.map(i => (
-                <li key={i.to}>
+                <li key={i.label}>
                   <Link to={i.to} className={styles.footLink}>{i.label}</Link>
                 </li>
               ))}

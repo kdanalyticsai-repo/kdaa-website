@@ -1,7 +1,37 @@
 {
   "permissions": {
     "allow": [
-      "PowerShell(Start-Process powershell -ArgumentList '-NoExit', '-Command', 'cd \"c:\\\\Users\\\\user\\\\Desktop\\\\projects\\\\KDAA\\\\KDA-Analytics-Final\\\\kda-final\\\\frontend\"; npm run dev' -WindowStyle Normal)"
+      "PowerShell(Start-Process powershell -ArgumentList '-NoExit', '-Command', 'cd \"c:\\\\Users\\\\user\\\\Desktop\\\\projects\\\\KDAA\\\\KDA-Analytics-Final\\\\kda-final\\\\frontend\"; npm run dev' -WindowStyle Normal)",
+      "PowerShell($userPath = [System.Environment]::GetEnvironmentVariable\\(\"PATH\", \"User\"\\); $userPath)",
+      "Bash(curl -s -X POST http://localhost:8000/api/v1/contact -H 'Content-Type: application/json' -d '{\"first_name\":\"Test\",\"last_name\":\"User\",\"email\":\"sunildubeym1306@gmail.com\",\"company\":\"Test Co\",\"phone\":\"\",\"interest\":\"data_analytics\",\"message\":\"This is a test submission to verify email delivery is working.\"}')",
+      "Bash(curl -s -X POST http://localhost:8000/api/v1/contact -H 'Content-Type: application/json' -d '{\"first_name\":\"Test\",\"last_name\":\"User\",\"email\":\"sunildubeym1306@gmail.com\",\"company\":\"Test Co\",\"phone\":\"\",\"interest\":\"General Enquiry\",\"message\":\"This is a test submission to verify email delivery is working.\"}')",
+      "PowerShell(Get-Command fnm -ErrorAction SilentlyContinue)",
+      "PowerShell(Get-Command volta -ErrorAction SilentlyContinue)",
+      "PowerShell(Get-Command scoop -ErrorAction SilentlyContinue)",
+      "PowerShell(python -m pip install flask --quiet)",
+      "Bash(curl -s http://localhost:5000/api/v1/health)",
+      "PowerShell(Start-Process \"http://localhost:5000\")",
+      "Bash(xargs grep *)",
+      "Bash(npm run *)",
+      "PowerShell(Get-Command node, npm -ErrorAction SilentlyContinue | Select-Object Name, Source; $env:PATH -split ';' | Where-Object { $_ -match 'node' -or $_ -match 'npm' })",
+      "PowerShell(Get-ChildItem \"C:\\\\Program Files\\\\nodejs\\\\npm.cmd\" -ErrorAction SilentlyContinue; Get-ChildItem \"$env:APPDATA\\\\npm\\\\npm.cmd\" -ErrorAction SilentlyContinue; Get-ChildItem \"C:\\\\Program Files\\\\nodejs\\\\\" -ErrorAction SilentlyContinue | Select-Object -First 5)",
+      "PowerShell(Get-ChildItem \"C:\\\\Program Files\\\\\" -ErrorAction SilentlyContinue | Select-Object Name; Get-ChildItem \"C:\\\\Users\\\\user\\\\AppData\\\\Roaming\\\\\" -ErrorAction SilentlyContinue | Select-Object Name | Where-Object { $_.Name -match 'node|npm|nvm' })",
+      "PowerShell(cmd /c \"where npm 2>&1\")",
+      "PowerShell(cmd /c \"where node 2>&1\")",
+      "PowerShell(Get-ChildItem \"C:\\\\Program Files\" | ForEach-Object { $_.Name })",
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\user\\\\AppData\\\\Local\\\\\" | Where-Object { $_.Name -match 'node|nvm|fnm' } | ForEach-Object { $_.Name }; Get-ChildItem \"C:\\\\Users\\\\user\\\\\" -Force | ForEach-Object { $_.Name })",
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\user\\\\AppData\\\\Local\\\\claude-cli-nodejs\\\\\" | ForEach-Object { $_.Name })",
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\user\\\\AppData\\\\Roaming\\\\\" | Where-Object { $_.Name -match 'node|npm|nvm' } | ForEach-Object { $_.Name })",
+      "PowerShell($env:PATH -split ';' | ForEach-Object { $_ })",
+      "PowerShell(cmd /c \"winget --version 2>&1\")",
+      "PowerShell(cmd /c \"choco --version 2>&1\")",
+      "PowerShell(cmd /c \"scoop --version 2>&1\")",
+      "PowerShell(winget install OpenJS.NodeJS.LTS --silent --accept-package-agreements --accept-source-agreements)",
+      "PowerShell($env:PATH = [System.Environment]::GetEnvironmentVariable\\(\"PATH\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"PATH\",\"User\"\\); cmd /c \"node --version && npm --version\")",
+      "PowerShell($env:PATH = [System.Environment]::GetEnvironmentVariable\\(\"PATH\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"PATH\",\"User\"\\); Set-Location \"c:\\\\Users\\\\user\\\\kdaa-projects\\\\kdaa-web\\\\frontend\"; npm install 2>&1)",
+      "PowerShell($env:PATH = [System.Environment]::GetEnvironmentVariable\\(\"PATH\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"PATH\",\"User\"\\); Set-Location \"c:\\\\Users\\\\user\\\\kdaa-projects\\\\kdaa-web\\\\frontend\"; npm run dev)",
+      "PowerShell($env:PATH = [System.Environment]::GetEnvironmentVariable\\(\"PATH\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"PATH\",\"User\"\\); Stop-Process -Name \"node\" -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 2; Write-Host \"Stopped\")",
+      "PowerShell(Start-Process \"http://localhost:5173\")"
     ]
   }
 }

@@ -1,8 +1,11 @@
 # ── Environment / Secrets ─────────────────────────────────────────────────────
-.envn
-.envn.local
-.envn.*.local
+.env
+.env.local
+.env.*.local
 backend/.env
+frontend/.env
+frontend/.env.local
+frontend/.env.production
 
 # ── Python ────────────────────────────────────────────────────────────────────
 __pycache__/

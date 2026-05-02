@@ -30,10 +30,12 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
   gap: 1.5rem;
   padding: 5rem 5%;
   background: var(--bg);
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .card {

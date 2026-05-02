@@ -3,10 +3,10 @@ import { Link, NavLink, useLocation } from 'react-router-dom'
 import styles from './Navbar.module.css'
 
 const NAV_LINKS = [
-  { label: 'Features',    to: '/features' },
-  { label: 'Services',    to: '/services' },
-  { label: 'For Business',to: '/for-business' },
-  { label: 'Contact',     to: '/contact' },
+  { label: 'About',    to: '/about' },
+  { label: 'Services', to: '/services' },
+  { label: 'Products', to: '/products' },
+  { label: 'Contact',  to: '/contact' },
 ]
 
 export default function Navbar() {
@@ -26,10 +26,7 @@ export default function Navbar() {
   return (
     <nav className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}>
       <Link to="/" className={styles.logo}>
-        <span className={styles.logoBracket}>[</span>
-        <span className={styles.logoKDA}>KDA</span>
-        <span className={styles.logoBracket}>]</span>
-        <span className={styles.logoSub}>Analytics</span>
+        <img src="/logo.png" alt="KDA Analytics" className={styles.logoImg} />
       </Link>
 
       <ul className={`${styles.links} ${menuOpen ? styles.open : ''}`}>

@@ -6,6 +6,7 @@ Strategy:
   3. If both fail, log the lead and return gracefully — never lose a lead.
 """
 
+import asyncio
 import logging
 import smtplib
 import ssl
@@ -40,7 +41,7 @@ def _build_internal_html(lead: ContactRequest, lead_id: str) -> str:
     .sub {{ color:#6b7fa8; font-size:13px; }}
     table {{ width:100%; border-collapse:collapse; margin:20px 0; }}
     td {{ padding:12px 0; border-bottom:1px solid #1a2d50; font-size:14px; vertical-align:top; }}
-    td:first-child {{ color:#6b7fa8; width:160px; font-size:12px; text-transform:uppercase; letter-spacing:0.08em; }}
+    td:first-child {{ color:#6b7fa8; width:140px; min-width:140px; padding-right:24px; font-size:12px; text-transform:uppercase; letter-spacing:0.08em; }}
     td:last-child {{ color:#e8f0fe; }}
     .msg-box {{ background:#0c1628; border:1px solid #1a2d50; border-radius:8px;
                 padding:20px; margin:20px 0; font-size:14px; line-height:1.7; color:#e8f0fe; }}
@@ -60,11 +61,11 @@ def _build_internal_html(lead: ContactRequest, lead_id: str) -> str:
       <tr><td>Email</td><td><span class="accent">{lead.email}</span></td></tr>
       <tr><td>Company</td><td>{lead.company or '—'}</td></tr>
       <tr><td>Phone</td><td>{lead.phone or '—'}</td></tr>
-      <tr><td>Interest</td><td>{lead.interest.value}</td></tr>
+      <tr><td>Interest</td><td>{lead.interest}</td></tr>
     </table>
     <p style="color:#6b7fa8;font-size:12px;text-transform:uppercase;letter-spacing:0.1em;">Message</p>
     <div class="msg-box">{lead.message}</div>
-    <div class="footer">KDA Analytics · hello@kdaanalytics.ai · New Delhi NCR Region </div>
+    <div class="footer">KDA Analytics · info@kdaanalytics.com · New Delhi NCR Region </div>
   </div>
 </body>
 </html>
@@ -100,14 +101,14 @@ def _build_confirmation_html(lead: ContactRequest) -> str:
       <div class="logo">KDA<span>.</span>Analytics</div>
       <h1>We've received your message 👋</h1>
       <p>Hi <span class="highlight">{lead.first_name}</span>, thank you for reaching out about
-         <strong class="highlight">{lead.interest.value}</strong>.<br/>
+         <strong class="highlight">{lead.interest}</strong>.<br/>
          Our team will get back to you within <strong class="highlight">24 business hours</strong>.</p>
       <a href="https://kdaanalytics.ai" class="cta">Explore KDA Analytics →</a>
     </div>
     <p style="text-align:center;">In the meantime, feel free to connect with us on LinkedIn
        or reply directly to this email.</p>
     <div class="footer">
-      © {datetime.utcnow().year} KDA Analytics · hello@kdaanalytics.ai<br/>
+      © {datetime.utcnow().year} KDA Analytics · info@kdaanalytics.com<br/>
       New Delhi NCR Region · Where Data Meets Intelligence
     </div>
   </div>
@@ -122,27 +123,49 @@ async def send_via_sendgrid(lead: ContactRequest, lead_id: str) -> bool:
     """Send via SendGrid HTTP API (requires SENDGRID_API_KEY)."""
     try:
         import httpx
-        payload = {
+        headers = {
+            "Authorization": f"Bearer {settings.SENDGRID_API_KEY}",
+            "Content-Type": "application/json",
+        }
+        sender = {"email": settings.SENDGRID_FROM_EMAIL, "name": "KDA Analytics"}
+
+        internal_payload = {
             "personalizations": [
                 {
                     "to": [{"email": settings.COMPANY_EMAIL}],
-                    "subject": f"[KDA Lead] {lead.interest.value} — {lead.first_name} {lead.last_name}",
+                    "subject": f"[KDA Lead] {lead.interest} — {lead.first_name} {lead.last_name}",
                 }
             ],
-            "from": {"email": settings.SENDGRID_FROM_EMAIL, "name": "KDA Analytics"},
+            "from": sender,
             "content": [{"type": "text/html", "value": _build_internal_html(lead, lead_id)}],
         }
+
+        confirmation_payload = {
+            "personalizations": [
+                {
+                    "to": [{"email": lead.email, "name": f"{lead.first_name} {lead.last_name}"}],
+                    "subject": "We've received your message — KDA Analytics",
+                }
+            ],
+            "from": sender,
+            "reply_to": {"email": settings.COMPANY_EMAIL, "name": "KDA Analytics"},
+            "content": [{"type": "text/html", "value": _build_confirmation_html(lead)}],
+        }
+
         async with httpx.AsyncClient() as client:
-            resp = await client.post(
-                "https://api.sendgrid.com/v3/mail/send",
-                headers={"Authorization": f"Bearer {settings.SENDGRID_API_KEY}"},
-                json=payload,
-                timeout=10,
+            r1, r2 = await asyncio.gather(
+                client.post("https://api.sendgrid.com/v3/mail/send", headers=headers, json=internal_payload, timeout=10),
+                client.post("https://api.sendgrid.com/v3/mail/send", headers=headers, json=confirmation_payload, timeout=10),
             )
-        if resp.status_code in (200, 202):
-            logger.info("SendGrid delivery OK — lead %s", lead_id)
+
+        if r1.status_code in (200, 202) and r2.status_code in (200, 202):
+            logger.info("SendGrid delivery OK (internal + confirmation) — lead %s", lead_id)
             return True
-        logger.warning("SendGrid returned %s", resp.status_code)
+
+        if r1.status_code not in (200, 202):
+            logger.warning("SendGrid internal email returned %s: %s", r1.status_code, r1.text)
+        if r2.status_code not in (200, 202):
+            logger.warning("SendGrid confirmation email returned %s: %s", r2.status_code, r2.text)
         return False
     except Exception as exc:
         logger.error("SendGrid error: %s", exc)
@@ -160,7 +183,7 @@ def send_via_smtp(lead: ContactRequest, lead_id: str) -> bool:
 
         # --- internal notification to team ---
         msg = MIMEMultipart("alternative")
-        msg["Subject"] = f"[KDA Lead] {lead.interest.value} — {lead.first_name} {lead.last_name}"
+        msg["Subject"] = f"[KDA Lead] {lead.interest} — {lead.first_name} {lead.last_name}"
         msg["From"] = f"KDA Analytics <{settings.SMTP_USERNAME}>"
         msg["To"] = settings.COMPANY_EMAIL
         msg.attach(MIMEText(_build_internal_html(lead, lead_id), "html"))
@@ -200,7 +223,7 @@ async def send_sms_alert(lead: ContactRequest) -> bool:
         client = Client(settings.TWILIO_ACCOUNT_SID,
                         settings.TWILIO_AUTH_TOKEN)
         client.messages.create(
-            body=f"[KDA Lead] {lead.first_name} {lead.last_name} · {lead.email} · {lead.interest.value}",
+            body=f"[KDA Lead] {lead.first_name} {lead.last_name} · {lead.email} · {lead.interest}",
             from_=settings.TWILIO_FROM_NUMBER,
             to=settings.TWILIO_TO_NUMBER,
         )

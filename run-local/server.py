@@ -19,7 +19,7 @@ from email.mime.text import MIMEText
 from flask import Flask, request, jsonify, send_from_directory, send_file
 
 # ── Config ─────────────────────────────────────────────────────────────────
-COMPANY_EMAIL = os.environ.get("COMPANY_EMAIL",   "hello@kdaanalytics.ai")
+COMPANY_EMAIL = os.environ.get("COMPANY_EMAIL",   "info@kdaanalytics.com")
 SMTP_HOST = os.environ.get("SMTP_HOST",       "smtp.gmail.com")
 SMTP_PORT = int(os.environ.get("SMTP_PORT",   "587"))
 SMTP_USERNAME = os.environ.get("SMTP_USERNAME",   "")
@@ -118,7 +118,7 @@ def send_email(lead: dict, lead_id: str) -> bool:
              <b style="color:#e8f0fe">{lead['interest']}</b>.<br/>
              Our team will get back to you within <b style="color:#00d4ff">24 business hours</b>.</p>
           <p style="color:#6b7fa8;font-size:12px;margin-top:32px">
-            © {datetime.utcnow().year} KDA Analytics · hello@kdaanalytics.ai<br/>
+            © {datetime.utcnow().year} KDA Analytics · info@kdaanalytics.com<br/>
             New Delhi NCR Region · Where Data Meets Intelligence</p>
         </div>"""
         reply.attach(MIMEText(reply_html, "html"))

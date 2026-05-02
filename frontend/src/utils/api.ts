@@ -25,7 +25,13 @@ export async function submitContact(payload: ContactPayload): Promise<ContactRes
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({}))
-    throw new Error(err.detail || `Server error ${res.status}`)
+    let message = `Server error ${res.status}`
+    if (typeof err.detail === 'string') {
+      message = err.detail
+    } else if (Array.isArray(err.detail) && err.detail.length > 0) {
+      message = err.detail.map((d: any) => d.msg ?? String(d)).join(', ')
+    }
+    throw new Error(message)
   }
 
   return res.json()
