@@ -26,6 +26,8 @@ class Settings(BaseSettings):
     ALLOWED_HOSTS: List[str] = [
         "kdaanalytics.com",
         "www.kdaanalytics.com",
+        "kdaa-website.onrender.com",
+        "*.onrender.com",
         "localhost",
     ]
 
