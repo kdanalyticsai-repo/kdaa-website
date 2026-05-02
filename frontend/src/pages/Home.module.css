@@ -289,7 +289,6 @@
 @media (max-width: 768px) {
   .servicesGrid  { grid-template-columns: 1fr; }
   .featured      { grid-column: unset; }
-  .heroStats     { gap: 1.5rem; }
   .ctaInner      { padding: 3rem 1.5rem; }
   .productsGrid  { grid-template-columns: 1fr; }
   .whyGrid       { grid-template-columns: 1fr; }
@@ -297,11 +296,16 @@
   .productsSection,
   .whySection,
   .ctaSection    { padding: 4rem 5%; }
-  .hero          { padding: 5rem 5% 3rem; min-height: auto; }
+  .hero {
+    min-height: unset;
+    padding: 6rem 5% 3rem;
+    justify-content: flex-start;
+    align-items: center;
+  }
   .heroSub       { font-size: 1rem; }
   .heroTitle     { font-size: clamp(1.8rem, 9vw, 2.8rem); }
   .serviceCard,
   .productCard,
   .whyCard       { padding: 1.75rem; }
-  .heroStats     { margin-top: 3rem; gap: 1.5rem; }
+  .heroStats     { margin-top: 2.5rem; gap: 1.5rem; }
 }
