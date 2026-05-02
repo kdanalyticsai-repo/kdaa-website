@@ -105,8 +105,7 @@ def _build_confirmation_html(lead: ContactRequest) -> str:
          Our team will get back to you within <strong class="highlight">24 business hours</strong>.</p>
       <a href="https://kdaanalytics.com" class="cta">Explore KDA Analytics →</a>
     </div>
-    <p style="text-align:center;">In the meantime, feel free to connect with us on LinkedIn
-       or reply directly to this email.</p>
+    <p style="text-align:center;">For any immediate queries feel free to connect with us by replying directly to this email or call/WhatsApp us on +91-9412309146.</p>
     <div class="footer">
       © {datetime.utcnow().year} KDA Analytics · info@kdaanalytics.com<br/>
       New Delhi NCR Region · Where Data Meets Intelligence
