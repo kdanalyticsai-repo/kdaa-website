@@ -36,3 +36,8 @@ services:
         sync: false
       - key: SECRET_KEY
         generateValue: true           # Render auto-generates a secure random value
+
+      # Add your Cloudflare Pages preview URL here once deployed, e.g.:
+      # ALLOWED_ORIGINS=["https://kdaanalytics.com","https://www.kdaanalytics.com","https://kda-web.pages.dev"]
+      - key: ALLOWED_ORIGINS
+        sync: false
