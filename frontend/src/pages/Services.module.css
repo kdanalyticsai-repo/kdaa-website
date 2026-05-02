@@ -30,7 +30,7 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(440px, 100%), 1fr));
   gap: 1.5rem;
   padding: 5rem 5%;
   background: var(--bg);
@@ -132,6 +132,9 @@
 .ctaBanner h2 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; }
 .ctaBanner p  { color: var(--muted); margin-bottom: 0.5rem; }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .grid { grid-template-columns: 1fr; padding: 3rem 5%; }
+  .hero { padding: 5rem 5% 3rem; }
+  .heroTitle { font-size: clamp(1.8rem, 6vw, 2.5rem); }
+  .ctaBanner { padding: 3rem 5%; }
 }

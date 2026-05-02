@@ -101,7 +101,7 @@
 }
 .valuesGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
   gap: 1.25rem;
   margin-top: 3rem;
 }
@@ -218,8 +218,15 @@
   }
   .statsGrid { grid-template-columns: repeat(2, 1fr); }
 }
+@media (max-width: 768px) {
+  .hero          { padding: 5rem 5% 3rem; }
+  .missionSection,
+  .valuesSection,
+  .whatSection,
+  .ctaBanner     { padding: 3.5rem 5%; }
+}
 @media (max-width: 520px) {
-  .statsGrid { grid-template-columns: 1fr 1fr; }
+  .statsGrid  { grid-template-columns: 1fr 1fr; }
   .valuesGrid { grid-template-columns: 1fr; }
   .whatActions { flex-direction: column; }
 }

@@ -25,6 +25,7 @@
 .logoImg {
   height: 48px;
   width: auto;
+  max-width: 160px;
   object-fit: contain;
 }
 
@@ -103,6 +104,8 @@
 @media (max-width: 768px) {
   .hamburger { display: flex; }
   .cta { display: none; }
+  .logoImg { height: 40px; max-width: 140px; }
+  .nav { padding: 0.9rem 5%; }
 
   .links {
     position: fixed;

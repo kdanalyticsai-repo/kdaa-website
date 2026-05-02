@@ -285,10 +285,19 @@
 }
 
 @media (max-width: 768px) {
-  .servicesGrid { grid-template-columns: 1fr; }
-  .featured     { grid-column: unset; }
-  .heroStats    { gap: 1.5rem; }
-  .ctaInner     { padding: 3rem 1.5rem; }
-  .productsGrid { grid-template-columns: 1fr; }
-  .whyGrid      { grid-template-columns: 1fr; }
+  .servicesGrid  { grid-template-columns: 1fr; }
+  .featured      { grid-column: unset; }
+  .heroStats     { gap: 1.5rem; }
+  .ctaInner      { padding: 3rem 1.5rem; }
+  .productsGrid  { grid-template-columns: 1fr; }
+  .whyGrid       { grid-template-columns: 1fr; }
+  .servicesSection,
+  .productsSection,
+  .whySection,
+  .ctaSection    { padding: 4rem 5%; }
+  .hero          { padding: 6rem 5% 4rem; }
+  .heroSub       { font-size: 1rem; }
+  .serviceCard,
+  .productCard,
+  .whyCard       { padding: 1.75rem; }
 }

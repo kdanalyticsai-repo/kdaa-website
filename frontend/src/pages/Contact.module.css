@@ -247,12 +247,16 @@
 .featuresSection { padding: 5rem 5%; background: var(--surface); }
 
 @media (max-width: 900px) {
-  .hero { grid-template-columns: 1fr; gap: 2.5rem; }
+  .hero   { grid-template-columns: 1fr; gap: 2.5rem; padding: 5rem 5% 3rem; }
   .layout { grid-template-columns: 1fr; }
-  .info { order: 1; }
+  .info   { order: 1; }
+  .statsGrid { grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 600px) {
-  .row { grid-template-columns: 1fr; }
+  .row      { grid-template-columns: 1fr; }
   .formWrap { padding: 1.5rem; }
+  .statValue { font-size: 1.8rem; }
+  .layout   { padding: 2.5rem 5%; }
+  .featuresSection { padding: 3rem 5%; }
 }
