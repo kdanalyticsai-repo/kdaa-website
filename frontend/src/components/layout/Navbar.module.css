@@ -85,9 +85,10 @@
   display: none;
   flex-direction: column;
   gap: 5px;
-  padding: 4px;
-  background: none;
-  border: none;
+  padding: 8px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border);
+  border-radius: 8px;
   cursor: pointer;
 }
 .hamburger span {
@@ -104,9 +105,17 @@
 /* ─── Mobile ─────────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .hamburger { display: flex; }
-  .cta { display: none; }
-  .logoImg { height: 44px; max-width: 150px; }
   .nav { padding: 0.85rem 5%; }
+  .logoImg { height: 44px; max-width: 150px; }
+
+  /* Show CTA on mobile, pushed to the right */
+  .cta {
+    margin-left: auto;
+    margin-right: 0.75rem;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.75rem;
+    box-shadow: none;
+  }
 
   .links {
     position: fixed;
@@ -128,5 +137,11 @@
   .links li { width: 100%; text-align: center; padding: 0.8rem 5%; }
   .link { font-size: 1rem; }
   .mobileCtaWrap { display: block; margin-top: 0.5rem; }
-  .mobileCtaWrap .cta { display: inline-flex; }
+  .mobileCtaWrap .cta {
+    display: inline-flex;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0.55rem 1.4rem;
+    font-size: 0.85rem;
+  }
 }
