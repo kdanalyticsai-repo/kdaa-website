@@ -1,13 +1,17 @@
 name: KDA Analytics — CI/CD
 
+# ─── Triggers ────────────────────────────────────────────────────────────────
+# • Every branch push  → run tests so feature branches are validated before PR
+# • PRs targeting main → run tests as a required gate before merge is allowed
+# • Push to main (post-merge) → run tests, then deploy if they pass
 on:
   push:
-    branches: [main]
+    branches: ['**']
   pull_request:
     branches: [main]
 
 jobs:
-  # ── Backend tests ────────────────────────────────────────────────────────
+  # ── Backend tests ────────────────────────────────────────────────────────────
   test-backend:
     name: Python Tests
     runs-on: ubuntu-latest
@@ -29,7 +33,7 @@ jobs:
       - name: Run tests
         run: pytest tests/ -v --tb=short
 
-  # ── Frontend build ────────────────────────────────────────────────────────
+  # ── Frontend build ────────────────────────────────────────────────────────────
   build-frontend:
     name: React Build
     runs-on: ubuntu-latest
@@ -52,3 +56,21 @@ jobs:
       - name: Build
         run: npm run build
 
+  # ── Deploy to Render (only after tests pass on main) ─────────────────────────
+  deploy:
+    name: Deploy to Render
+    runs-on: ubuntu-latest
+    needs: [test-backend, build-frontend]
+    # Only deploy when a commit is actually merged (pushed) to main — not on PRs
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - name: Trigger Render deploy hook
+        run: |
+          RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}")
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
+            echo "Deploy triggered successfully (HTTP $HTTP_CODE)"
+          else
+            echo "Deploy hook returned HTTP $HTTP_CODE — check Render dashboard"
+            exit 1
+          fi
