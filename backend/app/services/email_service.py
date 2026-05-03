@@ -80,55 +80,58 @@ def _build_confirmation_html(lead: ContactRequest) -> str:
 <head>
   <meta charset="UTF-8"/>
   <style>
-    body {{ font-family: 'Helvetica Neue', Arial, sans-serif; background:#040810; color:#e8f0fe; margin:0; padding:0; }}
+    body {{ font-family: 'Helvetica Neue', Arial, sans-serif; background:#f4f6f9; color:#1a1a2e; margin:0; padding:0; }}
     .wrap {{ max-width:600px; margin:0 auto; padding:40px 20px; }}
-    .hero {{ text-align:center; padding:40px 0; }}
-    .logo {{ font-size:22px; font-weight:800; letter-spacing:-0.02em; color:#fff; }}
-    .logo span {{ color:#00d4ff; }}
-    h1 {{ font-size:26px; margin:24px 0 12px; }}
-    p {{ color:#e8f0fe; line-height:1.7; font-size:14px; }}
-    .highlight {{ color:#e8f0fe; font-weight:600; }}
-    .cta {{ display:inline-block; background:#00d4ff; color:#040810; font-weight:700;
+    .card {{ background:#ffffff; border-radius:12px; padding:40px 36px; box-shadow:0 2px 12px rgba(0,0,0,0.08); }}
+    .hero {{ text-align:center; }}
+    .logo {{ font-size:22px; font-weight:800; letter-spacing:-0.02em; color:#1a1a2e; }}
+    .logo span {{ color:#00b8d9; }}
+    h1 {{ font-size:26px; margin:24px 0 12px; color:#1a1a2e; }}
+    p {{ color:#444c60; line-height:1.7; font-size:14px; margin:0; }}
+    .highlight {{ color:#1a1a2e; font-weight:600; }}
+    .cta {{ display:inline-block; background:#00b8d9; color:#ffffff; font-weight:700;
             font-size:14px; padding:12px 28px; border-radius:8px; text-decoration:none;
             margin:24px 0; }}
-    .footer {{ border-top:1px solid #1a2d50; padding-top:24px; margin-top:32px;
-               text-align:center; color:#6b7fa8; font-size:11px; }}
+    .divider {{ border:none; border-top:1px solid #e4e8f0; margin:28px 0; }}
+    .footer {{ text-align:center; color:#8a94a8; font-size:11px; margin-top:24px; }}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="hero">
-      <div class="logo">KDA<span>.</span>Analytics</div>
-      <h1>We've received your message 👋</h1>
-      <p>Hi <span class="highlight">{lead.first_name}</span>, thank you for reaching out about
-         <strong class="highlight">{lead.interest}</strong>.<br/>
-         Our team will get back to you within <strong class="highlight">24 business hours</strong>.</p>
-      <a href="https://kdaanalytics.com" class="cta">Explore KDA Analytics →</a>
-    </div>
-    <div style="text-align:center; margin:32px 0 8px;">
-      <p style="color:#e8f0fe; font-size:13px; margin:0 0 16px;">Need an immediate response? Reach us directly:</p>
-      <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto;">
-        <tr>
-          <td style="padding:0 10px; vertical-align:middle; text-align:center;">
-            <a href="mailto:info@kdaanalytics.com" style="display:inline-block; color:#00d4ff; font-size:13px; text-decoration:none; font-weight:500;">
-              ✉&nbsp; info@kdaanalytics.com
-            </a>
-          </td>
-          <td style="color:#3a5070; font-size:18px; vertical-align:middle; padding:0 4px;">|</td>
-          <td style="padding:0 10px; vertical-align:middle; text-align:center;">
-            <a href="https://wa.me/919412309146" target="_blank" style="display:inline-flex; align-items:center; gap:6px; text-decoration:none;">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/32px-WhatsApp.svg.png"
-                   alt="WhatsApp" width="18" height="18"
-                   style="vertical-align:middle; display:inline-block;"/>
-              <span style="color:#25D366; font-size:13px; font-weight:500; vertical-align:middle;">+91-9412309146</span>
-            </a>
-          </td>
-        </tr>
-      </table>
+    <div class="card">
+      <div class="hero">
+        <div class="logo">KDA<span>.</span>Analytics</div>
+        <h1>We've received your message 👋</h1>
+        <p>Hi <span class="highlight">{lead.first_name}</span>, thank you for reaching out about
+           <strong class="highlight">{lead.interest}</strong>.<br/>
+           Our team will get back to you within <strong class="highlight">24 business hours</strong>.</p>
+        <a href="https://kdaanalytics.com" class="cta">Explore KDA Analytics →</a>
+      </div>
+      <hr class="divider"/>
+      <div style="text-align:center;">
+        <p style="color:#444c60; font-size:13px; margin:0 0 16px;">Need an immediate response? Reach us directly:</p>
+        <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto;">
+          <tr>
+            <td style="padding:0 10px; vertical-align:middle; text-align:center;">
+              <a href="mailto:info@kdaanalytics.com" style="display:inline-block; color:#00b8d9; font-size:13px; text-decoration:none; font-weight:500;">
+                ✉&nbsp; info@kdaanalytics.com
+              </a>
+            </td>
+            <td style="color:#c8d0dc; font-size:18px; vertical-align:middle; padding:0 4px;">|</td>
+            <td style="padding:0 10px; vertical-align:middle; text-align:center;">
+              <a href="https://wa.me/919412309146" target="_blank" style="display:inline-flex; align-items:center; gap:6px; text-decoration:none;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/32px-WhatsApp.svg.png"
+                     alt="WhatsApp" width="18" height="18"
+                     style="vertical-align:middle; display:inline-block;"/>
+                <span style="color:#25D366; font-size:13px; font-weight:500; vertical-align:middle;">+91-9412309146</span>
+              </a>
+            </td>
+          </tr>
+        </table>
+      </div>
     </div>
     <div class="footer">
-      © {datetime.utcnow().year} KDA Analytics · New Delhi NCR Region<br/>
-      Where Data Meets Intelligence
+      © {datetime.utcnow().year} KDA Analytics · New Delhi NCR Region · Where Data Meets Intelligence
     </div>
   </div>
 </body>
