@@ -5,8 +5,11 @@ import Home from '@/pages/Home'
 import ServicesPage from '@/pages/Services'
 import ServiceDetailPage from '@/pages/ServiceDetail'
 import ProductsPage from '@/pages/Products'
+import ProductDetailPage from '@/pages/ProductDetail'
 import AboutPage from '@/pages/About'
 import ContactPage from '@/pages/Contact'
+import PrivacyPolicyPage from '@/pages/PrivacyPolicy'
+import TermsOfServicePage from '@/pages/TermsOfService'
 import NotFound from '@/pages/NotFound'
 
 function ScrollToTop() {
@@ -21,13 +24,16 @@ export default function App() {
       <ScrollToTop />
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/"               element={<Home />} />
-          <Route path="/about"          element={<AboutPage />} />
-          <Route path="/services"       element={<ServicesPage />} />
-          <Route path="/services/:slug" element={<ServiceDetailPage />} />
-          <Route path="/products"       element={<ProductsPage />} />
-          <Route path="/contact"        element={<ContactPage />} />
-          <Route path="*"               element={<NotFound />} />
+          <Route path="/"                  element={<Home />} />
+          <Route path="/about"             element={<AboutPage />} />
+          <Route path="/services"          element={<ServicesPage />} />
+          <Route path="/services/:slug"    element={<ServiceDetailPage />} />
+          <Route path="/products"          element={<ProductsPage />} />
+          <Route path="/products/:slug"    element={<ProductDetailPage />} />
+          <Route path="/contact"           element={<ContactPage />} />
+          <Route path="/privacy-policy"    element={<PrivacyPolicyPage />} />
+          <Route path="/terms-of-service"  element={<TermsOfServicePage />} />
+          <Route path="*"                  element={<NotFound />} />
         </Route>
       </Routes>
     </>
