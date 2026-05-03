@@ -86,8 +86,8 @@ def _build_confirmation_html(lead: ContactRequest) -> str:
     .logo {{ font-size:22px; font-weight:800; letter-spacing:-0.02em; color:#fff; }}
     .logo span {{ color:#00d4ff; }}
     h1 {{ font-size:26px; margin:24px 0 12px; }}
-    p {{ color:#6b7fa8; line-height:1.7; font-size:14px; }}
-    .highlight {{ color:#e8f0fe; }}
+    p {{ color:#e8f0fe; line-height:1.7; font-size:14px; }}
+    .highlight {{ color:#e8f0fe; font-weight:600; }}
     .cta {{ display:inline-block; background:#00d4ff; color:#040810; font-weight:700;
             font-size:14px; padding:12px 28px; border-radius:8px; text-decoration:none;
             margin:24px 0; }}
@@ -106,7 +106,7 @@ def _build_confirmation_html(lead: ContactRequest) -> str:
       <a href="https://kdaanalytics.com" class="cta">Explore KDA Analytics →</a>
     </div>
     <div style="text-align:center; margin:32px 0 8px;">
-      <p style="color:#6b7fa8; font-size:13px; margin:0 0 16px;">Need an immediate response? Reach us directly:</p>
+      <p style="color:#e8f0fe; font-size:13px; margin:0 0 16px;">Need an immediate response? Reach us directly:</p>
       <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto;">
         <tr>
           <td style="padding:0 10px; vertical-align:middle; text-align:center;">
@@ -114,7 +114,7 @@ def _build_confirmation_html(lead: ContactRequest) -> str:
               ✉&nbsp; info@kdaanalytics.com
             </a>
           </td>
-          <td style="color:#1a2d50; font-size:18px; vertical-align:middle; padding:0 4px;">|</td>
+          <td style="color:#3a5070; font-size:18px; vertical-align:middle; padding:0 4px;">|</td>
           <td style="padding:0 10px; vertical-align:middle; text-align:center;">
             <a href="https://wa.me/919412309146" target="_blank" style="display:inline-flex; align-items:center; gap:6px; text-decoration:none;">
               <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/32px-WhatsApp.svg.png"
