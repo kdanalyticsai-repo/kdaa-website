@@ -15,10 +15,10 @@ const LINKS = {
     { label: 'API & Data Solutions',    to: '/services/api-data-licensing' },
   ],
   Products: [
-    { label: 'Enterprise Chatbot',  to: '/products' },
-    { label: 'Fraud Detection',     to: '/products' },
-    { label: 'Agentic AI Platform', to: '/products' },
-    { label: 'AML Solution',        to: '/products' },
+    { label: 'Enterprise Chatbot',  to: '/products/enterprise-chatbot' },
+    { label: 'Fraud Detection',     to: '/products/fraud-detection' },
+    { label: 'Agentic AI Platform', to: '/products/agentic-ai-platform' },
+    { label: 'AML Solution',        to: '/products/aml-solution' },
   ],
 }
 
@@ -58,8 +58,8 @@ export default function Footer() {
       <div className={styles.bottom}>
         <p>© {new Date().getFullYear()} KDA Analytics. All rights reserved.</p>
         <div className={styles.legal}>
-          <Link to="/contact">Privacy Policy</Link>
-          <Link to="/contact">Terms of Service</Link>
+          <Link to="/privacy-policy">Privacy Policy</Link>
+          <Link to="/terms-of-service">Terms of Service</Link>
         </div>
       </div>
     </footer>

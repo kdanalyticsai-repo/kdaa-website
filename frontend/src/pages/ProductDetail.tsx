@@ -1,0 +1,155 @@
+import { useParams, Link, Navigate } from 'react-router-dom'
+import styles from './ServiceDetail.module.css'
+
+export const FOOTER_PRODUCTS = [
+  {
+    slug: 'enterprise-chatbot',
+    icon: '💬',
+    title: 'Enterprise Chatbot',
+    tagline: 'Intelligent Conversational AI for Business',
+    color: 'rgba(0,212,255,0.12)',
+    desc: 'A production-ready enterprise chatbot platform powered by large language models, designed to automate customer support, internal helpdesks, and complex business workflows. Handles multi-turn conversations, integrates with enterprise systems, and continuously improves through reinforcement learning from human feedback.',
+    bullets: [
+      'Multi-channel deployment — web, mobile, WhatsApp, Microsoft Teams',
+      'LLM-powered contextual understanding with intent and entity detection',
+      'Seamless CRM, ERP, and ticketing system integrations',
+      'Live agent handoff with full conversation context preservation',
+      'Analytics dashboard tracking engagement, resolution rates, and CSAT',
+      'Custom fine-tuning on your proprietary knowledge base and internal documents',
+    ],
+    industries: ['Banking & Insurance', 'E-Commerce', 'Healthcare', 'Telecom', 'HR & IT Helpdesk'],
+  },
+  {
+    slug: 'fraud-detection',
+    icon: '🔍',
+    title: 'Fraud Detection',
+    tagline: 'Real-Time AI-Powered Fraud Intelligence',
+    color: 'rgba(239,68,68,0.12)',
+    desc: 'An advanced fraud detection system leveraging machine learning and behavioural analytics to identify and block suspicious patterns in real time. Protects financial transactions, digital onboarding flows, and payment gateways with adaptive models that evolve continuously to stay ahead of emerging fraud tactics.',
+    bullets: [
+      'Real-time transaction scoring and risk flagging with sub-100ms latency',
+      'Behavioural biometrics and device fingerprinting for account takeover prevention',
+      'Network graph analysis to detect organised fraud rings and mule accounts',
+      'Adaptive ML models with automated retraining on new fraud signals',
+      'Low false-positive tuning to protect genuine customer experience',
+      'Integration with core banking, UPI, and payment gateway systems',
+    ],
+    industries: ['Banking', 'FinTech', 'Insurance', 'E-Commerce', 'NBFCs'],
+  },
+  {
+    slug: 'agentic-ai-platform',
+    icon: '🤖',
+    title: 'Agentic AI Platform',
+    tagline: 'Autonomous Multi-Agent Business Automation',
+    color: 'rgba(124,58,237,0.12)',
+    desc: 'Deploy autonomous, goal-driven AI agents that execute complex multi-step business workflows with minimal human intervention. Agents plan, reason, use external tools, and coordinate with each other to complete finance, procurement, HR, and operational tasks — consistently reducing manual effort by 40–70%.',
+    bullets: [
+      'Multi-agent orchestration with task delegation and result aggregation',
+      'Tool use: APIs, SQL databases, web search, ERPs, and document stores',
+      'Human-in-the-loop approval checkpoints for high-stakes decisions',
+      'Full audit trail, agent observability, and explainability reports',
+      'Custom agent design for any domain — finance, legal, operations, procurement',
+      'Secure enterprise deployment with role-based access control and data isolation',
+    ],
+    industries: ['Finance', 'Operations', 'HR', 'Legal', 'Procurement'],
+  },
+  {
+    slug: 'aml-solution',
+    icon: '🏦',
+    title: 'AML Solution',
+    tagline: 'AI-Driven Anti-Money Laundering Compliance',
+    color: 'rgba(16,185,129,0.12)',
+    desc: 'A comprehensive Anti-Money Laundering (AML) platform combining AI-powered transaction monitoring, customer due diligence, and regulatory reporting. Built to meet RBI, FATF, and PMLA compliance requirements, enabling financial institutions to significantly reduce compliance costs while dramatically improving detection accuracy.',
+    bullets: [
+      'Real-time transaction monitoring with adaptive ML risk scoring',
+      'Customer Due Diligence (CDD) and Enhanced Due Diligence (EDD) automation',
+      'Automated Suspicious Activity Report (SAR) generation and submission workflows',
+      'Integration with CIBIL, UIDAI Aadhaar verification, and PAN systems',
+      'Full regulatory compliance: RBI, SEBI, FATF, and PMLA 2002 frameworks',
+      'Case management with investigator dashboards and escalation routing',
+    ],
+    industries: ['Banking', 'NBFCs', 'Insurance', 'FinTech', 'Cooperative Banks'],
+  },
+]
+
+export default function ProductDetailPage() {
+  const { slug } = useParams<{ slug: string }>()
+  const product = FOOTER_PRODUCTS.find(p => p.slug === slug)
+
+  if (!product) return <Navigate to="/products" replace />
+
+  const others = FOOTER_PRODUCTS.filter(p => p.slug !== slug)
+
+  return (
+    <div className={`${styles.page} page-enter`}>
+
+      <div className={styles.breadcrumb}>
+        <Link to="/">Home</Link>
+        <span>/</span>
+        <Link to="/products">Products</Link>
+        <span>/</span>
+        <span>{product.title}</span>
+      </div>
+
+      <div className={styles.hero} style={{ '--color': product.color } as React.CSSProperties}>
+        <div className={styles.heroGlow} />
+        <div className={styles.badge}>
+          <span className={styles.badgeIcon}>{product.icon}</span>
+          AI Product
+        </div>
+        <h1 className={styles.title}>{product.title}</h1>
+        <p className={styles.tagline}>{product.tagline}</p>
+        <div className={styles.heroActions}>
+          <Link to="/contact" className="btn-primary">Request a Demo →</Link>
+          <Link to="/products" className="btn-outline">← All Products</Link>
+        </div>
+      </div>
+
+      <div className={styles.content}>
+        <div className={styles.main}>
+          <h2>Overview</h2>
+          <p className={styles.overview}>{product.desc}</p>
+
+          <h2>Key Capabilities</h2>
+          <ul className={styles.bullets}>
+            {product.bullets.map(b => (
+              <li key={b}>
+                <span className={styles.check}>✓</span>
+                {b}
+              </li>
+            ))}
+          </ul>
+
+          <div className={styles.cta}>
+            <h3>Interested in this product?</h3>
+            <p>Get in touch to discuss your requirements and schedule a personalised demo.</p>
+            <Link to="/contact" className="btn-primary">Contact Us →</Link>
+          </div>
+        </div>
+
+        <aside className={styles.sidebar}>
+          <div className={styles.sideCard}>
+            <div className={styles.sideIcon} style={{ background: product.color }}>{product.icon}</div>
+            <h3>{product.title}</h3>
+            <div className={styles.sidePills}>
+              {product.industries.map(ind => (
+                <span key={ind} className={styles.pill}>{ind}</span>
+              ))}
+            </div>
+          </div>
+
+          <div className={styles.sideCard}>
+            <h4>Other Products</h4>
+            {others.map(o => (
+              <Link key={o.slug} to={`/products/${o.slug}`} className={styles.otherLink}>
+                <span>{o.icon}</span>
+                <span>{o.title}</span>
+                <span className={styles.arrow}>→</span>
+              </Link>
+            ))}
+          </div>
+        </aside>
+      </div>
+    </div>
+  )
+}
