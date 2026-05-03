@@ -105,10 +105,30 @@ def _build_confirmation_html(lead: ContactRequest) -> str:
          Our team will get back to you within <strong class="highlight">24 business hours</strong>.</p>
       <a href="https://kdaanalytics.com" class="cta">Explore KDA Analytics →</a>
     </div>
-    <p style="text-align:center;">For any immediate queries feel free to connect with us by replying directly to this email or call/WhatsApp us on +91-9412309146.</p>
+    <div style="text-align:center; margin:32px 0 8px;">
+      <p style="color:#6b7fa8; font-size:13px; margin:0 0 16px;">Need an immediate response? Reach us directly:</p>
+      <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto;">
+        <tr>
+          <td style="padding:0 10px; vertical-align:middle; text-align:center;">
+            <a href="mailto:info@kdaanalytics.com" style="display:inline-block; color:#00d4ff; font-size:13px; text-decoration:none; font-weight:500;">
+              ✉&nbsp; info@kdaanalytics.com
+            </a>
+          </td>
+          <td style="color:#1a2d50; font-size:18px; vertical-align:middle; padding:0 4px;">|</td>
+          <td style="padding:0 10px; vertical-align:middle; text-align:center;">
+            <a href="https://wa.me/919412309146" target="_blank" style="display:inline-flex; align-items:center; gap:6px; text-decoration:none;">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/32px-WhatsApp.svg.png"
+                   alt="WhatsApp" width="18" height="18"
+                   style="vertical-align:middle; display:inline-block;"/>
+              <span style="color:#25D366; font-size:13px; font-weight:500; vertical-align:middle;">+91-9412309146</span>
+            </a>
+          </td>
+        </tr>
+      </table>
+    </div>
     <div class="footer">
-      © {datetime.utcnow().year} KDA Analytics · info@kdaanalytics.com<br/>
-      New Delhi NCR Region · Where Data Meets Intelligence
+      © {datetime.utcnow().year} KDA Analytics · New Delhi NCR Region<br/>
+      Where Data Meets Intelligence
     </div>
   </div>
 </body>
