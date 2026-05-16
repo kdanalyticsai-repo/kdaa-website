@@ -4,7 +4,7 @@ from fastapi.responses import HTMLResponse
 router = APIRouter()
 
 
-@router.get("/cvpilot/subscribe", response_class=HTMLResponse, include_in_schema=False)
+@router.get("/api/cvpilot/subscribe", response_class=HTMLResponse, include_in_schema=False)
 async def cvpilot_subscribe():
     """Razorpay checkout page for CVPilot Pro upgrades."""
     return """<!DOCTYPE html>
