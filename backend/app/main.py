@@ -10,7 +10,7 @@ from contextlib import asynccontextmanager
 
 from app.core.config import settings
 from app.core.logging import setup_logging
-from app.api.v1.routes import contact, health
+from app.api.v1.routes import contact, health, cvpilot
 
 
 @asynccontextmanager
@@ -43,3 +43,4 @@ if settings.ENVIRONMENT == "production":
 # ── Routers ───────────────────────────────────────────────────────────────────
 app.include_router(health.router, prefix="/api/v1", tags=["Health"])
 app.include_router(contact.router, prefix="/api/v1", tags=["Contact"])
+app.include_router(cvpilot.router, tags=["CVPilot"])
