@@ -53,9 +53,11 @@
     <h2>Payment Successful!</h2>
     <p>
       Your CVPilot account has been upgraded to Pro.<br><br>
-      Return to the app and pull down to refresh your profile —
-      your Pro badge will appear within a minute.
+      Taking you back to the app…
     </p>
+    <a href="cvpilot://profile" style="display:inline-block;margin-top:20px;background:#4361EE;color:#fff;padding:14px 28px;border-radius:12px;font-weight:700;font-size:15px;text-decoration:none;">
+      Open CVPilot App
+    </a>
   </div>
 </div>
 <script>
@@ -77,6 +79,9 @@
       handler: function() {
         document.getElementById('payment-view').style.display = 'none';
         document.getElementById('success').style.display = 'block';
+        setTimeout(function() {
+          window.location.href = 'cvpilot://profile';
+        }, 2000);
       },
       modal: {
         ondismiss: function() {
