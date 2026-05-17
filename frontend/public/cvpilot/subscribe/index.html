@@ -46,7 +46,7 @@
       <div>
         <div style="display:flex;align-items:baseline;justify-content:center;gap:4px">
           <span class="price-amount" id="display-amount">₹199</span>
-          <span class="price-per">/month</span>
+          <span class="price-per" id="display-per">/month</span>
         </div>
         <div class="price-compare">Up to 10× cheaper than other paid career services · Cancel anytime</div>
       </div>
@@ -96,7 +96,14 @@
   var amountPaise = parseInt(p.get('amount') || '19900');
   var amountRupees = '₹' + (amountPaise / 100).toLocaleString('en-IN');
 
+  var plan = p.get('plan') || 'monthly';
+  var planPerLabels = { monthly: '/month', quarterly: '/quarter', yearly: '/year' };
+  var planDescriptions = { monthly: 'Pro — ₹199/month', quarterly: 'Pro — ₹499/quarter', yearly: 'Pro — ₹1,499/year' };
+  var planPer = planPerLabels[plan] || '/month';
+  var planDesc = planDescriptions[plan] || 'CVPilot Pro';
+
   document.getElementById('display-amount').textContent = amountRupees;
+  document.getElementById('display-per').textContent = planPer;
   document.getElementById('btn-amount').textContent = amountRupees;
 
   if (!p.get('key') || !p.get('order_id') || !p.get('uid')) {
@@ -128,7 +135,7 @@
         amount:   amountPaise,
         currency: 'INR',
         name:     'CVPilot',
-        description: 'Pro plan — ₹199/month',
+        description: planDesc,
         prefill:  { email: p.get('email') || '', name: p.get('name') || '' },
         theme:    { color: '#4361EE' },
         handler: function(response) {
