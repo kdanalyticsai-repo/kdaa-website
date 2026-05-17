@@ -76,11 +76,8 @@
     <h2>Payment Successful!</h2>
     <p>
       Your CVPilot account has been upgraded to Pro.<br><br>
-      Taking you back to the app…
+      Press the <strong>back button</strong> to return to the app — your Pro badge will activate automatically.
     </p>
-    <a href="cvpilot://profile" style="display:inline-block;margin-top:20px;background:#4361EE;color:#fff;padding:14px 28px;border-radius:12px;font-weight:700;font-size:15px;text-decoration:none;">
-      Open CVPilot App
-    </a>
   </div>
 
   <div id="error-view">
@@ -99,12 +96,10 @@
   var amountPaise = parseInt(p.get('amount') || '19900');
   var amountRupees = '₹' + (amountPaise / 100).toLocaleString('en-IN');
 
-  // Show amount on page load
   document.getElementById('display-amount').textContent = amountRupees;
   document.getElementById('btn-amount').textContent = amountRupees;
 
-  // Validate required params (subscription_id replaces order_id)
-  if (!p.get('key') || !p.get('subscription_id') || !p.get('uid')) {
+  if (!p.get('key') || !p.get('order_id') || !p.get('uid')) {
     document.getElementById('payment-view').style.display = 'none';
     document.getElementById('error-view').style.display = 'block';
     document.getElementById('error-msg').textContent = 'This payment link is invalid or has expired. Please go back to the app and try again.';
@@ -128,18 +123,17 @@
 
     try {
       var rzp = new Razorpay({
-        key:             p.get('key'),
-        subscription_id: p.get('subscription_id'),
-        name:            'CVPilot',
-        description:     'Pro subscription — ₹199/month, billed monthly',
-        prefill:         { email: p.get('email') || '', name: p.get('name') || '' },
-        theme:           { color: '#4361EE' },
+        key:      p.get('key'),
+        order_id: p.get('order_id'),
+        amount:   amountPaise,
+        currency: 'INR',
+        name:     'CVPilot',
+        description: 'Pro plan — ₹199/month',
+        prefill:  { email: p.get('email') || '', name: p.get('name') || '' },
+        theme:    { color: '#4361EE' },
         handler: function(response) {
           document.getElementById('payment-view').style.display = 'none';
           document.getElementById('success').style.display = 'block';
-          setTimeout(function() {
-            window.location.href = 'cvpilot://profile';
-          }, 2000);
         },
         modal: {
           ondismiss: function() {
