@@ -116,7 +116,7 @@ const PRODUCTS = [
   },
   {
     icon: '🚀',
-    title: 'JobSearchAI',
+    title: 'CVPilot',
     subtitle: 'AI Powered Job Search',
     tags: ['HRTech', 'Recruitment', 'Career'],
     status: 'Live',
