@@ -103,8 +103,8 @@
   document.getElementById('display-amount').textContent = amountRupees;
   document.getElementById('btn-amount').textContent = amountRupees;
 
-  // Validate required params
-  if (!p.get('key') || !p.get('order_id') || !p.get('uid')) {
+  // Validate required params (subscription_id replaces order_id)
+  if (!p.get('key') || !p.get('subscription_id') || !p.get('uid')) {
     document.getElementById('payment-view').style.display = 'none';
     document.getElementById('error-view').style.display = 'block';
     document.getElementById('error-msg').textContent = 'This payment link is invalid or has expired. Please go back to the app and try again.';
@@ -128,15 +128,12 @@
 
     try {
       var rzp = new Razorpay({
-        key:      p.get('key'),
-        order_id: p.get('order_id'),
-        amount:   amountPaise,
-        currency: 'INR',
-        name:     'CVPilot',
-        description: 'Pro subscription — monthly',
-        prefill:  { email: p.get('email') || '', name: p.get('name') || '' },
-        notes:    { user_id: p.get('uid'), plan: 'pro' },
-        theme:    { color: '#4361EE' },
+        key:             p.get('key'),
+        subscription_id: p.get('subscription_id'),
+        name:            'CVPilot',
+        description:     'Pro subscription — ₹199/month, billed monthly',
+        prefill:         { email: p.get('email') || '', name: p.get('name') || '' },
+        theme:           { color: '#4361EE' },
         handler: function(response) {
           document.getElementById('payment-view').style.display = 'none';
           document.getElementById('success').style.display = 'block';
