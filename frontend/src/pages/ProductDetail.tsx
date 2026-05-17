@@ -3,6 +3,24 @@ import styles from './ServiceDetail.module.css'
 
 export const FOOTER_PRODUCTS = [
   {
+    slug: 'cvpilot',
+    icon: '🚀',
+    title: 'CVPilot',
+    tagline: 'Find jobs that match your skills',
+    color: 'rgba(99,102,241,0.12)',
+    desc: 'CVPilot is a live AI-powered career platform that matches job seekers to the right opportunities using their resume and skills. It goes beyond job boards — coaching users, optimising their applications, and tracking their entire job search from one place. Available now on Android and iOS.',
+    bullets: [
+      'Smart job matching — AI surfaces the best-fit roles based on your resume daily',
+      'Resume upload & ATS score — instantly see how your resume ranks against any job',
+      'AI Career Coach — chat with an AI coach anytime for personalised career guidance',
+      'Interview prep — AI-generated questions and model answers tailored to your target role',
+      'Cover letter generator — unique, personalised cover letters for every application',
+      'Resume tailoring — automatically adapt your resume to match specific job descriptions',
+      'Application tracker — manage and track every application in one organised place',
+    ],
+    industries: ['Job Seekers', 'HRTech', 'EdTech', 'Staffing', 'Professional Services'],
+  },
+  {
     slug: 'enterprise-chatbot',
     icon: '💬',
     title: 'Enterprise Chatbot',
@@ -100,7 +118,10 @@ export default function ProductDetailPage() {
         <h1 className={styles.title}>{product.title}</h1>
         <p className={styles.tagline}>{product.tagline}</p>
         <div className={styles.heroActions}>
-          <Link to="/contact" className="btn-primary">Request a Demo →</Link>
+          {product.slug === 'cvpilot'
+            ? <Link to="/contact" className="btn-primary">Get Early Access →</Link>
+            : <Link to="/contact" className="btn-primary">Request a Demo →</Link>
+          }
           <Link to="/products" className="btn-outline">← All Products</Link>
         </div>
       </div>

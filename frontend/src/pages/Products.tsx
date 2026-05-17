@@ -3,6 +3,23 @@ import styles from './Products.module.css'
 
 const PRODUCTS = [
   {
+    icon: '🚀',
+    title: 'CVPilot',
+    subtitle: 'AI Powered Job Search',
+    tags: ['HRTech', 'Recruitment', 'Career'],
+    status: 'Live',
+    slug: 'cvpilot',
+    desc: 'An AI-powered proactive job agent that autonomously discovers, matches, and applies to relevant opportunities on behalf of job seekers. Continuously monitors markets, surfaces high-fit roles, and personalizes applications — transforming passive job searching into active career intelligence.',
+    capabilities: [
+      'Autonomous role discovery across job boards and networks',
+      'AI-driven fit scoring and match explanation',
+      'Personalized resume and cover letter generation',
+      'Application tracking and follow-up automation',
+    ],
+    industries: ['HRTech', 'Staffing', 'EdTech', 'Professional Services'],
+    color: 'rgba(99,102,241,0.12)',
+  },
+  {
     icon: '🤖',
     title: 'Autonomous AI Agents Platform',
     subtitle: 'Agentic Business Automation',
@@ -114,22 +131,6 @@ const PRODUCTS = [
     industries: ['Retail', 'BFSI', 'Telecom', 'Healthcare'],
     color: 'rgba(20,184,166,0.12)',
   },
-  {
-    icon: '🚀',
-    title: 'JobSearchAI',
-    subtitle: 'AI Powered Job Search',
-    tags: ['HRTech', 'Recruitment', 'Career'],
-    status: 'In Development',
-    desc: 'An AI-powered proactive job agent that autonomously discovers, matches, and applies to relevant opportunities on behalf of job seekers. Continuously monitors markets, surfaces high-fit roles, and personalizes applications — transforming passive job searching into active career intelligence.',
-    capabilities: [
-      'Autonomous role discovery across job boards and networks',
-      'AI-driven fit scoring and match explanation',
-      'Personalized resume and cover letter generation',
-      'Application tracking and follow-up automation',
-    ],
-    industries: ['HRTech', 'Staffing', 'EdTech', 'Professional Services'],
-    color: 'rgba(99,102,241,0.12)',
-  },
 ]
 
 export default function ProductsPage() {
@@ -149,45 +150,64 @@ export default function ProductsPage() {
       </div>
 
       <section className={styles.grid}>
-        {PRODUCTS.map((p, i) => (
-          <div key={p.title} className={styles.card} style={{ animationDelay: `${i * 0.07}s` }}>
-            <div className={styles.cardHeader}>
-              <div className={styles.iconWrap} style={{ background: p.color }}>
-                <span className={styles.icon}>{p.icon}</span>
+        {PRODUCTS.map((p, i) => {
+          const cardInner = (
+            <>
+              <div className={styles.cardHeader}>
+                <div className={styles.iconWrap} style={{ background: p.color }}>
+                  <span className={styles.icon}>{p.icon}</span>
+                </div>
+                <span className={p.status === 'Live' ? styles.statusLive : styles.status}>{p.status}</span>
               </div>
-              <span className={styles.status}>{p.status}</span>
-            </div>
 
-            <div className={styles.tags}>
-              {p.tags.map(t => <span key={t} className={styles.tag}>{t}</span>)}
-            </div>
-
-            <h2 className={styles.title}>{p.title}</h2>
-            <p className={styles.subtitle}>{p.subtitle}</p>
-            <p className={styles.desc}>{p.desc}</p>
-
-            <div className={styles.capabilities}>
-              <div className={styles.capLabel}>Key Capabilities</div>
-              <ul>
-                {p.capabilities.map(c => (
-                  <li key={c} className={styles.cap}>
-                    <span className={styles.check}>✓</span>
-                    {c}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className={styles.industries}>
-              <div className={styles.indLabel}>Industries</div>
-              <div className={styles.indList}>
-                {p.industries.map(ind => (
-                  <span key={ind} className={styles.ind}>{ind}</span>
-                ))}
+              <div className={styles.tags}>
+                {p.tags.map(t => <span key={t} className={styles.tag}>{t}</span>)}
               </div>
+
+              <h2 className={styles.title}>{p.title}</h2>
+              <p className={styles.subtitle}>{p.subtitle}</p>
+              <p className={styles.desc}>{p.desc}</p>
+
+              <div className={styles.capabilities}>
+                <div className={styles.capLabel}>Key Capabilities</div>
+                <ul>
+                  {p.capabilities.map(c => (
+                    <li key={c} className={styles.cap}>
+                      <span className={styles.check}>✓</span>
+                      {c}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className={styles.industries}>
+                <div className={styles.indLabel}>Industries</div>
+                <div className={styles.indList}>
+                  {p.industries.map(ind => (
+                    <span key={ind} className={styles.ind}>{ind}</span>
+                  ))}
+                </div>
+              </div>
+
+              {'slug' in p && <div className={styles.viewLink}>View Product →</div>}
+            </>
+          )
+
+          return 'slug' in p ? (
+            <Link
+              key={p.title}
+              to={`/products/${p.slug}`}
+              className={`${styles.card} ${styles.cardClickable}`}
+              style={{ animationDelay: `${i * 0.07}s` }}
+            >
+              {cardInner}
+            </Link>
+          ) : (
+            <div key={p.title} className={styles.card} style={{ animationDelay: `${i * 0.07}s` }}>
+              {cardInner}
             </div>
-          </div>
-        ))}
+          )
+        })}
       </section>
 
       <section className={styles.ctaBanner}>
