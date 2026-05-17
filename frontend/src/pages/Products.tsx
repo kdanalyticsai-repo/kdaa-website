@@ -3,6 +3,23 @@ import styles from './Products.module.css'
 
 const PRODUCTS = [
   {
+    icon: '🚀',
+    title: 'CVPilot',
+    subtitle: 'AI Powered Job Search',
+    tags: ['HRTech', 'Recruitment', 'Career'],
+    status: 'Live',
+    slug: 'cvpilot',
+    desc: 'An AI-powered proactive job agent that autonomously discovers, matches, and applies to relevant opportunities on behalf of job seekers. Continuously monitors markets, surfaces high-fit roles, and personalizes applications — transforming passive job searching into active career intelligence.',
+    capabilities: [
+      'Autonomous role discovery across job boards and networks',
+      'AI-driven fit scoring and match explanation',
+      'Personalized resume and cover letter generation',
+      'Application tracking and follow-up automation',
+    ],
+    industries: ['HRTech', 'Staffing', 'EdTech', 'Professional Services'],
+    color: 'rgba(99,102,241,0.12)',
+  },
+  {
     icon: '🤖',
     title: 'Autonomous AI Agents Platform',
     subtitle: 'Agentic Business Automation',
@@ -113,23 +130,6 @@ const PRODUCTS = [
     ],
     industries: ['Retail', 'BFSI', 'Telecom', 'Healthcare'],
     color: 'rgba(20,184,166,0.12)',
-  },
-  {
-    icon: '🚀',
-    title: 'CVPilot',
-    subtitle: 'AI Powered Job Search',
-    tags: ['HRTech', 'Recruitment', 'Career'],
-    status: 'Live',
-    slug: 'cvpilot',
-    desc: 'An AI-powered proactive job agent that autonomously discovers, matches, and applies to relevant opportunities on behalf of job seekers. Continuously monitors markets, surfaces high-fit roles, and personalizes applications — transforming passive job searching into active career intelligence.',
-    capabilities: [
-      'Autonomous role discovery across job boards and networks',
-      'AI-driven fit scoring and match explanation',
-      'Personalized resume and cover letter generation',
-      'Application tracking and follow-up automation',
-    ],
-    industries: ['HRTech', 'Staffing', 'EdTech', 'Professional Services'],
-    color: 'rgba(99,102,241,0.12)',
   },
 ]
 
