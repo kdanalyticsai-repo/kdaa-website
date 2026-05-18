@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CVPilot Pro – Upgrade</title>
+  <title>CVProAI Pro – Upgrade</title>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
@@ -39,7 +39,7 @@
 
   <div id="payment-view">
     <div class="logo">✦</div>
-    <h1>Upgrade to CVPilot Pro</h1>
+    <h1>Upgrade to CVProAI Pro</h1>
     <p class="subtitle">Unlimited AI coaching, job matches, and resume tools — all in one app.</p>
 
     <div class="price-box">
@@ -75,7 +75,7 @@
     <div class="icon">🎉</div>
     <h2>Payment Successful!</h2>
     <p>
-      Your CVPilot account has been upgraded to Pro.<br><br>
+      Your CVProAI account has been upgraded to Pro.<br><br>
       Press the <strong>back button</strong> to return to the app — your Pro badge will activate automatically.
     </p>
   </div>
@@ -100,7 +100,7 @@
   var planPerLabels = { monthly: '/month', quarterly: '/quarter', yearly: '/year' };
   var planDescriptions = { monthly: 'Pro — ₹199/month', quarterly: 'Pro — ₹499/quarter', yearly: 'Pro — ₹1,499/year' };
   var planPer = planPerLabels[plan] || '/month';
-  var planDesc = planDescriptions[plan] || 'CVPilot Pro';
+  var planDesc = planDescriptions[plan] || 'CVProAI Pro';
 
   document.getElementById('display-amount').textContent = amountRupees;
   document.getElementById('display-per').textContent = planPer;
@@ -134,7 +134,7 @@
         order_id: p.get('order_id'),
         amount:   amountPaise,
         currency: 'INR',
-        name:     'CVPilot',
+        name:     'CVProAI',
         description: planDesc,
         prefill:  { email: p.get('email') || '', name: p.get('name') || '' },
         theme:    { color: '#4361EE' },
