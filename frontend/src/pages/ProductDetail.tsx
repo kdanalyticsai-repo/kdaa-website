@@ -5,20 +5,21 @@ export const FOOTER_PRODUCTS = [
   {
     slug: 'cvpilot',
     icon: '🚀',
-    title: 'CVPilot',
-    tagline: 'Find jobs that match your skills',
+    title: 'CVProAI',
+    tagline: 'Hire smarter. Get hired faster.',
     color: 'rgba(99,102,241,0.12)',
-    desc: 'CVPilot is a live AI-powered career platform that matches job seekers to the right opportunities using their resume and skills. It goes beyond job boards — coaching users, optimising their applications, and tracking their entire job search from one place. Available now on Android and iOS.',
+    desc: 'CVProAI is a live, dual-sided AI career platform serving both job seekers and job providers. Job seekers get smart job matching, AI resume coaching, interview prep, and application tracking. Job providers can post listings, manage applicants, and hire qualified candidates — all from one mobile app, available now on Android and iOS.',
     bullets: [
-      'Smart job matching — AI surfaces the best-fit roles based on your resume daily',
+      'Smart job matching — AI surfaces the best-fit roles based on your resume and skills daily',
       'Resume upload & ATS score — instantly see how your resume ranks against any job',
       'AI Career Coach — chat with an AI coach anytime for personalised career guidance',
       'Interview prep — AI-generated questions and model answers tailored to your target role',
       'Cover letter generator — unique, personalised cover letters for every application',
       'Resume tailoring — automatically adapt your resume to match specific job descriptions',
       'Application tracker — manage and track every application in one organised place',
+      'Job Provider portal — post listings with full specs, review applicants, and manage hiring',
     ],
-    industries: ['Job Seekers', 'HRTech', 'EdTech', 'Staffing', 'Professional Services'],
+    industries: ['Job Seekers', 'Job Providers', 'HRTech', 'EdTech', 'Staffing'],
   },
   {
     slug: 'enterprise-chatbot',
@@ -119,7 +120,7 @@ export default function ProductDetailPage() {
         <p className={styles.tagline}>{product.tagline}</p>
         <div className={styles.heroActions}>
           {product.slug === 'cvpilot'
-            ? <Link to="/contact" className="btn-primary">Get Early Access →</Link>
+            ? <Link to="/contact" className="btn-primary">Download the App →</Link>
             : <Link to="/contact" className="btn-primary">Request a Demo →</Link>
           }
           <Link to="/products" className="btn-outline">← All Products</Link>
