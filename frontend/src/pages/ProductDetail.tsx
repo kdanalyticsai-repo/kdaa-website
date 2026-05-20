@@ -3,7 +3,7 @@ import styles from './ServiceDetail.module.css'
 
 export const FOOTER_PRODUCTS = [
   {
-    slug: 'cvpilot',
+    slug: 'cvproai',
     icon: '🚀',
     title: 'CVProAI',
     tagline: 'Hire smarter. Get hired faster.',
@@ -119,7 +119,7 @@ export default function ProductDetailPage() {
         <h1 className={styles.title}>{product.title}</h1>
         <p className={styles.tagline}>{product.tagline}</p>
         <div className={styles.heroActions}>
-          {product.slug === 'cvpilot'
+          {product.slug === 'cvproai'
             ? <Link to="/contact" className="btn-primary">Download the App →</Link>
             : <Link to="/contact" className="btn-primary">Request a Demo →</Link>
           }
