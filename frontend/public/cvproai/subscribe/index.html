@@ -93,6 +93,7 @@
 </div>
 <script>
   var p = new URLSearchParams(window.location.search);
+  var returnUrl = p.get('return_url') || 'cvpilot://payment-success';
   var amountPaise = parseInt(p.get('amount') || '19900');
   var amountRupees = '₹' + (amountPaise / 100).toLocaleString('en-IN');
 
@@ -141,7 +142,7 @@
         handler: function(response) {
           document.getElementById('payment-view').style.display = 'none';
           document.getElementById('success').style.display = 'block';
-          setTimeout(function() { window.location.href = 'cvpilot://payment-success'; }, 2000);
+          setTimeout(function() { window.location.href = returnUrl; }, 2000);
         },
         modal: {
           ondismiss: function() {
