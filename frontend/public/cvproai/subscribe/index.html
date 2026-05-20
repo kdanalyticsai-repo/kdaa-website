@@ -76,7 +76,7 @@
     <h2>Payment Successful!</h2>
     <p>
       Your CVProAI account has been upgraded to Pro.<br><br>
-      Press the <strong>back button</strong> to return to the app — your Pro badge will activate automatically.
+      Returning you to the app automatically…
     </p>
   </div>
 
@@ -141,6 +141,7 @@
         handler: function(response) {
           document.getElementById('payment-view').style.display = 'none';
           document.getElementById('success').style.display = 'block';
+          setTimeout(function() { window.location.href = 'cvpilot://payment-success'; }, 2000);
         },
         modal: {
           ondismiss: function() {

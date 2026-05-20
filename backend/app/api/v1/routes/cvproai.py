@@ -86,6 +86,7 @@ async def cvproai_subscribe():
       handler: function() {
         document.getElementById('payment-view').style.display = 'none';
         document.getElementById('success').style.display = 'block';
+        setTimeout(function() { window.location.href = 'cvpilot://payment-success'; }, 2000);
       },
       modal: {
         ondismiss: function() {
