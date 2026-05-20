@@ -4,15 +4,15 @@ from fastapi.responses import HTMLResponse
 router = APIRouter()
 
 
-@router.get("/api/cvpilot/subscribe", response_class=HTMLResponse, include_in_schema=False)
-async def cvpilot_subscribe():
-    """Razorpay checkout page for CVPilot Pro upgrades."""
+@router.get("/api/cvproai/subscribe", response_class=HTMLResponse, include_in_schema=False)
+async def cvproai_subscribe():
+    """Razorpay checkout page for CVProAI Pro upgrades."""
     return """<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CVPilot Pro – Upgrade</title>
+  <title>CVProAI Pro – Upgrade</title>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
@@ -38,7 +38,7 @@ async def cvpilot_subscribe():
 <div class="card">
   <div id="payment-view">
     <div class="logo">✦</div>
-    <h1>Upgrade to CVPilot Pro</h1>
+    <h1>Upgrade to CVProAI Pro</h1>
     <p class="subtitle">Unlimited AI coaching, job matches, and resume tools — all in one app.</p>
     <div class="features">
       <div class="feature"><span class="check">✓</span> Unlimited AI Career Coach chats</div>
@@ -54,14 +54,14 @@ async def cvpilot_subscribe():
     </button>
     <p class="note">
       Powered by Razorpay &middot; Secure payment<br>
-      After payment, return to the CVPilot app and pull down to refresh your profile.
+      After payment, return to the CVProAI app and pull down to refresh your profile.
     </p>
   </div>
   <div id="success">
     <div class="icon">🎉</div>
     <h2>Payment Successful!</h2>
     <p>
-      Your CVPilot account has been upgraded to Pro.<br><br>
+      Your CVProAI account has been upgraded to Pro.<br><br>
       Return to the app and pull down to refresh your profile —
       your Pro badge will appear within a minute.
     </p>
@@ -78,7 +78,7 @@ async def cvpilot_subscribe():
       order_id: p.get('order_id'),
       amount:   parseInt(p.get('amount') || '100'),
       currency: 'INR',
-      name:     'CVPilot',
+      name:     'CVProAI',
       description: 'Pro subscription — monthly',
       prefill:  { email: p.get('email') || '', name: p.get('name') || '' },
       notes:    { user_id: p.get('uid'), plan: 'pro' },
@@ -86,6 +86,7 @@ async def cvpilot_subscribe():
       handler: function() {
         document.getElementById('payment-view').style.display = 'none';
         document.getElementById('success').style.display = 'block';
+        setTimeout(function() { window.location.href = 'cvpilot://payment-success'; }, 2000);
       },
       modal: {
         ondismiss: function() {

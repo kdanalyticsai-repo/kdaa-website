@@ -8,7 +8,7 @@ const PRODUCTS = [
     subtitle: 'AI-Powered Career & Hiring Platform',
     tags: ['HRTech', 'Recruitment', 'Career'],
     status: 'Live',
-    slug: 'cvpilot',
+    slug: 'cvproai',
     desc: 'A dual-sided AI career platform connecting job seekers and job providers. Job seekers get AI resume coaching, smart job matching, and interview prep. Job providers post listings, manage applicants, and hire smarter — all from one place, available on Android and iOS.',
     capabilities: [
       'Smart job matching — AI surfaces the best-fit roles based on resume and skills',

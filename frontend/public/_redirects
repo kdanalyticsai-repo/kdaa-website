@@ -1,5 +1,7 @@
-/cvpilot/privacy/   /cvproai/privacy/ 301
-/cvpilot/privacy    /cvproai/privacy/ 301
-/cvpilot/subscribe/ /cvproai/subscribe/ 301
-/cvpilot/subscribe  /cvproai/subscribe/ 301
+/cvpilot/privacy/        /cvproai/privacy/ 301
+/cvpilot/privacy         /cvproai/privacy/ 301
+/cvpilot/subscribe/      /cvproai/subscribe/ 301
+/cvpilot/subscribe       /cvproai/subscribe/ 301
+/products/cvpilot        /products/cvproai 301
+/products/cvpilot/*      /products/cvproai 301
 /* /index.html 200
