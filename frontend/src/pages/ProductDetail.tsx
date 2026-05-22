@@ -3,12 +3,12 @@ import styles from './ServiceDetail.module.css'
 
 export const FOOTER_PRODUCTS = [
   {
-    slug: 'cvproai',
+    slug: 'proaicv',
     icon: '🚀',
-    title: 'CVProAI',
+    title: 'ProAICV',
     tagline: 'Hire smarter. Get hired faster.',
     color: 'rgba(99,102,241,0.12)',
-    desc: 'CVProAI is a live, dual-sided AI career platform serving both job seekers and job providers. Job seekers get smart job matching, AI resume coaching, interview prep, and application tracking. Job providers can post listings, manage applicants, and hire qualified candidates — all from one mobile app, available now on Android and iOS.',
+    desc: 'ProAICV is a live, dual-sided AI career platform serving both job seekers and job providers. Job seekers get smart job matching, AI resume coaching, interview prep, and application tracking. Job providers can post listings, manage applicants, and hire qualified candidates — all from one mobile app, available now on Android and iOS.',
     bullets: [
       'Smart job matching — AI surfaces the best-fit roles based on your resume and skills daily',
       'Resume upload & ATS score — instantly see how your resume ranks against any job',
@@ -119,7 +119,7 @@ export default function ProductDetailPage() {
         <h1 className={styles.title}>{product.title}</h1>
         <p className={styles.tagline}>{product.tagline}</p>
         <div className={styles.heroActions}>
-          {product.slug === 'cvproai'
+          {product.slug === 'proaicv'
             ? <Link to="/contact" className="btn-primary">Download the App →</Link>
             : <Link to="/contact" className="btn-primary">Request a Demo →</Link>
           }
