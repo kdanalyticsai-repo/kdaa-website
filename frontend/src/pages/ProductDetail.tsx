@@ -22,6 +22,26 @@ export const FOOTER_PRODUCTS = [
     industries: ['Job Seekers', 'Job Providers', 'HRTech', 'EdTech', 'Staffing'],
   },
   {
+    slug: 'dharmaai',
+    icon: '🪔',
+    title: 'DharmaAI',
+    tagline: 'Your companion on the path of wisdom.',
+    color: 'rgba(204,85,0,0.12)',
+    appUrl: 'https://dharma.kdaanalytics.com/',
+    desc: 'DharmaAI is a live, multilingual spiritual companion that brings the timeless wisdom of the Bhagavad Gita, the Vedas, and the Upanishads to everyday life through AI. Seekers read scripture with translations and commentary, ask an AI Guru for personalised guidance, track their daily sadhana, listen to audio wisdom, and connect with a community of fellow seekers — all available now on the web in English, Hindi, Tamil, and Bengali.',
+    bullets: [
+      'AI Guru — a compassionate AI guide offering personalised spiritual counsel',
+      'Scripture Scholar — verse-grounded answers with citations from the Gita and beyond',
+      'Full reader for the Bhagavad Gita, Vedas, and Upanishads with translations & commentary',
+      'Daily Reflection and Daily Audio Wisdom — a fresh verse and chapter reading each day',
+      'Sadhana tracker — build and sustain your daily spiritual practice and streak',
+      'Sangha community — share reflections, celebrate milestones, and draw inspiration',
+      'Fully multilingual — English, Hindi, Tamil, and Bengali, with transliterated names',
+      'Premium membership with gifting, secure payments, and account management',
+    ],
+    industries: ['Spirituality', 'Wellness', 'Consumer Apps', 'EdTech', 'Devotional'],
+  },
+  {
     slug: 'enterprise-chatbot',
     icon: '💬',
     title: 'Enterprise Chatbot',
@@ -119,9 +139,11 @@ export default function ProductDetailPage() {
         <h1 className={styles.title}>{product.title}</h1>
         <p className={styles.tagline}>{product.tagline}</p>
         <div className={styles.heroActions}>
-          {product.slug === 'proaicv'
-            ? <Link to="/contact" className="btn-primary">Download the App →</Link>
-            : <Link to="/contact" className="btn-primary">Request a Demo →</Link>
+          {'appUrl' in product && product.appUrl
+            ? <a href={product.appUrl} target="_blank" rel="noopener noreferrer" className="btn-primary">Open the App →</a>
+            : product.slug === 'proaicv'
+              ? <Link to="/contact" className="btn-primary">Download the App →</Link>
+              : <Link to="/contact" className="btn-primary">Request a Demo →</Link>
           }
           <Link to="/products" className="btn-outline">← All Products</Link>
         </div>
@@ -144,8 +166,20 @@ export default function ProductDetailPage() {
 
           <div className={styles.cta}>
             <h3>Interested in this product?</h3>
-            <p>Get in touch to discuss your requirements and schedule a personalised demo.</p>
-            <Link to="/contact" className="btn-primary">Contact Us →</Link>
+            {'appUrl' in product && product.appUrl ? (
+              <>
+                <p>Visit {product.title} to explore it yourself, or get in touch with any questions.</p>
+                <div className={styles.heroActions}>
+                  <a href={product.appUrl} target="_blank" rel="noopener noreferrer" className="btn-primary">Visit {product.title} →</a>
+                  <Link to="/contact" className="btn-outline">Contact Us →</Link>
+                </div>
+              </>
+            ) : (
+              <>
+                <p>Get in touch to discuss your requirements and schedule a personalised demo.</p>
+                <Link to="/contact" className="btn-primary">Contact Us →</Link>
+              </>
+            )}
           </div>
         </div>
 

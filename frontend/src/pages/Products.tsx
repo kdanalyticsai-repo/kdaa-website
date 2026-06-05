@@ -20,6 +20,23 @@ const PRODUCTS = [
     color: 'rgba(99,102,241,0.12)',
   },
   {
+    icon: '🪔',
+    title: 'DharmaAI',
+    subtitle: 'AI Spiritual Wisdom & Sadhana Companion',
+    tags: ['Spiritual', 'Wellness', 'Consumer'],
+    status: 'Live',
+    slug: 'dharmaai',
+    desc: 'A multilingual spiritual companion that brings the Bhagavad Gita, the Vedas, and the Upanishads to life with AI. Seekers read scripture with translations and commentary, ask an AI Guru for personalised guidance, track their daily sadhana, listen to audio wisdom, and connect with a like-minded community — available now on the web in English, Hindi, Tamil, and Bengali.',
+    capabilities: [
+      'AI Guru & Scripture Scholar — personalised, verse-grounded spiritual guidance',
+      'Bhagavad Gita, Vedas & Upanishads reader with translations and commentary',
+      'Daily reflection, daily audio wisdom, and sadhana (practice) tracking',
+      'Sangha community + a fully multilingual experience (EN / HI / TA / BN)',
+    ],
+    industries: ['Spirituality', 'Wellness', 'Consumer', 'EdTech'],
+    color: 'rgba(204,85,0,0.12)',
+  },
+  {
     icon: '🤖',
     title: 'Autonomous AI Agents Platform',
     subtitle: 'Agentic Business Automation',
