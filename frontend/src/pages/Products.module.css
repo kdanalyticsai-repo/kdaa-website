@@ -97,7 +97,13 @@
 }
 
 .cardClickable {
-  display: block;
+  /* Mirror .card's flex layout. Without this, display:block overrides .card's
+     `display:flex` and its `gap` stops applying, so the children (icon, tags…)
+     collapse together — which is why Live (clickable) tiles looked cramped
+     while In-Development tiles did not. */
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
   text-decoration: none;
   color: inherit;
   cursor: pointer;
