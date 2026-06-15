@@ -27,7 +27,7 @@ export const FOOTER_PRODUCTS = [
     title: 'DharmaAI',
     tagline: 'Your companion on the path of wisdom.',
     color: 'rgba(204,85,0,0.12)',
-    appUrl: 'https://dharma.kdaanalytics.com/welcome',
+    appUrl: 'https://dharma.kdaanalytics.com',
     desc: 'DharmaAI is a live, multilingual spiritual companion that brings the timeless wisdom of the Bhagavad Gita, the Vedas, and the Upanishads to everyday life through AI. Seekers read scripture with translations and commentary, ask an AI Guru for personalised guidance, track their daily sadhana, listen to audio wisdom, and connect with a community of fellow seekers — available on web and Android in English, Hindi, Tamil, Bengali, Gujarati, and Odia.',
     bullets: [
       'AI Guru — a compassionate AI guide offering personalised spiritual counsel',
