@@ -1,8 +1,11 @@
 // ProAICV web app config.
-// Defaults to the live Render backend so the app works out of the box.
-// For local backend dev, set VITE_API_URL=http://localhost:8000/api/v1 in frontend/.env.local
+// IMPORTANT: this app uses its OWN env var (VITE_PROAICV_API_URL), NOT the shared
+// VITE_API_URL — that one is set in Cloudflare Pages to the marketing site's backend
+// (kdaa-website.onrender.com) and would point this app at the wrong host.
+// Defaults to the live cvpilot backend so the app works out of the box with no env vars.
+// For local backend dev, set VITE_PROAICV_API_URL=http://localhost:8000/api/v1 in frontend/.env.local
 export const API_URL =
-  (import.meta.env.VITE_API_URL as string | undefined) ??
+  (import.meta.env.VITE_PROAICV_API_URL as string | undefined) ??
   'https://cvpilot-backend-hop4.onrender.com/api/v1';
 
 export const POLL_INTERVAL_MS = 3000;
