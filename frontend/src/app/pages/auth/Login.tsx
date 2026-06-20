@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuthStore } from '@/app/stores/authStore';
 import { apiError } from '@/app/lib/api';
 import { Button, Field, PasswordInput } from '@/app/components/ui';
+import { AuthShell } from '@/app/components/AuthShell';
 
 export default function Login() {
   const login = useAuthStore((s) => s.login);
@@ -28,10 +29,10 @@ export default function Login() {
   };
 
   return (
-    <div className="pa-auth-wrap">
-      <form className="pa-auth-card" onSubmit={onSubmit}>
-        <div className="pa-auth-title">Welcome back</div>
-        <div className="pa-auth-sub">Sign in to your ProAICV account</div>
+    <AuthShell>
+      <form onSubmit={onSubmit}>
+        <div className="pa-auth-title" style={{ textAlign: 'left' }}>Welcome back</div>
+        <div className="pa-auth-sub" style={{ textAlign: 'left', margin: '6px 0 22px' }}>Sign in to your ProAICV account</div>
 
         <Field label="Email">
           <input className="pa-input" type="email" autoComplete="email" value={email}
@@ -53,6 +54,6 @@ export default function Login() {
           <Link to={`/register${params.get('role') ? `?role=${params.get('role')}` : ''}`}>Create an account</Link>
         </div>
       </form>
-    </div>
+    </AuthShell>
   );
 }

@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuthStore } from '@/app/stores/authStore';
 import { apiError } from '@/app/lib/api';
 import { Button, Field, PasswordInput } from '@/app/components/ui';
+import { AuthShell } from '@/app/components/AuthShell';
 
 export default function Register() {
   const register = useAuthStore((s) => s.register);
@@ -40,10 +41,10 @@ export default function Register() {
   const roleLabel = pendingRole === 'job_provider' ? 'Employer' : 'Job Seeker';
 
   return (
-    <div className="pa-auth-wrap">
-      <form className="pa-auth-card" onSubmit={onSubmit}>
-        <div className="pa-auth-title">Create your account</div>
-        <div className="pa-auth-sub">
+    <AuthShell>
+      <form onSubmit={onSubmit}>
+        <div className="pa-auth-title" style={{ textAlign: 'left' }}>Create your account</div>
+        <div className="pa-auth-sub" style={{ textAlign: 'left', margin: '6px 0 22px' }}>
           Signing up as <strong>{roleLabel}</strong> · <Link to="/role-select">change</Link>
         </div>
 
@@ -65,6 +66,6 @@ export default function Register() {
           Already have an account? <Link to="/login">Sign in</Link>
         </div>
       </form>
-    </div>
+    </AuthShell>
   );
 }

@@ -59,16 +59,26 @@ export default function ProviderHome() {
         </div>
       </div>
 
-      <div className="pa-card">
-        <h3 style={{ fontSize: 16, marginBottom: 10 }}>Quick actions</h3>
-        <div className="pa-grid pa-grid-3">
-          <Link to="/provider/post" className="pa-btn pa-btn-primary">➕ Post a job</Link>
-          <Link to="/provider/listings" className="pa-btn pa-btn-ghost">📑 My listings</Link>
-          <Link to="/provider/applicants" className="pa-btn pa-btn-ghost">👥 Applicants</Link>
-        </div>
+      <h3 style={{ fontSize: 17, margin: '24px 0 12px' }}>Quick actions</h3>
+      <div className="pa-grid pa-grid-3">
+        <Link to="/provider/post" className="pa-card pa-tile" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <span className="pa-icon-tile">➕</span>
+          <div style={{ fontWeight: 700 }}>Post a job</div>
+          <span className="pa-chevron-circle">›</span>
+        </Link>
+        <Link to="/provider/listings" className="pa-card pa-tile" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <span className="pa-icon-tile tertiary">📑</span>
+          <div style={{ fontWeight: 700 }}>My listings</div>
+          <span className="pa-chevron-circle">›</span>
+        </Link>
+        <Link to="/provider/applicants" className="pa-card pa-tile" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <span className="pa-icon-tile">👥</span>
+          <div style={{ fontWeight: 700 }}>Applicants</div>
+          <span className="pa-chevron-circle">›</span>
+        </Link>
       </div>
 
-      <div className="pa-card">
+      <div className="pa-card" style={{ marginTop: 16 }}>
         <h3 style={{ fontSize: 16, marginBottom: 8 }}>Company</h3>
         <Link to="/provider/profile" className="pa-list-link">🏢 Company profile <span>›</span></Link>
         <Link to="/settings" className="pa-list-link">⚙️ Settings & security <span>›</span></Link>

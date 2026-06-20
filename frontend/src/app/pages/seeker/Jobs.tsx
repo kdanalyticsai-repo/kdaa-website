@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/app/lib/api';
 import { formatSalary, timeAgo } from '@/app/lib/format';
@@ -30,11 +30,13 @@ const QUICK_COMPANIES = ['TCS', 'HCL', 'IBM', 'Havells', 'Tata Power'];
 export default function Jobs() {
   const qc = useQueryClient();
   const toast = useToast();
-  const [search, setSearch] = useState('');
+  const [params] = useSearchParams();
+  const initialQ = params.get('q') ?? '';
+  const [search, setSearch] = useState(initialQ);
   const [location, setLocation] = useState('');
   const [remote, setRemote] = useState('');
   const [postedDays, setPostedDays] = useState(0);
-  const [applied, setApplied] = useState({ q: '', location: '', remote: '', postedDays: 0 });
+  const [applied, setApplied] = useState({ q: initialQ, location: '', remote: '', postedDays: 0 });
 
   const { data, isLoading, isError, refetch, isFetching } = useQuery({
     queryKey: ['jobs', applied],
@@ -115,38 +117,37 @@ export default function Jobs() {
           ) : (
             <div style={{ opacity: isFetching ? 0.6 : 1 }}>
               {jobs.map((job) => (
-                <div key={job.id} className="pa-card">
-                  <div className="pa-between">
-                    <div style={{ minWidth: 0 }}>
-                      <Link to={`/jobs/${job.id}`} style={{ fontWeight: 700, fontSize: 16, color: 'var(--text)' }}>
-                        {job.title}
-                      </Link>
-                      <div className="pa-muted" style={{ fontSize: 14, marginTop: 2 }}>
-                        {job.company}{job.location ? ` · ${job.location}` : ''}
-                      </div>
+                <div key={job.id} className="pa-job-card">
+                  <span className="pa-app-logo"><span className="material-symbols-outlined">domain</span></span>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div className="pa-between" style={{ gap: 12 }}>
+                      <Link to={`/jobs/${job.id}`} className="pa-job-title">{job.title}</Link>
+                      {job.match_score != null && (
+                        <span className="pa-match-pill"><span className="material-symbols-outlined">target</span>{job.match_score}%</span>
+                      )}
                     </div>
-                    {job.match_score != null && (
-                      <span className="pa-badge pa-badge-primary">{job.match_score}% match</span>
-                    )}
-                  </div>
+                    <div className="pa-muted" style={{ fontSize: 14, marginTop: 2 }}>
+                      {job.company}{job.location ? ` · ${job.location}` : ''}
+                    </div>
 
-                  <div className="pa-chip-row" style={{ marginTop: 10 }}>
-                    {job.remote_type && <span className="pa-badge pa-badge-neutral">{job.remote_type}</span>}
-                    {job.job_type && <span className="pa-badge pa-badge-neutral">{job.job_type}</span>}
-                    {formatSalary(job.salary_min, job.salary_max, job.currency) && (
-                      <span className="pa-badge pa-badge-neutral">{formatSalary(job.salary_min, job.salary_max, job.currency)}</span>
-                    )}
-                    {job.posted_at && <span className="pa-badge pa-badge-neutral">{timeAgo(job.posted_at)}</span>}
-                  </div>
+                    <div className="pa-chip-row" style={{ marginTop: 10 }}>
+                      {job.remote_type && <span className="pa-badge pa-badge-neutral">{job.remote_type}</span>}
+                      {job.job_type && <span className="pa-badge pa-badge-neutral">{job.job_type}</span>}
+                      {formatSalary(job.salary_min, job.salary_max, job.currency) && (
+                        <span className="pa-badge pa-badge-neutral">{formatSalary(job.salary_min, job.salary_max, job.currency)}</span>
+                      )}
+                      {job.posted_at && <span className="pa-badge pa-badge-neutral">{timeAgo(job.posted_at)}</span>}
+                    </div>
 
-                  <div className="pa-row" style={{ marginTop: 14 }}>
-                    <Link to={`/jobs/${job.id}`} className="pa-btn pa-btn-ghost pa-btn-sm">View details</Link>
-                    <Button size="sm" variant={job.is_saved ? 'outline' : 'ghost'}
-                      loading={saveToggle.isPending && saveToggle.variables?.id === job.id}
-                      onClick={() => saveToggle.mutate(job)}>
-                      {job.is_saved ? '★ Saved' : '☆ Save'}
-                    </Button>
-                    {job.is_applied && <span className="pa-badge pa-badge-success">Applied</span>}
+                    <div className="pa-row" style={{ marginTop: 14 }}>
+                      <Link to={`/jobs/${job.id}`} className="pa-btn pa-btn-primary pa-btn-sm">View details</Link>
+                      <Button size="sm" variant={job.is_saved ? 'outline' : 'ghost'}
+                        loading={saveToggle.isPending && saveToggle.variables?.id === job.id}
+                        onClick={() => saveToggle.mutate(job)}>
+                        {job.is_saved ? '★ Saved' : '☆ Save'}
+                      </Button>
+                      {job.is_applied && <span className="pa-badge pa-badge-success">Applied</span>}
+                    </div>
                   </div>
                 </div>
               ))}

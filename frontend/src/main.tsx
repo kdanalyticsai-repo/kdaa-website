@@ -15,7 +15,7 @@ const isAppHost =
   import.meta.env.VITE_APP_TARGET === 'app'
 
 // The app and marketing site share one index.html, so brand the browser tab
-// (title + favicon) at runtime when we're serving the ProAICV app.
+// (title + favicon) and load the app's fonts at runtime when serving the app.
 if (isAppHost) {
   document.title = 'ProAICV'
   const favicon =
@@ -23,6 +23,17 @@ if (isAppHost) {
     document.head.appendChild(Object.assign(document.createElement('link'), { rel: 'icon' }))
   favicon.type = 'image/png'
   favicon.href = '/proaicv-logo.png'
+
+  // Lumina design system: Plus Jakarta Sans (all type) + Material Symbols
+  // Outlined (line-art icons). Scoped to the app host so marketing is untouched.
+  document.head.appendChild(Object.assign(document.createElement('link'), {
+    rel: 'stylesheet',
+    href: 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap',
+  }))
+  document.head.appendChild(Object.assign(document.createElement('link'), {
+    rel: 'stylesheet',
+    href: 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap',
+  }))
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

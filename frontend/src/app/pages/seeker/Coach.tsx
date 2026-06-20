@@ -93,8 +93,9 @@ function ChatPanel() {
         <div className="pa-chat-messages">
           {messages.length === 0 && !send.isPending && (
             <div className="pa-chat-welcome">
-              <div style={{ fontSize: 32 }}>🎯</div>
-              <p className="pa-muted" style={{ margin: '8px 0 16px' }}>Start a conversation or pick a prompt:</p>
+              <div className="pa-coach-orb">✦</div>
+              <div style={{ fontWeight: 800, fontSize: 18 }}>AI Career Coach</div>
+              <p className="pa-muted" style={{ margin: '6px 0 16px' }}>Start a conversation or pick a prompt:</p>
               {SUGGESTIONS.map((s) => (
                 <button key={s} className="pa-chip" style={{ display: 'block', margin: '6px auto', maxWidth: 360 }}
                   onClick={() => send.mutate(s)}>{s}</button>
@@ -103,11 +104,12 @@ function ChatPanel() {
           )}
           {messages.map((m, i) => (
             <div key={i} className={`pa-msg pa-msg-${m.role === 'user' ? 'user' : 'ai'}`}>
+              {m.role !== 'user' && <span className="pa-msg-avatar">✦</span>}
               <div className="pa-msg-bubble">{m.content}</div>
             </div>
           ))}
           {send.isPending && (
-            <div className="pa-msg pa-msg-ai"><div className="pa-msg-bubble"><Spinner size={16} /></div></div>
+            <div className="pa-msg pa-msg-ai"><span className="pa-msg-avatar">✦</span><div className="pa-msg-bubble"><Spinner size={16} /></div></div>
           )}
           <div ref={endRef} />
         </div>
