@@ -52,9 +52,6 @@ export default function Login() {
           New here?{' '}
           <Link to={`/register${params.get('role') ? `?role=${params.get('role')}` : ''}`}>Create an account</Link>
         </div>
-        <div className="pa-auth-foot" style={{ marginTop: 8 }}>
-          <Link to="/admin-login" style={{ fontSize: 12, color: 'var(--text-muted)' }}>Admin sign in</Link>
-        </div>
       </form>
     </div>
   );
