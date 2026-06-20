@@ -60,22 +60,21 @@ export default function ProviderHome() {
       </div>
 
       <h3 style={{ fontSize: 17, margin: '24px 0 12px' }}>Quick actions</h3>
-      <div className="pa-grid pa-grid-3">
-        <Link to="/provider/post" className="pa-card pa-tile" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <span className="pa-icon-tile">➕</span>
-          <div style={{ fontWeight: 700 }}>Post a job</div>
-          <span className="pa-chevron-circle">›</span>
-        </Link>
-        <Link to="/provider/listings" className="pa-card pa-tile" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <span className="pa-icon-tile tertiary">📑</span>
-          <div style={{ fontWeight: 700 }}>My listings</div>
-          <span className="pa-chevron-circle">›</span>
-        </Link>
-        <Link to="/provider/applicants" className="pa-card pa-tile" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <span className="pa-icon-tile">👥</span>
-          <div style={{ fontWeight: 700 }}>Applicants</div>
-          <span className="pa-chevron-circle">›</span>
-        </Link>
+      <div className="pa-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))' }}>
+        {([
+          { to: '/provider/post', icon: 'post_add', title: 'Post a job', sub: 'Create a new listing', accent: 'primary' },
+          { to: '/provider/listings', icon: 'list_alt', title: 'My listings', sub: 'Manage your roles', accent: 'cyan' },
+          { to: '/provider/applicants', icon: 'groups', title: 'Applicants', sub: 'Review candidates', accent: 'violet' },
+        ] as const).map((a) => (
+          <Link key={a.to} to={a.to} className="pa-card pa-tile" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <span className={`pa-icon-pill ${a.accent}`}><span className="material-symbols-outlined fill">{a.icon}</span></span>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ fontWeight: 700 }}>{a.title}</div>
+              <div className="pa-muted" style={{ fontSize: 12 }}>{a.sub}</div>
+            </div>
+            <span className="pa-chevron-circle">›</span>
+          </Link>
+        ))}
       </div>
 
       <div className="pa-card" style={{ marginTop: 16 }}>

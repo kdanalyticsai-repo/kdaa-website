@@ -91,6 +91,13 @@ export function AppShell({ children }: { children: ReactNode }) {
               <span className="pa-pro-btn">Upgrade to Pro</span>
             </Link>
           )}
+          {user?.role === 'job_provider' && (
+            <Link to="/provider/post" className="pa-pro-card">
+              <div className="pa-pro-eyebrow">EMPLOYER</div>
+              <div className="pa-pro-title">Reach admin-verified candidates</div>
+              <span className="pa-pro-btn">+ Post a Job</span>
+            </Link>
+          )}
           <NavLink to="/settings" className={({ isActive }) => `pa-nav-link${isActive ? ' active' : ''}`}>
             <Icon name="settings" /><span>Settings</span>
           </NavLink>
