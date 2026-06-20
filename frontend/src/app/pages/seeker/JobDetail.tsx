@@ -90,13 +90,22 @@ export default function JobDetail() {
         </div>
       </div>
 
-      <div className="pa-card">
-        <h3 style={{ fontSize: 16, marginBottom: 10 }}>AI tools for this job</h3>
-        <div className="pa-grid pa-grid-3">
-          <Link to={`/jobs/${id}/tailor`} className="pa-btn pa-btn-ghost">📝 Tailor resume</Link>
-          <Link to={`/jobs/${id}/cover-letter`} className="pa-btn pa-btn-ghost">✉️ Cover letter</Link>
-          <Link to={`/jobs/${id}/interview-prep`} className="pa-btn pa-btn-ghost">🎤 Interview prep</Link>
-        </div>
+      <h3 style={{ fontSize: 17, margin: '4px 0 14px' }}>AI tools for this job</h3>
+      <div className="pa-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))' }}>
+        {([
+          { to: 'tailor', icon: 'edit_document', title: 'Tailor resume', sub: 'Match your CV to this role', accent: 'primary' },
+          { to: 'cover-letter', icon: 'draft', title: 'Cover letter', sub: 'A letter written for this role', accent: 'cyan' },
+          { to: 'interview-prep', icon: 'record_voice_over', title: 'Interview prep', sub: 'Likely questions & answers', accent: 'violet' },
+        ] as const).map((t) => (
+          <Link key={t.to} to={`/jobs/${id}/${t.to}`} className="pa-card pa-tile" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <span className={`pa-icon-pill ${t.accent}`}><span className="material-symbols-outlined fill">{t.icon}</span></span>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ fontWeight: 700 }}>{t.title}</div>
+              <div className="pa-muted" style={{ fontSize: 12 }}>{t.sub}</div>
+            </div>
+            <span className="pa-chevron-circle">›</span>
+          </Link>
+        ))}
       </div>
 
       {job.skills_required?.length > 0 && (
