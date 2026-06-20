@@ -34,6 +34,35 @@ if (isAppHost) {
     rel: 'stylesheet',
     href: 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap',
   }))
+
+  // PWA: installable web app (scoped to the app host, so marketing is untouched).
+  document.head.appendChild(Object.assign(document.createElement('link'), {
+    rel: 'manifest', href: '/proaicv.webmanifest',
+  }))
+  document.head.appendChild(Object.assign(document.createElement('meta'), {
+    name: 'theme-color', content: '#3800c0',
+  }))
+  // iOS Safari uses apple-* tags (not the manifest) for the home-screen icon,
+  // app title and standalone launch — so the iPhone install matches the app.
+  document.head.appendChild(Object.assign(document.createElement('link'), {
+    rel: 'apple-touch-icon', href: '/proaicv-app-icon.png',
+  }))
+  const appleMeta = (name: string, content: string) =>
+    document.head.appendChild(Object.assign(document.createElement('meta'), { name, content }))
+  appleMeta('apple-mobile-web-app-capable', 'yes')
+  appleMeta('apple-mobile-web-app-status-bar-style', 'default')
+  appleMeta('apple-mobile-web-app-title', 'ProAICV')
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(() => {})
+    })
+  }
+  // Capture the install prompt early so the Install button can fire it later.
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault()
+    ;(window as unknown as { __pwaPrompt?: Event }).__pwaPrompt = e
+    window.dispatchEvent(new Event('pwa-installable'))
+  })
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

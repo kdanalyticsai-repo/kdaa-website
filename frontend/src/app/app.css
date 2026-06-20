@@ -392,6 +392,8 @@ a.pa-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); bor
 .pa-role-logo-text { font-size: 32px; font-weight: 800; letter-spacing: -.6px; }
 .pa-role-tagline { color: rgba(255, 255, 255, .7); margin-top: 6px; font-size: 15px; }
 .pa-role-pills { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 18px; }
+.pa-install-cta { margin-top: 20px; background: rgba(255, 255, 255, .16); border: 1px solid rgba(255, 255, 255, .32); color: #fff; padding: 10px 18px; border-radius: 999px; font-weight: 700; font-size: 14px; font-family: inherit; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; transition: background .15s; }
+.pa-install-cta:hover { background: rgba(255, 255, 255, .26); }
 .pa-role-pill {
   background: rgba(255, 255, 255, .12); border: 1px solid rgba(255, 255, 255, .2);
   border-radius: 999px; padding: 5px 14px; font-size: 12px; font-weight: 600; color: rgba(255, 255, 255, .88);
