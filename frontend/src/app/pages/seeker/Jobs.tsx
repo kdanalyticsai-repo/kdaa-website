@@ -63,6 +63,10 @@ export default function Jobs() {
   const runSearch = () => setApplied({ q: search.trim(), location: location.trim(), remote, postedDays });
 
   const jobs = data?.jobs ?? [];
+  const webTerm = [applied.q, applied.location].filter(Boolean).join(' ').trim();
+  const webQuery = webTerm ? `${webTerm} jobs` : 'jobs in India';
+  const googleUrl = `https://www.google.com/search?q=${encodeURIComponent(webQuery)}`;
+  const ddgUrl = `https://duckduckgo.com/?q=${encodeURIComponent(webQuery)}`;
 
   return (
     <div className="pa-content">
@@ -108,12 +112,22 @@ export default function Jobs() {
         </div>
       </div>
 
+      {/* Web search — find roles on Google / DuckDuckGo, then log them in Applications */}
+      <div className="pa-card pa-between" style={{ marginTop: 16, flexWrap: 'wrap', gap: 12 }}>
+        <div style={{ minWidth: 0 }}>
+          <div style={{ fontWeight: 700 }}>Can’t find the right role here?</div>
+          <div className="pa-muted" style={{ fontSize: 13, marginTop: 2 }}>Search the web, then log what you find from Applications.</div>
+        </div>
+        <WebSearch google={googleUrl} ddg={ddgUrl} />
+      </div>
+
       <div style={{ marginTop: 16 }}>
         {isLoading ? <Loading label="Finding jobs…" />
           : isError ? <ErrorState message="Could not load jobs." onRetry={refetch} />
           : jobs.length === 0 ? (
             <EmptyState icon="🔍" title="No jobs found"
-              sub="Try a broader search or different filters." />
+              sub="Try a broader search, change filters, or look on the web."
+              action={<WebSearch google={googleUrl} ddg={ddgUrl} />} />
           ) : (
             <div style={{ opacity: isFetching ? 0.6 : 1 }}>
               {jobs.map((job) => (
@@ -154,6 +168,19 @@ export default function Jobs() {
             </div>
           )}
       </div>
+    </div>
+  );
+}
+
+function WebSearch({ google, ddg }: { google: string; ddg: string }) {
+  return (
+    <div className="pa-row" style={{ flexWrap: 'wrap', gap: 10 }}>
+      <a className="pa-btn pa-btn-ghost pa-btn-sm" href={google} target="_blank" rel="noreferrer">
+        <span className="material-symbols-outlined" style={{ fontSize: 18 }}>travel_explore</span> Google
+      </a>
+      <a className="pa-btn pa-btn-ghost pa-btn-sm" href={ddg} target="_blank" rel="noreferrer">
+        <span className="material-symbols-outlined" style={{ fontSize: 18 }}>travel_explore</span> DuckDuckGo
+      </a>
     </div>
   );
 }

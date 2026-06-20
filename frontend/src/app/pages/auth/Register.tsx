@@ -41,7 +41,7 @@ export default function Register() {
   const roleLabel = pendingRole === 'job_provider' ? 'Employer' : 'Job Seeker';
 
   return (
-    <AuthShell>
+    <AuthShell role={pendingRole}>
       <form onSubmit={onSubmit}>
         <div className="pa-auth-title" style={{ textAlign: 'left' }}>Create your account</div>
         <div className="pa-auth-sub" style={{ textAlign: 'left', margin: '6px 0 22px' }}>
@@ -63,7 +63,7 @@ export default function Register() {
         <Button type="submit" block loading={busy}>Create account</Button>
 
         <div className="pa-auth-foot">
-          Already have an account? <Link to="/login">Sign in</Link>
+          Already have an account? <Link to={`/login?role=${pendingRole === 'job_provider' ? 'job_provider' : 'job_seeker'}`}>Sign in</Link>
         </div>
       </form>
     </AuthShell>

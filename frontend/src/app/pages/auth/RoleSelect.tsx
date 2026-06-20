@@ -1,4 +1,4 @@
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/app/stores/authStore';
 
 // Same imagery as the mobile role-select screen.
@@ -67,9 +67,6 @@ export default function RoleSelect() {
           onClick={() => pick('job_provider')}
         />
 
-        <div className="pa-role-signin">
-          Already have an account? <Link to="/login">Sign in</Link>
-        </div>
       </div>
     </div>
   );

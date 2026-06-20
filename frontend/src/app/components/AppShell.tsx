@@ -1,4 +1,4 @@
-import { ReactNode, useState, FormEvent } from 'react';
+import { ReactNode } from 'react';
 import { NavLink, useNavigate, Link } from 'react-router-dom';
 import { useAuthStore } from '@/app/stores/authStore';
 
@@ -41,7 +41,6 @@ export function AppShell({ children }: { children: ReactNode }) {
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
   const navigate = useNavigate();
-  const [q, setQ] = useState('');
 
   const nav = user?.role === 'job_provider' ? PROVIDER_NAV
     : user?.role === 'admin' ? ADMIN_NAV
@@ -56,11 +55,6 @@ export function AppShell({ children }: { children: ReactNode }) {
   const handleLogout = async () => {
     await logout();
     navigate('/login', { replace: true });
-  };
-
-  const onSearch = (e: FormEvent) => {
-    e.preventDefault();
-    navigate(`/jobs${q.trim() ? `?q=${encodeURIComponent(q.trim())}` : ''}`);
   };
 
   return (
@@ -107,14 +101,10 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       <div className="pa-main">
         <header className="pa-topbar">
-          <form className="pa-search" onSubmit={onSearch}>
-            <span className="material-symbols-outlined">search</span>
-            <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Search jobs, companies or insights…"
-            />
-          </form>
+          <NavLink to={homePathForRole(user?.role)} className="pa-topbar-brand">
+            <span className="pa-brand-logo"><Icon name="rocket_launch" fill /></span>
+            <span className="pa-brand-name">ProAICV</span>
+          </NavLink>
           <div className="pa-topbar-actions">
             {isSeeker && !isPro && (
               <Link to="/paywall" className="pa-btn pa-btn-primary pa-btn-sm">Upgrade to Pro</Link>
