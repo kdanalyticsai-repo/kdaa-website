@@ -80,8 +80,8 @@ export default function Settings() {
 
       <div className="pa-card">
         <h3 style={{ fontSize: 16, marginBottom: 12 }}>Legal</h3>
-        <a className="pa-list-link" href="https://kdaanalytics.com/terms-of-service" target="_blank" rel="noreferrer">📋 Terms & Conditions <span>›</span></a>
-        <a className="pa-list-link" href="https://kdaanalytics.com/privacy-policy" target="_blank" rel="noreferrer">🔒 Privacy Policy <span>›</span></a>
+        <a className="pa-list-link" href="https://kdaanalytics.com/proaicv/terms/" target="_blank" rel="noreferrer">📋 Terms & Conditions <span>›</span></a>
+        <a className="pa-list-link" href="https://kdaanalytics.com/proaicv/privacy/" target="_blank" rel="noreferrer">🔒 Privacy Policy <span>›</span></a>
       </div>
 
       <div className="pa-card" style={{ borderColor: 'var(--danger)' }}>
