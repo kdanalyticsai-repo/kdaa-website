@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/app/lib/api';
 import { formatSalary, timeAgo } from '@/app/lib/format';
@@ -30,11 +30,13 @@ const QUICK_COMPANIES = ['TCS', 'HCL', 'IBM', 'Havells', 'Tata Power'];
 export default function Jobs() {
   const qc = useQueryClient();
   const toast = useToast();
-  const [search, setSearch] = useState('');
+  const [params] = useSearchParams();
+  const initialQ = params.get('q') ?? '';
+  const [search, setSearch] = useState(initialQ);
   const [location, setLocation] = useState('');
   const [remote, setRemote] = useState('');
   const [postedDays, setPostedDays] = useState(0);
-  const [applied, setApplied] = useState({ q: '', location: '', remote: '', postedDays: 0 });
+  const [applied, setApplied] = useState({ q: initialQ, location: '', remote: '', postedDays: 0 });
 
   const { data, isLoading, isError, refetch, isFetching } = useQuery({
     queryKey: ['jobs', applied],

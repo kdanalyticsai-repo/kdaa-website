@@ -24,11 +24,15 @@ if (isAppHost) {
   favicon.type = 'image/png'
   favicon.href = '/proaicv-logo.png'
 
-  // Lumina design system fonts: Plus Jakarta Sans (headings), Hanken Grotesk
-  // (body), Geist (labels). Scoped to the app host so marketing is untouched.
+  // Lumina design system: Plus Jakarta Sans (all type) + Material Symbols
+  // Outlined (line-art icons). Scoped to the app host so marketing is untouched.
   document.head.appendChild(Object.assign(document.createElement('link'), {
     rel: 'stylesheet',
-    href: 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=Geist:wght@400;500;600&display=swap',
+    href: 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap',
+  }))
+  document.head.appendChild(Object.assign(document.createElement('link'), {
+    rel: 'stylesheet',
+    href: 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap',
   }))
 }
 

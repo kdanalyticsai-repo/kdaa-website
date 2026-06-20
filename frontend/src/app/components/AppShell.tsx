@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { ReactNode, useState, FormEvent } from 'react';
+import { NavLink, useNavigate, Link } from 'react-router-dom';
 import { useAuthStore } from '@/app/stores/authStore';
 
 interface NavItem { to: string; label: string; icon: string; end?: boolean }
@@ -12,93 +12,125 @@ export function homePathForRole(role?: string): string {
 }
 
 const SEEKER_NAV: NavItem[] = [
-  { to: '/', label: 'Home', icon: '🏠', end: true },
-  { to: '/jobs', label: 'Jobs', icon: '💼' },
-  { to: '/applications', label: 'Apply', icon: '📋' },
-  { to: '/resume', label: 'Resume', icon: '📄' },
-  { to: '/coach', label: 'Coach', icon: '✨' },
-  { to: '/insights', label: 'Insights', icon: '📊' },
+  { to: '/', label: 'Dashboard', icon: 'dashboard', end: true },
+  { to: '/jobs', label: 'Jobs', icon: 'work' },
+  { to: '/applications', label: 'Applications', icon: 'assignment' },
+  { to: '/resume', label: 'Resume', icon: 'description' },
+  { to: '/coach', label: 'Coach', icon: 'psychology' },
+  { to: '/insights', label: 'Insights', icon: 'analytics' },
 ];
 
 const PROVIDER_NAV: NavItem[] = [
-  { to: '/provider', label: 'Home', icon: '🏢', end: true },
-  { to: '/provider/listings', label: 'Listings', icon: '📑' },
-  { to: '/provider/post', label: 'Post Job', icon: '➕' },
-  { to: '/provider/applicants', label: 'Applicants', icon: '👥' },
-  { to: '/provider/profile', label: 'Company', icon: '⚙️' },
+  { to: '/provider', label: 'Dashboard', icon: 'dashboard', end: true },
+  { to: '/provider/listings', label: 'Listings', icon: 'list_alt' },
+  { to: '/provider/post', label: 'Post Job', icon: 'post_add' },
+  { to: '/provider/applicants', label: 'Applicants', icon: 'groups' },
+  { to: '/provider/profile', label: 'Company', icon: 'domain' },
 ];
 
 const ADMIN_NAV: NavItem[] = [
-  { to: '/admin', label: 'Admin', icon: '🛡️', end: true },
-  { to: '/jobs', label: 'Jobs', icon: '💼' },
+  { to: '/admin', label: 'Admin', icon: 'shield', end: true },
+  { to: '/jobs', label: 'Jobs', icon: 'work' },
 ];
+
+function Icon({ name, fill }: { name: string; fill?: boolean }) {
+  return <span className={`material-symbols-outlined${fill ? ' fill' : ''}`}>{name}</span>;
+}
 
 export function AppShell({ children }: { children: ReactNode }) {
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
   const navigate = useNavigate();
+  const [q, setQ] = useState('');
 
   const nav = user?.role === 'job_provider' ? PROVIDER_NAV
     : user?.role === 'admin' ? ADMIN_NAV
     : SEEKER_NAV;
+
+  const isPro = user?.subscription === 'pro';
+  const isSeeker = user?.role === 'job_seeker';
+  const initials = (user?.name || user?.email || '?').slice(0, 2).toUpperCase();
+  const roleLabel = user?.role === 'job_provider' ? 'Employer'
+    : user?.role === 'admin' ? 'Admin' : 'Job Seeker';
 
   const handleLogout = async () => {
     await logout();
     navigate('/login', { replace: true });
   };
 
-  const isPro = user?.subscription === 'pro';
-  const isSeeker = user?.role === 'job_seeker';
+  const onSearch = (e: FormEvent) => {
+    e.preventDefault();
+    navigate(`/jobs${q.trim() ? `?q=${encodeURIComponent(q.trim())}` : ''}`);
+  };
 
   return (
     <div className="pa-shell">
       <aside className="pa-sidebar">
         <NavLink to={homePathForRole(user?.role)} className="pa-brand">
-          <span className="pa-brand-logo">P</span>
-          <span className="pa-brand-name">ProAICV</span>
+          <span className="pa-brand-logo"><Icon name="rocket_launch" fill /></span>
+          <span>
+            <span className="pa-brand-name">ProAICV</span>
+            <span className="pa-brand-tag">Career Intelligence</span>
+          </span>
         </NavLink>
-        {nav.map((item) => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            end={item.end}
-            className={({ isActive }) => `pa-nav-link${isActive ? ' active' : ''}`}
-          >
-            <span className="pa-nav-icon">{item.icon}</span>
-            <span>{item.label}</span>
+
+        <nav className="pa-nav">
+          {nav.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.end}
+              className={({ isActive }) => `pa-nav-link${isActive ? ' active' : ''}`}
+            >
+              <Icon name={item.icon} />
+              <span>{item.label}</span>
+            </NavLink>
+          ))}
+        </nav>
+
+        <div className="pa-sidebar-foot">
+          {isSeeker && !isPro && (
+            <Link to="/paywall" className="pa-pro-card">
+              <div className="pa-pro-eyebrow">PRO PLAN</div>
+              <div className="pa-pro-title">Get 3× more interview invites</div>
+              <span className="pa-pro-btn">Upgrade to Pro</span>
+            </Link>
+          )}
+          <NavLink to="/settings" className={({ isActive }) => `pa-nav-link${isActive ? ' active' : ''}`}>
+            <Icon name="settings" /><span>Settings</span>
           </NavLink>
-        ))}
-        <div className="pa-nav-spacer" />
-        <NavLink to="/profile" className={({ isActive }) => `pa-nav-link${isActive ? ' active' : ''}`}>
-          <span className="pa-nav-icon">👤</span><span>Profile</span>
-        </NavLink>
-        <button className="pa-nav-link" onClick={handleLogout}>
-          <span className="pa-nav-icon">↩️</span><span>Sign out</span>
-        </button>
+          <button className="pa-nav-link pa-nav-danger" onClick={handleLogout}>
+            <Icon name="logout" /><span>Logout</span>
+          </button>
+        </div>
       </aside>
 
       <div className="pa-main">
         <header className="pa-topbar">
-          <div className="pa-row">
-            <span style={{ fontWeight: 700 }}>{greeting()}, {user?.name?.split(' ')[0] || 'there'}</span>
-          </div>
-          <div className="pa-row">
-            {/* Subscription/Pro is a job-seeker concept only. */}
+          <form className="pa-search" onSubmit={onSearch}>
+            <span className="material-symbols-outlined">search</span>
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Search jobs, companies or insights…"
+            />
+          </form>
+          <div className="pa-topbar-actions">
             {isSeeker && !isPro && (
-              <NavLink to="/paywall" className="pa-btn pa-btn-outline pa-btn-sm">Upgrade to Pro</NavLink>
+              <Link to="/paywall" className="pa-btn pa-btn-primary pa-btn-sm">Upgrade to Pro</Link>
             )}
             {isSeeker && isPro && <span className="pa-badge pa-badge-primary">PRO</span>}
+            <Link to="/profile" className="pa-topbar-user" title="Profile">
+              <span className="pa-topbar-user-meta">
+                <span className="pa-topbar-user-name">{user?.name || 'Your profile'}</span>
+                <span className="pa-topbar-user-role">{roleLabel}</span>
+              </span>
+              <span className="pa-topbar-avatar">{initials}</span>
+            </Link>
           </div>
         </header>
         {children}
       </div>
     </div>
   );
-}
-
-function greeting() {
-  const h = new Date().getHours();
-  if (h < 12) return 'Good morning';
-  if (h < 17) return 'Good afternoon';
-  return 'Good evening';
 }
