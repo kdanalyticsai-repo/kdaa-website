@@ -50,25 +50,28 @@ export default function Applications() {
               sub="Track jobs you apply to here — including ones you found elsewhere."
               action={<Button onClick={() => setShowLog(true)}>Log your first application</Button>} />
           ) : apps.map((app) => (
-            <div key={app.id} className="pa-card">
-              <div className="pa-between">
-                <div style={{ minWidth: 0 }}>
-                  <div style={{ fontWeight: 700, fontSize: 15 }}>{app.job?.title || 'Untitled role'}</div>
-                  <div className="pa-muted" style={{ fontSize: 13, marginTop: 2 }}>
-                    {app.job?.company}{app.job?.location ? ` · ${app.job.location}` : ''} · {formatDate(app.applied_at)}
+            <div key={app.id} className="pa-job-card">
+              <span className="pa-app-logo"><span className="material-symbols-outlined">domain</span></span>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div className="pa-between" style={{ gap: 12 }}>
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{ fontWeight: 700, fontSize: 15 }}>{app.job?.title || 'Untitled role'}</div>
+                    <div className="pa-muted" style={{ fontSize: 13, marginTop: 2 }}>
+                      {app.job?.company}{app.job?.location ? ` · ${app.job.location}` : ''} · {formatDate(app.applied_at)}
+                    </div>
                   </div>
+                  <select className="pa-select" style={{ width: 'auto', flexShrink: 0 }} value={app.status}
+                    onChange={(e) => updateStatus.mutate({ id: app.id, status: e.target.value })}>
+                    {STATUS_ORDER.map((s) => <option key={s} value={s}>{STATUS_LABELS[s]}</option>)}
+                  </select>
                 </div>
-                <select className="pa-select" style={{ width: 'auto' }} value={app.status}
-                  onChange={(e) => updateStatus.mutate({ id: app.id, status: e.target.value })}>
-                  {STATUS_ORDER.map((s) => <option key={s} value={s}>{STATUS_LABELS[s]}</option>)}
-                </select>
-              </div>
-              <div className="pa-row" style={{ marginTop: 10 }}>
-                {app.job?.external_url && (
-                  <a className="pa-btn pa-btn-ghost pa-btn-sm" href={app.job.external_url} target="_blank" rel="noreferrer">Open posting ↗</a>
-                )}
-                <button className="pa-btn pa-btn-ghost pa-btn-sm" style={{ color: 'var(--danger)' }}
-                  onClick={() => remove.mutate(app.id)}>Remove</button>
+                <div className="pa-row" style={{ marginTop: 12 }}>
+                  {app.job?.external_url && (
+                    <a className="pa-btn pa-btn-ghost pa-btn-sm" href={app.job.external_url} target="_blank" rel="noreferrer">Open posting ↗</a>
+                  )}
+                  <button className="pa-btn pa-btn-ghost pa-btn-sm" style={{ color: 'var(--danger)' }}
+                    onClick={() => remove.mutate(app.id)}>Remove</button>
+                </div>
               </div>
             </div>
           ))}
