@@ -101,7 +101,7 @@ export default function Profile() {
                 : 'Limited access'}
             </div>
             {!isPro && (
-              <Link to="/paywall" className="pa-pill" style={{ position: 'relative', marginTop: 16, background: '#fff', color: 'var(--primary)' }}>Upgrade to Pro →</Link>
+              <Link to="/paywall" className="pa-pill" style={{ position: 'relative', marginTop: 16, background: '#fff', color: '#3800c0' }}>Upgrade to Pro →</Link>
             )}
           </div>
         )}

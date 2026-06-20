@@ -9,30 +9,46 @@ export default function Login() {
   const login = useAuthStore((s) => s.login);
   const navigate = useNavigate();
   const [params] = useSearchParams();
+  const role = params.get('role') || undefined; // job_seeker | job_provider
+  const isProvider = role === 'job_provider';
+  const roleLabel = isProvider ? 'Employer' : 'Job Seeker';
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [switchTo, setSwitchTo] = useState<{ to: string; label: string } | null>(null);
   const [busy, setBusy] = useState(false);
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError(''); setSwitchTo(null);
     setBusy(true);
     try {
-      await login(email.trim(), password);
+      await login(email.trim(), password, role);
       navigate('/', { replace: true });
     } catch (err: any) {
-      setError(apiError(err, 'Invalid email or password.'));
+      if (err?.isRoleMismatch) {
+        const actualProvider = err.actualRole === 'job_provider';
+        setError(`This email is registered as ${actualProvider ? 'an Employer' : 'a Job Seeker'}.`);
+        setSwitchTo({
+          to: `/login?role=${actualProvider ? 'job_provider' : 'job_seeker'}`,
+          label: `Sign in as ${actualProvider ? 'Employer' : 'Job Seeker'}`,
+        });
+      } else {
+        setError(apiError(err, 'Invalid email or password.'));
+      }
     } finally {
       setBusy(false);
     }
   };
 
   return (
-    <AuthShell>
+    <AuthShell role={role}>
       <form onSubmit={onSubmit}>
         <div className="pa-auth-title" style={{ textAlign: 'left' }}>Welcome back</div>
-        <div className="pa-auth-sub" style={{ textAlign: 'left', margin: '6px 0 22px' }}>Sign in to your ProAICV account</div>
+        <div className="pa-auth-sub" style={{ textAlign: 'left', margin: '6px 0 22px' }}>
+          Sign in to your <strong>{roleLabel}</strong> account · <Link to="/role-select">change</Link>
+        </div>
 
         <Field label="Email">
           <input className="pa-input" type="email" autoComplete="email" value={email}
@@ -42,8 +58,13 @@ export default function Login() {
           <PasswordInput autoComplete="current-password" value={password}
             onChange={(e) => setPassword(e.target.value)} required />
         </Field>
+        {switchTo && (
+          <div style={{ marginTop: -8, marginBottom: 12 }}>
+            <Link to={switchTo.to} style={{ fontSize: 13, fontWeight: 700 }}>{switchTo.label} →</Link>
+          </div>
+        )}
 
-        <div style={{ textAlign: 'right', marginTop: -6, marginBottom: 14 }}>
+        <div style={{ textAlign: 'right', marginTop: -2, marginBottom: 14 }}>
           <Link to="/forgot-password" style={{ fontSize: 13 }}>Forgot password?</Link>
         </div>
 
@@ -51,7 +72,7 @@ export default function Login() {
 
         <div className="pa-auth-foot">
           New here?{' '}
-          <Link to={`/register${params.get('role') ? `?role=${params.get('role')}` : ''}`}>Create an account</Link>
+          <Link to={`/register?role=${isProvider ? 'job_provider' : 'job_seeker'}`}>Create an account</Link>
         </div>
       </form>
     </AuthShell>

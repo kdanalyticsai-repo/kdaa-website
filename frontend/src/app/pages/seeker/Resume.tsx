@@ -105,7 +105,7 @@ export default function Resume() {
                     </div>
                   </div>
 
-                  <div className="pa-bento" style={{ gridTemplateColumns: 'repeat(3, 1fr)', display: 'grid', gap: 16, marginTop: 22 }}>
+                  <div className="pa-bento" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', display: 'grid', gap: 14, marginTop: 22 }}>
                     <ScoreCard label="ATS Score" value={primary.ats_score} suffix="/100" max={100} color="var(--primary)" />
                     <ScoreCard label="Completeness" value={primary.completeness_score} suffix="%" max={100} color="var(--tertiary)" />
                     <div className="pa-score-card">

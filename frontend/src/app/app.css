@@ -54,13 +54,17 @@
 /* ── Dark mode (follows OS / browser preference) ── */
 @media (prefers-color-scheme: dark) {
   .proaicv-app {
-    --primary: #b9a3ff;
-    --primary-dark: #a98fff;
+    /* Medium violet: legible as accent text on dark AND as a button bg w/ white text */
+    --primary: #8b6dff;
+    --primary-dark: #6f4ff0;
+    --primary-bright: #9d83ff;
     --primary-hero: #14004a;
-    --primary-light: rgba(149, 118, 255, 0.20);
+    --primary-light: rgba(139, 109, 255, 0.22);
     --tertiary: #2dd4ff;
     --tertiary-bright: #6fe0ff;
+    --tertiary-ink: #5fd6f5;          /* light cyan so cyan text/icons read on dark */
     --danger: #ff6b6b;
+    --danger-light: rgba(255, 107, 107, 0.16);
     --warning: #e0a83a;
     --warning-light: rgba(224, 168, 58, 0.16);
     --success: #5cd17e;
@@ -147,9 +151,14 @@
   height: 64px; background: rgba(248, 249, 253, 0.8);
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-subtle);
-  display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 24px;
+  display: flex; align-items: center; justify-content: flex-end; gap: 16px; padding: 0 24px;
   position: sticky; top: 0; z-index: 20;
 }
+.pa-topbar-brand { display: none; align-items: center; gap: 10px; margin-right: auto; text-decoration: none; }
+.pa-topbar-brand:hover { text-decoration: none; }
+.pa-topbar-brand .pa-brand-logo { width: 34px; height: 34px; }
+.pa-topbar-brand .pa-brand-logo .material-symbols-outlined { font-size: 19px; }
+.pa-topbar-brand .pa-brand-name { font-size: 18px; }
 .pa-search {
   display: flex; align-items: center; gap: 10px; background: var(--surface-low);
   border: 1px solid transparent; border-radius: 999px; padding: 9px 16px; width: 100%; max-width: 420px;
@@ -383,7 +392,7 @@ a.pa-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); bor
   border-radius: 999px; padding: 5px 14px; font-size: 12px; font-weight: 600; color: rgba(255, 255, 255, .88);
 }
 .pa-role-cards { max-width: 520px; margin: 0 auto; padding: 26px 18px 60px; display: flex; flex-direction: column; gap: 18px; }
-.pa-role-heading { text-align: center; font-size: 17px; font-weight: 700; color: var(--text); }
+.pa-role-heading { text-align: center; font-size: 17px; font-weight: 700; color: var(--text); line-height: 1.5; padding: 2px 6px; }
 .pa-role-card {
   background: var(--surface); border: 1px solid var(--border-subtle); border-radius: 22px;
   overflow: hidden; box-shadow: var(--shadow-md);
@@ -584,9 +593,7 @@ a.pa-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); bor
 .pa-auth-headline { font-size: 40px; font-weight: 800; line-height: 1.1; letter-spacing: -1px; color: var(--text); }
 .pa-auth-headline span { color: var(--primary); }
 .pa-auth-lead { font-size: 16px; color: var(--text-secondary); line-height: 1.6; max-width: 30rem; }
-.pa-auth-illus { margin-top: 6px; border-radius: 24px; height: 200px; background: linear-gradient(135deg, var(--primary-hero), var(--primary)); position: relative; overflow: hidden; box-shadow: var(--shadow-md); }
-.pa-auth-illus::before { content: ''; position: absolute; width: 260px; height: 260px; border-radius: 50%; background: var(--tertiary); opacity: .22; top: -90px; right: -60px; }
-.pa-auth-illus::after { content: ''; position: absolute; width: 150px; height: 150px; border-radius: 50%; background: var(--primary-bright); opacity: .45; bottom: -50px; left: 30px; filter: blur(8px); }
+.pa-auth-illus { margin-top: 6px; border-radius: 24px; height: 210px; background: var(--primary-hero); background-size: cover; background-position: center; position: relative; overflow: hidden; box-shadow: var(--shadow-md); }
 .pa-auth-pills { display: flex; gap: 8px; flex-wrap: wrap; }
 .pa-auth-formcard { width: 100%; max-width: 460px; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: 24px; padding: 36px 32px; box-shadow: var(--shadow-md); }
 @media (max-width: 920px) {
@@ -605,15 +612,18 @@ a.pa-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); bor
     position: fixed; bottom: 0; top: auto; left: 0; right: 0; width: 100%; height: auto;
     flex-direction: row; box-shadow: 0 -8px 30px rgba(56, 0, 192, .07);
     border-top: 1px solid var(--border-subtle);
-    padding: 6px; overflow-x: auto; z-index: 50;
+    padding: 6px 4px; z-index: 50;
   }
   .pa-brand, .pa-sidebar-foot { display: none; }
-  .pa-nav { flex-direction: row; gap: 2px; }
-  .pa-nav-link { flex-direction: column; gap: 3px; font-size: 11px; padding: 7px 10px; white-space: nowrap; }
+  .pa-nav { flex-direction: row; gap: 0; width: 100%; }
+  .pa-nav-link { flex: 1 1 0; min-width: 0; flex-direction: column; gap: 3px; padding: 6px 2px; }
+  .pa-nav-link span:last-child { font-size: 9.5px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: -0.2px; }
+  .pa-nav-link .material-symbols-outlined { font-size: 22px; }
   .pa-nav-link.active::after { display: none; }
   .pa-nav-link.active { background: color-mix(in srgb, var(--primary-bright) 12%, transparent); }
   .pa-main { padding-bottom: 70px; }
   .pa-content { padding: 18px 14px 84px; }
   .pa-topbar { padding: 0 14px; gap: 10px; }
+  .pa-topbar-brand { display: flex; }
   .pa-topbar-user-meta { display: none; }
 }
