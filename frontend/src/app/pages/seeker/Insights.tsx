@@ -7,6 +7,8 @@ interface Dashboard {
   applications: { total: number; by_status: Record<string, number>; response_rate: number };
   resume: { ats_score: number | null; completeness_score: number | null };
   jobs: { saved_count: number; match_count: number; top_match_score: number | null };
+  career_readiness?: number;
+  market_percentile?: number | null;
 }
 
 function Icon({ name, fill }: { name: string; fill?: boolean }) {
@@ -70,22 +72,50 @@ export default function Insights() {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {/* Career Readiness — composite score (career_readiness) */}
+          {data.career_readiness != null && (
+            <div className="pa-card pa-ai-card" style={{ color: '#fff' }}>
+              <div className="pa-metric-label" style={{ color: 'rgba(255,255,255,.75)', position: 'relative' }}>Career Readiness</div>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginTop: 6, position: 'relative' }}>
+                <span style={{ fontSize: 44, fontWeight: 800, lineHeight: 1 }}>{data.career_readiness}</span>
+                <span style={{ fontSize: 20, fontWeight: 700, opacity: .7 }}>%</span>
+              </div>
+              <div className="pa-bar-track" style={{ position: 'relative', marginTop: 14, background: 'rgba(255,255,255,.18)' }}>
+                <div className="pa-bar-fill" style={{ width: `${data.career_readiness}%`, background: 'var(--tertiary)' }} />
+              </div>
+              <p style={{ fontSize: 13, color: 'rgba(255,255,255,.78)', marginTop: 12, position: 'relative' }}>
+                Blends your resume score, completeness, response rate and activity.
+              </p>
+            </div>
+          )}
+
+          {/* Market Competitiveness — percentile (market_percentile) */}
           <div className="pa-card">
-            <h4 style={{ fontSize: 16 }}>Average Match Score</h4>
-            <p className="pa-muted" style={{ fontSize: 13, marginTop: 2 }}>Your profile alignment across all jobs.</p>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginTop: 14 }}>
-              <span style={{ fontSize: 52, fontWeight: 800, color: 'var(--primary)', lineHeight: 1 }}>{match ?? '—'}</span>
-              {match != null && <span style={{ fontSize: 24, fontWeight: 700, color: 'color-mix(in srgb, var(--primary) 45%, transparent)' }}>%</span>}
-            </div>
-            <div className="pa-chip-row" style={{ marginTop: 16 }}>
-              {match != null && match >= 70 && <span className="pa-badge pa-badge-primary">High Potential</span>}
-              {data.resume.ats_score != null && data.resume.ats_score >= 70 && <span className="pa-badge pa-badge-success">Optimized Resume</span>}
-            </div>
+            <h4 style={{ fontSize: 16 }}>Market Competitiveness</h4>
+            <p className="pa-muted" style={{ fontSize: 13, marginTop: 2 }}>Your resume vs the candidate pool.</p>
+            {match != null && (
+              <div className="pa-chip-row" style={{ marginTop: 12 }}>
+                {match >= 70 && <span className="pa-badge pa-badge-primary">High Potential</span>}
+                {data.resume.ats_score != null && data.resume.ats_score >= 70 && <span className="pa-badge pa-badge-success">Optimized Resume</span>}
+              </div>
+            )}
+            {data.market_percentile != null ? (
+              <>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginTop: 14 }}>
+                  <span style={{ fontSize: 40, fontWeight: 800, color: 'var(--primary)', lineHeight: 1 }}>Top {Math.max(1, 100 - data.market_percentile)}%</span>
+                </div>
+                <p className="pa-muted" style={{ fontSize: 13, marginTop: 6 }}>
+                  You score above {data.market_percentile}% of candidates.
+                </p>
+              </>
+            ) : (
+              <p className="pa-muted" style={{ fontSize: 14, marginTop: 14 }}>Upload a resume to see how you rank.</p>
+            )}
           </div>
 
           <div className="pa-card pa-bento" style={{ gridTemplateColumns: '1fr 1fr', display: 'grid', gap: 14 }}>
             <MiniStat label="Resume ATS" value={data.resume.ats_score != null ? `${data.resume.ats_score}` : '—'} />
-            <MiniStat label="Completeness" value={data.resume.completeness_score != null ? `${data.resume.completeness_score}%` : '—'} />
+            <MiniStat label="Top Match" value={match != null ? `${match}%` : '—'} />
           </div>
         </div>
       </div>

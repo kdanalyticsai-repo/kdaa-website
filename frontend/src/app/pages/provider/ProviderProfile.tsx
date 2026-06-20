@@ -71,6 +71,29 @@ export default function ProviderProfile() {
       <p className="pa-page-sub">Optimize how your company appears to top talent.</p>
       <div style={{ marginTop: 12 }}>{panBadge(user)}</div>
 
+      {(() => {
+        const fields = [company.company_name, company.industry, company.company_size, company.website, user.pan_verified];
+        const strength = Math.round((fields.filter(Boolean).length / fields.length) * 100);
+        return (
+          <div className="pa-card pa-ai-card" style={{ color: '#fff', marginTop: 16 }}>
+            <div className="pa-tile" style={{ position: 'relative' }}>
+              <span className="pa-ai-avatar"><span className="material-symbols-outlined fill">insights</span></span>
+              <div>
+                <div className="pa-ai-title">Profile Strength</div>
+                <div className="pa-ai-sub">How complete your employer profile is</div>
+              </div>
+              <span style={{ marginLeft: 'auto', fontSize: 32, fontWeight: 800, position: 'relative' }}>{strength}%</span>
+            </div>
+            <div className="pa-bar-track" style={{ position: 'relative', marginTop: 14, background: 'rgba(255,255,255,.18)' }}>
+              <div className="pa-bar-fill" style={{ width: `${strength}%`, background: 'var(--tertiary)' }} />
+            </div>
+            <p style={{ fontSize: 13, color: 'rgba(255,255,255,.78)', marginTop: 12, position: 'relative' }}>
+              {strength < 100 ? 'Complete every field and get PAN-verified to reach 100%.' : 'Your profile is fully complete.'}
+            </p>
+          </div>
+        );
+      })()}
+
       {profile.isLoading ? <Loading /> : (
         <div className="pa-card" style={{ marginTop: 16 }}>
           <div className="pa-card-head">

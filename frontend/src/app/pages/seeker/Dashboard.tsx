@@ -8,7 +8,7 @@ import { Loading } from '@/app/components/ui';
 import { homePathForRole } from '@/app/components/AppShell';
 
 interface DashboardData {
-  applications: { total: number; by_status: Record<string, number>; response_rate: number };
+  applications: { total: number; by_status: Record<string, number>; response_rate: number; trend_pct?: number };
   resume: { ats_score: number | null; completeness_score: number | null };
   jobs: { saved_count: number; match_count: number; top_match_score: number | null };
 }
@@ -101,7 +101,7 @@ function SeekerDashboard() {
         <>
           {/* Metrics */}
           <div className="pa-bento pa-bento-4" style={{ marginTop: 20 }}>
-            <Metric icon="send" accent="primary" label="Applications" value={total} />
+            <Metric icon="send" accent="primary" label="Applications" value={total} trend={apps?.trend_pct} />
             <Metric icon="record_voice_over" accent="cyan" label="Interviews" value={apps?.by_status.interview ?? 0} />
             <Metric icon="auto_awesome" accent="violet" label="Job Matches" value={data?.jobs.match_count ?? 0} />
             <Metric icon="verified" accent="primary" label="Resume Score"
@@ -185,13 +185,18 @@ function SeekerDashboard() {
   );
 }
 
-function Metric({ icon, accent, label, value, suffix }: {
-  icon: string; accent: 'primary' | 'cyan' | 'violet' | 'danger'; label: string; value: number | string; suffix?: string;
+function Metric({ icon, accent, label, value, suffix, trend }: {
+  icon: string; accent: 'primary' | 'cyan' | 'violet' | 'danger'; label: string; value: number | string; suffix?: string; trend?: number;
 }) {
   return (
     <div className="pa-metric">
       <div className="pa-metric-head">
         <span className={`pa-icon-pill ${accent}`}><Icon name={icon} fill /></span>
+        {trend != null && trend !== 0 && (
+          <span className={`pa-trend ${trend >= 0 ? 'up' : 'down'}`}>
+            <Icon name={trend >= 0 ? 'trending_up' : 'trending_down'} />{trend > 0 ? '+' : ''}{trend}%
+          </span>
+        )}
       </div>
       <div className="pa-metric-label">{label}</div>
       <div className="pa-metric-num">{value}{suffix && <small>{suffix}</small>}</div>
