@@ -1,68 +1,80 @@
 /* ProAICV web app — design tokens + base styles (mirrors mobile Aetheris theme). */
 .proaicv-app {
-  --primary: #5b2eff;
-  --primary-dark: #4300dc;
-  --primary-hero: #1a0060;
-  --primary-light: #e5deff;
-  --tertiary: #00aec4;
-  --tertiary-bright: #00d1ff;
+  /* Lumina Intelligence design system (DESIGN.md) */
+  --primary: #5d24ff;
+  --primary-dark: #4500d2;
+  --primary-hero: #1c0062;
+  --primary-light: #e6deff;
+  --tertiary: #00b4d8;
+  --tertiary-bright: #2dd4ff;
   --danger: #ba1a1a;
   --warning: #c47f00;
   --warning-light: #fdf2dd;
   --success: #1e7e34;
   --success-light: #e3f5e9;
-  --bg: #f8f9fe;
-  --bg-dim: #eceef3;
+  --bg: #faf8ff;
+  --bg-dim: #eaedff;
   --surface: #ffffff;
-  --surface-low: #f2f3f8;
+  --surface-low: #f2f3ff;
   --border: #c9c3da;
-  --border-subtle: rgba(201, 195, 218, 0.45);
-  --text: #191c1f;
-  --text-secondary: #474557;
-  --text-muted: #787589;
-  --shadow-sm: 0 1px 2px rgba(20, 12, 52, 0.05), 0 4px 16px rgba(20, 12, 52, 0.05);
-  --shadow-md: 0 8px 30px rgba(20, 12, 52, 0.10);
+  --border-subtle: rgba(19, 27, 46, 0.08);
+  --text: #131b2e;
+  --text-secondary: #484457;
+  --text-muted: #797489;
+  --shadow-sm: 0 4px 20px rgba(93, 36, 255, 0.05);
+  --shadow-md: 0 12px 32px rgba(15, 23, 42, 0.12);
   --on-primary: #ffffff;
 
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-body: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-head: 'Plus Jakarta Sans', var(--font-body);
+  --font-label: 'Geist', 'Plus Jakarta Sans', var(--font-body);
+
+  font-family: var(--font-body);
   color: var(--text);
   background: var(--bg);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
 
+/* Headings use Plus Jakarta Sans; small UI labels use Geist. */
+.proaicv-app h1, .proaicv-app h2, .proaicv-app h3, .proaicv-app h4,
+.pa-page-title, .pa-hero-title, .pa-stat-num, .pa-brand-name, .pa-auth-title,
+.pa-role-logo-text, .pa-role-card-title, .pa-modal-title { font-family: var(--font-head); }
+.pa-label, .pa-stat-label, .pa-section-label, .pa-badge, .pa-role-pill { font-family: var(--font-label); }
+
 /* ── Dark mode (follows OS / browser preference) ── */
 @media (prefers-color-scheme: dark) {
   .proaicv-app {
-    --primary: #8b6dff;
-    --primary-dark: #7a57ff;
-    --primary-hero: #0c0030;
-    --primary-light: rgba(139, 109, 255, 0.20);
-    --tertiary: #2bd4e8;
-    --tertiary-bright: #4fe0ff;
+    --primary: #b9a3ff;
+    --primary-dark: #a98fff;
+    --primary-hero: #14004a;
+    --primary-light: rgba(149, 118, 255, 0.20);
+    --tertiary: #2dd4ff;
+    --tertiary-bright: #6fe0ff;
     --danger: #ff6b6b;
     --warning: #e0a83a;
     --warning-light: rgba(224, 168, 58, 0.16);
     --success: #5cd17e;
     --success-light: rgba(92, 209, 126, 0.16);
-    --bg: #0e0f15;
-    --bg-dim: #191b22;
-    --surface: #16181f;
-    --surface-low: #1f222b;
-    --border: #353945;
+    --bg: #0d0f1a;
+    --bg-dim: #171a28;
+    --surface: #151826;
+    --surface-low: #1e2233;
+    --border: #343a4f;
     --border-subtle: rgba(255, 255, 255, 0.09);
-    --text: #e9eaf1;
-    --text-secondary: #b9bcc8;
-    --text-muted: #888c99;
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 6px 20px rgba(0, 0, 0, 0.35);
-    --shadow-md: 0 10px 34px rgba(0, 0, 0, 0.5);
+    --text: #eef0ff;
+    --text-secondary: #c0c2d4;
+    --text-muted: #8b8fa6;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 6px 20px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 12px 34px rgba(0, 0, 0, 0.55);
     color-scheme: dark;
   }
   /* Inputs read better with a slightly raised field on dark */
   .proaicv-app .pa-input,
   .proaicv-app .pa-textarea,
   .proaicv-app .pa-select { background: var(--surface-low); }
-  .proaicv-app .pa-toast { background: #2a2d36; border: 1px solid var(--border-subtle); }
+  .proaicv-app .pa-toast { background: #232838; border: 1px solid var(--border-subtle); }
+  .proaicv-app .pa-topbar { background: rgba(21, 24, 38, 0.72); }
 }
 
 .proaicv-app *,
@@ -76,7 +88,7 @@
 /* ── Layout ── */
 .pa-shell { display: flex; min-height: 100vh; }
 .pa-sidebar {
-  width: 248px; flex-shrink: 0; background: var(--surface);
+  width: 260px; flex-shrink: 0; background: var(--surface);
   border-right: 1px solid var(--border-subtle); padding: 20px 14px;
   display: flex; flex-direction: column; gap: 4px; position: sticky; top: 0; height: 100vh;
 }
@@ -94,13 +106,19 @@
   border: none; background: none; width: 100%; text-align: left;
 }
 .pa-nav-link:hover { background: var(--surface-low); text-decoration: none; }
-.pa-nav-link.active { background: var(--primary-light); color: var(--primary-dark); }
+.pa-nav-link.active { background: var(--primary-light); color: var(--primary-dark); position: relative; }
+.pa-nav-link.active::before {
+  content: ''; position: absolute; left: 3px; top: 50%; transform: translateY(-50%);
+  width: 4px; height: 22px; border-radius: 4px; background: var(--primary);
+}
 .pa-nav-icon { font-size: 17px; width: 20px; text-align: center; }
 .pa-nav-spacer { flex: 1; }
 
 .pa-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .pa-topbar {
-  height: 60px; border-bottom: 1px solid var(--border-subtle); background: var(--surface);
+  height: 60px; border-bottom: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(12px) saturate(1.4); -webkit-backdrop-filter: blur(12px) saturate(1.4);
   display: flex; align-items: center; justify-content: space-between; padding: 0 24px;
   position: sticky; top: 0; z-index: 10; box-shadow: var(--shadow-sm);
 }
@@ -126,8 +144,8 @@ a.pa-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); bor
 /* ── Buttons ── */
 .pa-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  padding: 12px 18px; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer;
-  border: 1px solid transparent; transition: opacity .15s, background .15s; line-height: 1;
+  padding: 12px 18px; border-radius: 10px; font-weight: 700; font-size: 14px; cursor: pointer;
+  border: 1px solid transparent; transition: opacity .15s, background .15s, filter .15s; line-height: 1;
 }
 .pa-btn:disabled { opacity: .55; cursor: not-allowed; }
 .pa-btn-primary {
@@ -146,8 +164,9 @@ a.pa-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); bor
 .pa-field { margin-bottom: 16px; }
 .pa-label { display: block; font-weight: 600; font-size: 13px; margin-bottom: 7px; color: var(--text-secondary); }
 .pa-input, .pa-textarea, .pa-select {
-  width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 11px;
+  width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px;
   font-size: 14px; background: var(--surface); color: var(--text); font-family: inherit;
+  transition: border-color .15s, box-shadow .15s;
 }
 .pa-input:focus, .pa-textarea:focus, .pa-select:focus {
   outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light);
