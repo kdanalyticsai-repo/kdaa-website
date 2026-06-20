@@ -1,8 +1,9 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { api, apiError } from '@/app/lib/api';
-import { Button, Loading, ErrorState } from '@/app/components/ui';
+import { api } from '@/app/lib/api';
+import { Button, Loading } from '@/app/components/ui';
 import { FeatureGate } from '@/app/components/FeatureGate';
+import { AiToolError } from '@/app/components/AiToolError';
 
 interface QA { question: string; answer?: string; guidance?: string; tip?: string }
 interface PrepResult {
@@ -65,7 +66,7 @@ export default function InterviewPrep() {
             </>
           )}
           {run.isPending && <Loading label="Building your prep sheet…" />}
-          {run.isError && <ErrorState message={apiError(run.error, 'Could not generate prep.')} onRetry={() => run.mutate()} />}
+          {run.isError && <AiToolError error={run.error} fallback="Could not generate prep." onRetry={() => run.mutate()} />}
 
           {run.data && (
             <div>

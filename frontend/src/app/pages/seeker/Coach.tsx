@@ -17,8 +17,13 @@ const SUGGESTIONS = [
 export default function Coach() {
   return (
     <div className="pa-content">
-      <h1 className="pa-page-title">Career coach</h1>
-      <p className="pa-page-sub">Ask anything about your job search, resume or career</p>
+      <div className="pa-tile" style={{ gap: 14 }}>
+        <span className="pa-coach-badge"><span className="material-symbols-outlined fill">smart_toy</span></span>
+        <div>
+          <h1 className="pa-page-title">AICoach</h1>
+          <p className="pa-page-sub" style={{ marginTop: 2 }}>Ask anything about your job search, resume or career</p>
+        </div>
+      </div>
       <FeatureGate feature="chat">
         <ChatPanel />
       </FeatureGate>
@@ -93,8 +98,8 @@ function ChatPanel() {
         <div className="pa-chat-messages">
           {messages.length === 0 && !send.isPending && (
             <div className="pa-chat-welcome">
-              <div className="pa-coach-orb">✦</div>
-              <div style={{ fontWeight: 800, fontSize: 18 }}>AI Career Coach</div>
+              <div className="pa-coach-orb"><span className="material-symbols-outlined fill" style={{ fontSize: 30 }}>smart_toy</span></div>
+              <div style={{ fontWeight: 800, fontSize: 18 }}>AICoach</div>
               <p className="pa-muted" style={{ margin: '6px 0 16px' }}>Start a conversation or pick a prompt:</p>
               {SUGGESTIONS.map((s) => (
                 <button key={s} className="pa-chip" style={{ display: 'block', margin: '6px auto', maxWidth: 360 }}

@@ -17,7 +17,7 @@ const SEEKER_NAV: NavItem[] = [
   { to: '/jobs', label: 'Jobs', icon: 'work' },
   { to: '/applications', label: 'Applications', icon: 'assignment' },
   { to: '/resume', label: 'Resume', icon: 'description' },
-  { to: '/coach', label: 'Coach', icon: 'psychology' },
+  { to: '/coach', label: 'AICoach', icon: 'smart_toy' },
   { to: '/insights', label: 'Insights', icon: 'analytics' },
 ];
 
