@@ -2,7 +2,7 @@ import { useState, FormEvent, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuthStore } from '@/app/stores/authStore';
 import { apiError } from '@/app/lib/api';
-import { Button, Field } from '@/app/components/ui';
+import { Button, Field, PasswordInput } from '@/app/components/ui';
 
 export default function Register() {
   const register = useAuthStore((s) => s.register);
@@ -55,7 +55,7 @@ export default function Register() {
             onChange={(e) => setEmail(e.target.value)} required />
         </Field>
         <Field label="Password" hint="At least 8 characters" error={error}>
-          <input className="pa-input" type="password" autoComplete="new-password" value={password}
+          <PasswordInput autoComplete="new-password" value={password}
             onChange={(e) => setPassword(e.target.value)} required />
         </Field>
 

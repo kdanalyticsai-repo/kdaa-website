@@ -27,6 +27,7 @@ export default function Profile() {
 
   if (!user) return null;
   const initials = (user.name || user.email).slice(0, 2).toUpperCase();
+  const isSeeker = user.role === 'job_seeker';
   const isPro = user.subscription === 'pro';
   const isTrial = usage.data?.is_trial;
   const trialEnds = usage.data?.trial_ends_at;
@@ -61,28 +62,31 @@ export default function Profile() {
         )}
       </div>
 
-      {/* Subscription */}
-      <div className="pa-card">
-        <div className="pa-between">
-          <div>
-            <h3 style={{ fontSize: 16 }}>Subscription</h3>
-            <div className="pa-muted" style={{ fontSize: 14, marginTop: 4 }}>
-              {isPro ? `Pro${usage.data?.pro_plan_type ? ` · ${usage.data.pro_plan_type}` : ''}`
-                : isTrial ? `Free trial${trialEnds ? ` · ends ${formatDate(trialEnds)}` : ''}`
-                : 'Free plan'}
+      {/* Subscription — job-seeker concept only */}
+      {isSeeker && (
+        <div className="pa-card">
+          <div className="pa-between">
+            <div>
+              <h3 style={{ fontSize: 16 }}>Subscription</h3>
+              <div className="pa-muted" style={{ fontSize: 14, marginTop: 4 }}>
+                {isPro ? `Pro${usage.data?.pro_plan_type ? ` · ${usage.data.pro_plan_type}` : ''}`
+                  : isTrial ? `Free trial${trialEnds ? ` · ends ${formatDate(trialEnds)}` : ''}`
+                  : 'Free plan'}
+              </div>
             </div>
+            {isPro ? <span className="pa-badge pa-badge-success">✦ PRO</span>
+              : <Link to="/paywall" className="pa-btn pa-btn-primary pa-btn-sm">Upgrade</Link>}
           </div>
-          {isPro ? <span className="pa-badge pa-badge-success">✦ PRO</span>
-            : <Link to="/paywall" className="pa-btn pa-btn-primary pa-btn-sm">Upgrade</Link>}
         </div>
-      </div>
+      )}
 
       {/* Quick links */}
       <div className="pa-card">
         <h3 style={{ fontSize: 16, marginBottom: 8 }}>Account</h3>
         <Link to="/settings" className="pa-list-link">⚙️ Settings & security <span>›</span></Link>
-        <Link to="/resume" className="pa-list-link">📄 My resume <span>›</span></Link>
-        <Link to="/insights" className="pa-list-link">📊 Insights <span>›</span></Link>
+        {isSeeker && <Link to="/resume" className="pa-list-link">📄 My resume <span>›</span></Link>}
+        {isSeeker && <Link to="/insights" className="pa-list-link">📊 Insights <span>›</span></Link>}
+        {user.role === 'job_provider' && <Link to="/provider/profile" className="pa-list-link">🏢 Company profile <span>›</span></Link>}
       </div>
     </div>
   );

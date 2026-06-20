@@ -2,7 +2,7 @@ import { useState, FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/app/stores/authStore';
 import { apiError } from '@/app/lib/api';
-import { Button, Field } from '@/app/components/ui';
+import { Button, Field, PasswordInput } from '@/app/components/ui';
 
 export default function AdminLogin() {
   const adminLogin = useAuthStore((s) => s.adminLogin);
@@ -36,7 +36,7 @@ export default function AdminLogin() {
             onChange={(e) => setEmail(e.target.value)} required />
         </Field>
         <Field label="Password" error={error}>
-          <input className="pa-input" type="password" value={password}
+          <PasswordInput value={password}
             onChange={(e) => setPassword(e.target.value)} required />
         </Field>
         <Button type="submit" block loading={busy}>Sign in</Button>
