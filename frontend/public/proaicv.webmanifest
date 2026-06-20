@@ -8,6 +8,7 @@
   "background_color": "#f8f9fd",
   "theme_color": "#3800c0",
   "icons": [
-    { "src": "/proaicv-logo.png", "sizes": "192x192 512x512", "type": "image/png", "purpose": "any" }
+    { "src": "/proaicv-app-icon.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/proaicv-app-icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
   ]
 }
