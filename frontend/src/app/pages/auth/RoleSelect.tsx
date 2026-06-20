@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/app/stores/authStore';
+import { InstallAppButton } from '@/app/components/InstallAppButton';
 
 // Same imagery as the mobile role-select screen.
 const SEEKER_IMAGE = 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=700&h=600&fit=crop&crop=top&q=80';
@@ -37,6 +38,7 @@ export default function RoleSelect() {
               <span key={p} className="pa-role-pill">{p}</span>
             ))}
           </div>
+          <InstallAppButton className="pa-install-cta" />
         </div>
       </div>
 

@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { NavLink, useNavigate, Link } from 'react-router-dom';
 import { useAuthStore } from '@/app/stores/authStore';
+import { InstallAppButton } from '@/app/components/InstallAppButton';
 
 interface NavItem { to: string; label: string; icon: string; end?: boolean }
 
@@ -106,6 +107,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <span className="pa-brand-name">ProAICV</span>
           </NavLink>
           <div className="pa-topbar-actions">
+            <InstallAppButton className="pa-btn pa-btn-ghost pa-btn-sm" />
             {isSeeker && !isPro && (
               <Link to="/paywall" className="pa-btn pa-btn-primary pa-btn-sm">Upgrade to Pro</Link>
             )}
