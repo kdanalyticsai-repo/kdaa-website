@@ -9,6 +9,10 @@ interface ResumeItem {
   completeness_score: number | null; is_primary: boolean; version: number;
 }
 
+function Icon({ name, fill }: { name: string; fill?: boolean }) {
+  return <span className={`material-symbols-outlined${fill ? ' fill' : ''}`}>{name}</span>;
+}
+
 export default function Resume() {
   const qc = useQueryClient();
   const toast = useToast();
@@ -42,7 +46,6 @@ export default function Resume() {
       const form = new FormData();
       form.append('file', file);
       form.append('name', file.name.replace(/\.[^.]+$/, ''));
-      // Use fetch for multipart so axios JSON defaults don't interfere.
       const res = await fetch(`${API_URL}/resumes/upload-file`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${tokenStore.getAccess()}` },
@@ -60,51 +63,107 @@ export default function Resume() {
   };
 
   const resumes = data?.resumes ?? [];
+  const primary = resumes.find((r) => r.is_primary) ?? resumes[0];
 
   return (
     <div className="pa-content">
       <div className="pa-between">
         <div>
-          <h1 className="pa-page-title">Resume</h1>
-          <p className="pa-page-sub">Upload your CV — we’ll score it for ATS and power AI tailoring</p>
+          <h1 className="pa-page-title">Resume Hub</h1>
+          <p className="pa-page-sub">Upload your CV — we’ll score it for ATS and power AI tailoring.</p>
         </div>
-        <Button loading={uploading} onClick={() => fileRef.current?.click()}>↑ Upload resume</Button>
+        <Button loading={uploading} onClick={() => fileRef.current?.click()}>
+          <span className="material-symbols-outlined" style={{ fontSize: 20 }}>upload_file</span> Upload resume
+        </Button>
         <input ref={fileRef} type="file" accept=".pdf,.doc,.docx" hidden onChange={onFile} />
       </div>
 
-      <div style={{ marginTop: 18 }}>
+      <div style={{ marginTop: 20 }}>
         {isLoading ? <Loading />
           : isError ? <ErrorState message="Could not load resumes." onRetry={refetch} />
           : resumes.length === 0 ? (
             <EmptyState icon="📄" title="No resume yet"
               sub="Upload a PDF or Word file to get an instant ATS score."
               action={<Button loading={uploading} onClick={() => fileRef.current?.click()}>Upload resume</Button>} />
-          ) : resumes.map((r) => (
-            <div key={r.id} className="pa-card">
-              <div className="pa-between">
-                <div>
-                  <div style={{ fontWeight: 700 }}>
-                    {r.name} {r.is_primary && <span className="pa-badge pa-badge-primary" style={{ marginLeft: 6 }}>Primary</span>}
+          ) : (
+            <>
+              {/* Primary resume hero */}
+              {primary && (
+                <div className="pa-card" style={{ borderRadius: 24, padding: 28 }}>
+                  <div className="pa-tile" style={{ alignItems: 'flex-start' }}>
+                    <span className="pa-resume-thumb"><Icon name="description" /></span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div className="pa-between">
+                        <div style={{ fontWeight: 800, fontSize: 20 }}>{primary.name}</div>
+                        {primary.is_primary && <span className="pa-badge pa-badge-primary">Primary</span>}
+                      </div>
+                      <div className="pa-muted" style={{ fontSize: 13, marginTop: 4 }}>
+                        {primary.status === 'processing' ? '⏳ Analyzing…'
+                          : primary.status === 'failed' ? '⚠️ Processing failed'
+                          : `Version ${primary.version} · Ready`}
+                      </div>
+                    </div>
                   </div>
-                  <div className="pa-muted" style={{ fontSize: 13, marginTop: 3 }}>
-                    {r.status === 'processing' ? '⏳ Analyzing…'
-                      : r.status === 'failed' ? '⚠️ Processing failed'
-                      : `ATS score ${r.ats_score ?? '—'} · Completeness ${r.completeness_score ?? '—'}%`}
+
+                  <div className="pa-bento" style={{ gridTemplateColumns: 'repeat(3, 1fr)', display: 'grid', gap: 16, marginTop: 22 }}>
+                    <ScoreCard label="ATS Score" value={primary.ats_score} suffix="/100" max={100} color="var(--primary)" />
+                    <ScoreCard label="Completeness" value={primary.completeness_score} suffix="%" max={100} color="var(--tertiary)" />
+                    <div className="pa-score-card">
+                      <div className="pa-metric-label">Status</div>
+                      <div style={{ fontSize: 22, fontWeight: 800, marginTop: 8, color: primary.status === 'ready' ? 'var(--success)' : 'var(--warning)' }}>
+                        {primary.status === 'ready' ? 'Ready' : primary.status === 'processing' ? 'Analyzing' : 'Failed'}
+                      </div>
+                    </div>
                   </div>
                 </div>
-                {r.status === 'processing' && <span className="pa-spinner" />}
+              )}
+
+              {/* All resumes */}
+              <h3 style={{ fontSize: 18, margin: '28px 0 14px' }}>All Resumes</h3>
+              <div className="pa-grid pa-grid-2">
+                {resumes.map((r) => (
+                  <div key={r.id} className="pa-card pa-tile" style={{ alignItems: 'flex-start' }}>
+                    <span className="pa-icon-pill primary"><Icon name="description" /></span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.name}</span>
+                        {r.is_primary && <span className="pa-badge pa-badge-primary">Primary</span>}
+                      </div>
+                      <div className="pa-muted" style={{ fontSize: 13, marginTop: 3 }}>
+                        {r.status === 'processing' ? '⏳ Analyzing…'
+                          : r.status === 'failed' ? '⚠️ Failed'
+                          : `ATS ${r.ats_score ?? '—'} · ${r.completeness_score ?? '—'}% complete`}
+                      </div>
+                      <div className="pa-row" style={{ marginTop: 12 }}>
+                        {!r.is_primary && r.status === 'ready' && (
+                          <Button size="sm" variant="ghost" loading={setPrimary.isPending} onClick={() => setPrimary.mutate(r.id)}>Set as primary</Button>
+                        )}
+                        <button className="pa-btn pa-btn-ghost pa-btn-sm" style={{ color: 'var(--danger)' }} onClick={() => remove.mutate(r.id)}>Delete</button>
+                      </div>
+                    </div>
+                    {r.status === 'processing' && <span className="pa-spinner" />}
+                  </div>
+                ))}
               </div>
-              <div className="pa-row" style={{ marginTop: 12 }}>
-                {!r.is_primary && r.status === 'ready' && (
-                  <Button size="sm" variant="ghost" loading={setPrimary.isPending} onClick={() => setPrimary.mutate(r.id)}>
-                    Set as primary
-                  </Button>
-                )}
-                <button className="pa-btn pa-btn-ghost pa-btn-sm" style={{ color: 'var(--danger)' }}
-                  onClick={() => remove.mutate(r.id)}>Delete</button>
-              </div>
-            </div>
-          ))}
+            </>
+          )}
+      </div>
+    </div>
+  );
+}
+
+function ScoreCard({ label, value, suffix, max, color }: {
+  label: string; value: number | null; suffix: string; max: number; color: string;
+}) {
+  return (
+    <div className="pa-score-card">
+      <div className="pa-metric-label">{label}</div>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginTop: 8 }}>
+        <span style={{ fontSize: 30, fontWeight: 800, color }}>{value ?? '—'}</span>
+        {value != null && <span className="pa-muted" style={{ fontWeight: 700, fontSize: 14 }}>{suffix}</span>}
+      </div>
+      <div className="pa-bar-track" style={{ marginTop: 12 }}>
+        <div className="pa-bar-fill" style={{ width: `${value != null ? (value / max) * 100 : 0}%`, background: color }} />
       </div>
     </div>
   );

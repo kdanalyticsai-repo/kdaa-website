@@ -492,6 +492,23 @@ a.pa-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); bor
 .pa-card-stat.clickable { cursor: pointer; transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease; }
 .pa-card-stat.clickable:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--primary); }
 
+/* ── Icon button ── */
+.pa-icon-btn { width: 36px; height: 36px; border-radius: 10px; border: none; background: none; cursor: pointer; color: var(--text-muted); display: grid; place-items: center; }
+.pa-icon-btn:hover { background: var(--danger-light); color: var(--danger); }
+.pa-card-head { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+.pa-card-head h3 { font-size: 17px; }
+.pa-card-head .sub { font-size: 13px; color: var(--text-muted); }
+
+/* ── Resume hub ── */
+.pa-resume-thumb { width: 64px; height: 84px; border-radius: 12px; background: var(--surface-low); border: 1px solid var(--border-subtle); display: grid; place-items: center; color: var(--primary); flex-shrink: 0; }
+.pa-resume-thumb .material-symbols-outlined { font-size: 32px; }
+.pa-score-card { background: var(--surface-low); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 18px; }
+
+/* ── Breadcrumb ── */
+.pa-breadcrumb { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--text-muted); }
+.pa-breadcrumb .material-symbols-outlined { font-size: 16px; }
+.pa-breadcrumb .cur { color: var(--primary); }
+
 /* ── Bento metric cards (dashboard / insights) ── */
 .pa-bento { display: grid; gap: 20px; }
 .pa-bento-4 { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
