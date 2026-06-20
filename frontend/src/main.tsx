@@ -42,6 +42,16 @@ if (isAppHost) {
   document.head.appendChild(Object.assign(document.createElement('meta'), {
     name: 'theme-color', content: '#3800c0',
   }))
+  // iOS Safari uses apple-* tags (not the manifest) for the home-screen icon,
+  // app title and standalone launch — so the iPhone install matches the app.
+  document.head.appendChild(Object.assign(document.createElement('link'), {
+    rel: 'apple-touch-icon', href: '/proaicv-app-icon.png',
+  }))
+  const appleMeta = (name: string, content: string) =>
+    document.head.appendChild(Object.assign(document.createElement('meta'), { name, content }))
+  appleMeta('apple-mobile-web-app-capable', 'yes')
+  appleMeta('apple-mobile-web-app-status-bar-style', 'default')
+  appleMeta('apple-mobile-web-app-title', 'ProAICV')
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/sw.js').catch(() => {})
