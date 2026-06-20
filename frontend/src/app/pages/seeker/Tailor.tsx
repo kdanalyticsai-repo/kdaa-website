@@ -1,8 +1,9 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { api, apiError } from '@/app/lib/api';
-import { Button, Loading, ErrorState } from '@/app/components/ui';
+import { api } from '@/app/lib/api';
+import { Button, Loading } from '@/app/components/ui';
 import { FeatureGate } from '@/app/components/FeatureGate';
+import { AiToolError } from '@/app/components/AiToolError';
 
 interface TailorResult {
   tailored_sections?: Record<string, string> | null;
@@ -46,7 +47,7 @@ export default function Tailor() {
             </>
           )}
           {run.isPending && <Loading label="Tailoring your resume…" />}
-          {run.isError && <ErrorState message={apiError(run.error, 'Could not tailor resume.')} onRetry={() => run.mutate()} />}
+          {run.isError && <AiToolError error={run.error} fallback="Could not tailor resume." onRetry={() => run.mutate()} />}
 
           {run.data && (
             <div>
