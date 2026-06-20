@@ -112,21 +112,12 @@ export default function Jobs() {
         </div>
       </div>
 
-      {/* Web search — find roles on Google / DuckDuckGo, then log them in Applications */}
-      <div className="pa-card pa-between" style={{ marginTop: 16, flexWrap: 'wrap', gap: 12 }}>
-        <div style={{ minWidth: 0 }}>
-          <div style={{ fontWeight: 700 }}>Can’t find the right role here?</div>
-          <div className="pa-muted" style={{ fontSize: 13, marginTop: 2 }}>Search the web, then log what you find from Applications.</div>
-        </div>
-        <WebSearch google={googleUrl} ddg={ddgUrl} />
-      </div>
-
       <div style={{ marginTop: 16 }}>
         {isLoading ? <Loading label="Finding jobs…" />
           : isError ? <ErrorState message="Could not load jobs." onRetry={refetch} />
           : jobs.length === 0 ? (
             <EmptyState icon="🔍" title="No jobs found"
-              sub="Try a broader search, change filters, or look on the web."
+              sub="Try a broader search or different filters — or look on the web and log what you find from Applications."
               action={<WebSearch google={googleUrl} ddg={ddgUrl} />} />
           ) : (
             <div style={{ opacity: isFetching ? 0.6 : 1 }}>

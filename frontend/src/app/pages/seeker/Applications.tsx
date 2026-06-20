@@ -113,6 +113,19 @@ function LogModal({ onClose }: { onClose: () => void }) {
         <Field label="Company *"><input className="pa-input" value={company} onChange={(e) => setCompany(e.target.value)} /></Field>
         <Field label="Location"><input className="pa-input" value={location} onChange={(e) => setLocation(e.target.value)} /></Field>
         <Field label="Job posting URL" error={error}><input className="pa-input" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://…" /></Field>
+        {(title.trim() || company.trim()) && (
+          <div className="pa-row" style={{ gap: 8, marginTop: -8, marginBottom: 14, flexWrap: 'wrap' }}>
+            <span className="pa-muted" style={{ fontSize: 12 }}>Find the link:</span>
+            <a className="pa-btn pa-btn-ghost pa-btn-sm" target="_blank" rel="noreferrer"
+              href={`https://www.google.com/search?q=${encodeURIComponent([title, company].filter(Boolean).join(' ') + ' job')}`}>
+              <span className="material-symbols-outlined" style={{ fontSize: 16 }}>travel_explore</span> Google
+            </a>
+            <a className="pa-btn pa-btn-ghost pa-btn-sm" target="_blank" rel="noreferrer"
+              href={`https://duckduckgo.com/?q=${encodeURIComponent([title, company].filter(Boolean).join(' ') + ' job')}`}>
+              <span className="material-symbols-outlined" style={{ fontSize: 16 }}>travel_explore</span> DuckDuckGo
+            </a>
+          </div>
+        )}
         <div className="pa-row" style={{ marginTop: 6 }}>
           <Button variant="ghost" block onClick={onClose}>Cancel</Button>
           <Button block loading={save.isPending} onClick={submit}>Save</Button>

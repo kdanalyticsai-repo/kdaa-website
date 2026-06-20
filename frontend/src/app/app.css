@@ -138,13 +138,13 @@
 .pa-sidebar-foot { display: flex; flex-direction: column; gap: 4px; padding-top: 14px; border-top: 1px solid var(--border-subtle); }
 .pa-pro-card {
   display: block; border-radius: 16px; padding: 16px; margin-bottom: 8px; color: #fff;
-  background: linear-gradient(135deg, var(--primary), var(--tertiary)); text-decoration: none;
+  background: linear-gradient(135deg, var(--primary-bright), var(--primary-hero)); text-decoration: none;
   box-shadow: 0 10px 24px rgba(56, 0, 192, .25);
 }
-.pa-pro-card:hover { text-decoration: none; filter: brightness(1.04); }
-.pa-pro-eyebrow { font-size: 10px; font-weight: 800; letter-spacing: 1px; opacity: .85; }
-.pa-pro-title { font-size: 14px; font-weight: 700; margin: 6px 0 12px; line-height: 1.3; }
-.pa-pro-btn { display: block; text-align: center; background: rgba(255, 255, 255, .2); color: #fff; border-radius: 9px; padding: 9px; font-size: 13px; font-weight: 700; }
+.pa-pro-card:hover { text-decoration: none; filter: brightness(1.08); }
+.pa-pro-eyebrow { font-size: 10px; font-weight: 800; letter-spacing: 1px; opacity: .9; }
+.pa-pro-title { font-size: 14px; font-weight: 700; margin: 6px 0 12px; line-height: 1.3; color: #fff; }
+.pa-pro-btn { display: block; text-align: center; background: #fff; color: var(--primary); border-radius: 9px; padding: 9px; font-size: 13px; font-weight: 800; }
 
 .pa-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .pa-topbar {
@@ -215,6 +215,11 @@ a.pa-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); bor
 .pa-btn-ghost:hover:not(:disabled) { background: var(--bg-dim); }
 .pa-btn-outline { background: transparent; color: var(--primary); border-color: var(--primary); }
 .pa-btn-danger { background: var(--danger); color: #fff; }
+/* Button-styled links must keep their button text colour (beat .proaicv-app a) */
+.proaicv-app a.pa-btn-primary, .proaicv-app a.pa-btn-danger { color: #fff; }
+.proaicv-app a.pa-btn-ghost { color: var(--text); }
+.proaicv-app a.pa-btn-outline { color: var(--primary); }
+.proaicv-app a.pa-pro-card { color: #fff; }
 .pa-btn-block { width: 100%; }
 .pa-btn-sm { padding: 8px 12px; font-size: 13px; border-radius: 10px; }
 
@@ -533,6 +538,8 @@ a.pa-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); bor
 .pa-match-pill .material-symbols-outlined { font-size: 16px; }
 
 /* ── Coach chat polish ── */
+.pa-coach-badge { width: 52px; height: 52px; border-radius: 16px; flex-shrink: 0; display: grid; place-items: center; color: #fff; background: linear-gradient(135deg, var(--primary), var(--tertiary)); box-shadow: var(--shadow-md); }
+.pa-coach-badge .material-symbols-outlined { font-size: 28px; }
 .pa-coach-orb { width: 56px; height: 56px; border-radius: 18px; background: linear-gradient(135deg, var(--primary), var(--tertiary)); color: #fff; display: grid; place-items: center; font-size: 26px; margin: 0 auto 12px; box-shadow: var(--shadow-md); }
 .pa-msg-avatar { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--tertiary)); color: #fff; display: grid; place-items: center; font-size: 14px; flex-shrink: 0; align-self: flex-end; margin-right: 8px; }
 

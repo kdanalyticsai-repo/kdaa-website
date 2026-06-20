@@ -1,8 +1,9 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { api, apiError } from '@/app/lib/api';
-import { Button, Loading, ErrorState, useToast } from '@/app/components/ui';
+import { api } from '@/app/lib/api';
+import { Button, Loading, useToast } from '@/app/components/ui';
 import { FeatureGate } from '@/app/components/FeatureGate';
+import { AiToolError } from '@/app/components/AiToolError';
 
 interface CoverLetterResult {
   subject_line: string;
@@ -48,7 +49,7 @@ export default function CoverLetter() {
             </>
           )}
           {run.isPending && <Loading label="Writing your cover letter…" />}
-          {run.isError && <ErrorState message={apiError(run.error, 'Could not generate cover letter.')} onRetry={() => run.mutate()} />}
+          {run.isError && <AiToolError error={run.error} fallback="Could not generate cover letter." onRetry={() => run.mutate()} />}
 
           {run.data && (
             <div>
