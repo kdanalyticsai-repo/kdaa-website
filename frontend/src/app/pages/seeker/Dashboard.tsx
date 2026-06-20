@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { api } from '@/app/lib/api';
 import { useAuthStore } from '@/app/stores/authStore';
 import { useUsage } from '@/app/lib/hooks';
 import { formatDate } from '@/app/lib/format';
 import { Loading } from '@/app/components/ui';
+import { homePathForRole } from '@/app/components/AppShell';
 
 interface DashboardData {
   applications: { total: number; by_status: Record<string, number>; response_rate: number };
@@ -13,6 +14,15 @@ interface DashboardData {
 }
 
 export default function Dashboard() {
+  const user = useAuthStore((s) => s.user);
+  // The seeker dashboard is job-seeker-only; route others to their own home.
+  if (user && user.role !== 'job_seeker') {
+    return <Navigate to={homePathForRole(user.role)} replace />;
+  }
+  return <SeekerDashboard />;
+}
+
+function SeekerDashboard() {
   const user = useAuthStore((s) => s.user);
   const { data: usage } = useUsage();
   const { data, isLoading } = useQuery({
@@ -29,7 +39,7 @@ export default function Dashboard() {
       <p className="pa-page-sub">Your job search at a glance</p>
 
       {!isPro && (
-        <div className="pa-card" style={{ marginTop: 18, background: trialEnded ? '#fdf2dd' : 'var(--primary-light)', borderColor: 'transparent' }}>
+        <div className="pa-card" style={{ marginTop: 18, background: trialEnded ? 'var(--warning-light)' : 'var(--primary-light)', borderColor: 'transparent' }}>
           <div className="pa-between">
             <div>
               <div style={{ fontWeight: 700 }}>

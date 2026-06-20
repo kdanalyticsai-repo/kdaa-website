@@ -1,5 +1,6 @@
 import {
-  createContext, useContext, useState, useCallback, ReactNode, ButtonHTMLAttributes,
+  createContext, useContext, useState, useCallback, ReactNode,
+  ButtonHTMLAttributes, InputHTMLAttributes,
 } from 'react';
 
 // ── Button ──────────────────────────────────────────────────────────────────
@@ -21,6 +22,25 @@ export function Button({
       {loading && <span className="pa-spinner" style={{ width: 15, height: 15, borderWidth: 2 }} />}
       {children}
     </button>
+  );
+}
+
+// ── Password input (with show/hide toggle) ──────────────────────────────────
+export function PasswordInput(props: InputHTMLAttributes<HTMLInputElement>) {
+  const [show, setShow] = useState(false);
+  return (
+    <div className="pa-input-wrap">
+      <input {...props} className="pa-input" type={show ? 'text' : 'password'} />
+      <button
+        type="button"
+        className="pa-input-eye"
+        onClick={() => setShow((s) => !s)}
+        tabIndex={-1}
+        aria-label={show ? 'Hide password' : 'Show password'}
+      >
+        {show ? 'Hide' : 'Show'}
+      </button>
+    </div>
   );
 }
 

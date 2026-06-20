@@ -2,7 +2,7 @@ import { useState, FormEvent } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuthStore } from '@/app/stores/authStore';
 import { apiError } from '@/app/lib/api';
-import { Button, Field } from '@/app/components/ui';
+import { Button, Field, PasswordInput } from '@/app/components/ui';
 
 export default function Login() {
   const login = useAuthStore((s) => s.login);
@@ -38,7 +38,7 @@ export default function Login() {
             onChange={(e) => setEmail(e.target.value)} required />
         </Field>
         <Field label="Password" error={error}>
-          <input className="pa-input" type="password" autoComplete="current-password" value={password}
+          <PasswordInput autoComplete="current-password" value={password}
             onChange={(e) => setPassword(e.target.value)} required />
         </Field>
 

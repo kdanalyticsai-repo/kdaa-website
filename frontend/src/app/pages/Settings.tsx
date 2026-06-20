@@ -14,6 +14,7 @@ export default function Settings() {
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   const isPro = user?.subscription === 'pro';
+  const isSeeker = user?.role === 'job_seeker';
 
   const exportData = useMutation({
     mutationFn: async () => {
@@ -57,16 +58,18 @@ export default function Settings() {
         )}
       </div>
 
-      <div className="pa-card">
-        <h3 style={{ fontSize: 16, marginBottom: 12 }}>Subscription</h3>
-        {isPro ? (
-          <Button variant="ghost" loading={downgrade.isPending} onClick={() => downgrade.mutate()}>
-            Turn off auto-renew
-          </Button>
-        ) : (
-          <Link to="/paywall" className="pa-btn pa-btn-primary">Upgrade to Pro</Link>
-        )}
-      </div>
+      {isSeeker && (
+        <div className="pa-card">
+          <h3 style={{ fontSize: 16, marginBottom: 12 }}>Subscription</h3>
+          {isPro ? (
+            <Button variant="ghost" loading={downgrade.isPending} onClick={() => downgrade.mutate()}>
+              Turn off auto-renew
+            </Button>
+          ) : (
+            <Link to="/paywall" className="pa-btn pa-btn-primary">Upgrade to Pro</Link>
+          )}
+        </div>
+      )}
 
       <div className="pa-card">
         <h3 style={{ fontSize: 16, marginBottom: 12 }}>Your data</h3>
@@ -77,8 +80,8 @@ export default function Settings() {
 
       <div className="pa-card">
         <h3 style={{ fontSize: 16, marginBottom: 12 }}>Legal</h3>
-        <a className="pa-list-link" href="https://kdaanalytics.com/terms" target="_blank" rel="noreferrer">📋 Terms & Conditions <span>›</span></a>
-        <a className="pa-list-link" href="https://kdaanalytics.com/privacy" target="_blank" rel="noreferrer">🔒 Privacy Policy <span>›</span></a>
+        <a className="pa-list-link" href="https://kdaanalytics.com/terms-of-service" target="_blank" rel="noreferrer">📋 Terms & Conditions <span>›</span></a>
+        <a className="pa-list-link" href="https://kdaanalytics.com/privacy-policy" target="_blank" rel="noreferrer">🔒 Privacy Policy <span>›</span></a>
       </div>
 
       <div className="pa-card" style={{ borderColor: 'var(--danger)' }}>

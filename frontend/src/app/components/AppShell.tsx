@@ -4,6 +4,13 @@ import { useAuthStore } from '@/app/stores/authStore';
 
 interface NavItem { to: string; label: string; icon: string; end?: boolean }
 
+/** Landing route for a role — providers/admins must not land on the seeker dashboard. */
+export function homePathForRole(role?: string): string {
+  if (role === 'job_provider') return '/provider';
+  if (role === 'admin') return '/admin';
+  return '/';
+}
+
 const SEEKER_NAV: NavItem[] = [
   { to: '/', label: 'Home', icon: '🏠', end: true },
   { to: '/jobs', label: 'Jobs', icon: '💼' },
@@ -41,11 +48,12 @@ export function AppShell({ children }: { children: ReactNode }) {
   };
 
   const isPro = user?.subscription === 'pro';
+  const isSeeker = user?.role === 'job_seeker';
 
   return (
     <div className="pa-shell">
       <aside className="pa-sidebar">
-        <NavLink to="/" className="pa-brand">
+        <NavLink to={homePathForRole(user?.role)} className="pa-brand">
           <span className="pa-brand-logo">P</span>
           <span className="pa-brand-name">ProAICV</span>
         </NavLink>
@@ -75,10 +83,11 @@ export function AppShell({ children }: { children: ReactNode }) {
             <span style={{ fontWeight: 700 }}>{greeting()}, {user?.name?.split(' ')[0] || 'there'}</span>
           </div>
           <div className="pa-row">
-            {!isPro && user?.role !== 'admin' && (
+            {/* Subscription/Pro is a job-seeker concept only. */}
+            {isSeeker && !isPro && (
               <NavLink to="/paywall" className="pa-btn pa-btn-outline pa-btn-sm">Upgrade to Pro</NavLink>
             )}
-            {isPro && <span className="pa-badge pa-badge-primary">PRO</span>}
+            {isSeeker && isPro && <span className="pa-badge pa-badge-primary">PRO</span>}
           </div>
         </header>
         {children}
