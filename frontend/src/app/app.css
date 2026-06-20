@@ -292,6 +292,52 @@ a.pa-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); bor
 .pa-chat-input { display: flex; gap: 10px; padding: 12px; border-top: 1px solid var(--border-subtle); align-items: flex-end; }
 .pa-chat-input .pa-textarea { resize: none; max-height: 120px; }
 
+/* ── Role-select landing (mirrors mobile role-select) ── */
+.pa-role-page { min-height: 100vh; background: var(--bg); }
+.pa-role-hero {
+  position: relative; overflow: hidden; background: var(--primary-hero); color: #fff;
+  padding: 52px 24px 44px; text-align: center;
+}
+.pa-role-hero::before, .pa-role-hero::after { content: ''; position: absolute; border-radius: 50%; pointer-events: none; }
+.pa-role-hero::before { width: 340px; height: 340px; background: var(--primary); opacity: .28; top: -140px; right: -100px; }
+.pa-role-hero::after { width: 210px; height: 210px; background: var(--tertiary-bright); opacity: .12; bottom: -90px; left: -60px; }
+.pa-role-hero-inner { position: relative; display: flex; flex-direction: column; align-items: center; }
+.pa-role-logo {
+  width: 64px; height: 64px; border-radius: 18px; display: grid; place-items: center; font-size: 28px;
+  background: rgba(255, 255, 255, .12); border: 1px solid rgba(255, 255, 255, .2);
+  margin-bottom: 12px; box-shadow: 0 10px 30px rgba(91, 46, 255, .4);
+}
+.pa-role-logo-text { font-size: 32px; font-weight: 800; letter-spacing: -.6px; }
+.pa-role-tagline { color: rgba(255, 255, 255, .7); margin-top: 6px; font-size: 15px; }
+.pa-role-pills { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 18px; }
+.pa-role-pill {
+  background: rgba(255, 255, 255, .12); border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 999px; padding: 5px 14px; font-size: 12px; font-weight: 600; color: rgba(255, 255, 255, .88);
+}
+.pa-role-cards { max-width: 520px; margin: 0 auto; padding: 26px 18px 60px; display: flex; flex-direction: column; gap: 18px; }
+.pa-role-heading { text-align: center; font-size: 17px; font-weight: 700; color: var(--text); }
+.pa-role-card {
+  background: var(--surface); border: 1px solid var(--border-subtle); border-radius: 22px;
+  overflow: hidden; box-shadow: var(--shadow-md);
+}
+.pa-role-img { height: 190px; background-size: cover; background-position: top center; position: relative; }
+.pa-role-img-overlay { position: absolute; inset: 0; padding: 16px; display: flex; flex-direction: column; justify-content: flex-end; }
+.pa-role-badge {
+  align-self: flex-start; background: rgba(255, 255, 255, .18); border: 1px solid rgba(255, 255, 255, .32);
+  color: #fff; border-radius: 999px; padding: 4px 11px; font-size: 12px; font-weight: 700; margin-bottom: 10px;
+}
+.pa-role-card-title { font-size: 22px; font-weight: 800; color: #fff; line-height: 1.25; letter-spacing: -.3px; }
+.pa-role-body { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.pa-role-feature { display: flex; align-items: center; gap: 10px; }
+.pa-role-feature .pa-icon-tile { width: 32px; height: 32px; font-size: 15px; border-radius: 9px; }
+.pa-role-feature-text { font-size: 14px; color: var(--text-secondary); line-height: 1.4; }
+.pa-role-cta {
+  display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;
+  border: none; cursor: pointer; padding: 15px; color: #fff; font-weight: 700; font-size: 15px;
+}
+.pa-role-cta:hover { filter: brightness(1.07); }
+.pa-role-signin { text-align: center; color: var(--text-secondary); font-size: 14px; margin-top: 4px; }
+
 /* ── Gradient hero band (mirrors mobile home hero) ── */
 .pa-hero {
   position: relative; overflow: hidden; border-radius: 20px;

@@ -6,7 +6,7 @@ import { Loading } from './ui';
 /**
  * Gate for authenticated areas. Mirrors the mobile _layout routing:
  *  - not hydrated yet → spinner
- *  - not authenticated → /login
+ *  - not authenticated → /role-select (the landing page; sign-in is reachable from there)
  *  - authenticated but not onboarded → onboarding (unless already there)
  */
 export function ProtectedRoute({
@@ -25,7 +25,7 @@ export function ProtectedRoute({
 
   if (!hydrated) return <Loading label="Loading your account…" />;
   if (!isAuthenticated || !user) {
-    return <Navigate to="/login" replace state={{ from: location.pathname }} />;
+    return <Navigate to="/role-select" replace state={{ from: location.pathname }} />;
   }
 
   if (requireOnboarded && !user.onboarded) {
