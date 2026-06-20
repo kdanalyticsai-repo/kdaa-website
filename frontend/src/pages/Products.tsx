@@ -9,6 +9,7 @@ const PRODUCTS = [
     tags: ['HRTech', 'Recruitment', 'Career'],
     status: 'Live',
     slug: 'proaicv',
+    appUrl: 'https://proaicv.kdaanalytics.com/',
     desc: 'A dual-sided AI career platform connecting job seekers and job providers. Job seekers get AI resume coaching, smart job matching, and interview prep. Job providers post listings, manage applicants, and hire smarter — all from one place, available on Android and iOS.',
     capabilities: [
       'Smart job matching — AI surfaces the best-fit roles based on resume and skills',
@@ -168,6 +169,7 @@ export default function ProductsPage() {
 
       <section className={styles.grid}>
         {PRODUCTS.map((p, i) => {
+          const appUrl = (p as { appUrl?: string }).appUrl
           const cardInner = (
             <>
               <div className={styles.cardHeader}>
@@ -206,9 +208,26 @@ export default function ProductsPage() {
                 </div>
               </div>
 
-              {'slug' in p && <div className={styles.viewLink}>View Product →</div>}
+              {(appUrl || 'slug' in p) && (
+                <div className={styles.viewLink}>{appUrl ? 'Download the app →' : 'View Product →'}</div>
+              )}
             </>
           )
+
+          if (appUrl) {
+            return (
+              <a
+                key={p.title}
+                href={appUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${styles.card} ${styles.cardClickable}`}
+                style={{ animationDelay: `${i * 0.07}s` }}
+              >
+                {cardInner}
+              </a>
+            )
+          }
 
           return 'slug' in p ? (
             <Link
