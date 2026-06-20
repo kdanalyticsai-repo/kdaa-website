@@ -2,12 +2,13 @@ import { useState, ReactNode } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api, apiError } from '@/app/lib/api';
 import { formatSalary, formatDate } from '@/app/lib/format';
-import { Button, Loading, EmptyState, ErrorState, useToast } from '@/app/components/ui';
+import { Button, Loading, EmptyState, ErrorState, Modal, DetailRow, useToast } from '@/app/components/ui';
 
-type Tab = 'overview' | 'jobs' | 'access' | 'pan' | 'users';
+type Tab = 'overview' | 'jobs' | 'listed' | 'access' | 'pan' | 'users';
 const TABS: { id: Tab; label: string }[] = [
   { id: 'overview', label: 'Overview' },
   { id: 'jobs', label: 'Pending jobs' },
+  { id: 'listed', label: 'Listed jobs' },
   { id: 'access', label: 'Access requests' },
   { id: 'pan', label: 'PAN verify' },
   { id: 'users', label: 'Users' },
@@ -17,8 +18,11 @@ export default function AdminHome() {
   const [tab, setTab] = useState<Tab>('overview');
   return (
     <div className="pa-content">
-      <h1 className="pa-page-title">Admin</h1>
-      <div className="pa-chip-row" style={{ marginTop: 14 }}>
+      <div className="pa-hero">
+        <div className="pa-hero-title">Admin Dashboard</div>
+        <div className="pa-hero-sub" style={{ color: '#ffb4b4' }}>Internal — do not share</div>
+      </div>
+      <div className="pa-chip-row">
         {TABS.map((t) => (
           <button key={t.id} className={`pa-chip${tab === t.id ? ' active' : ''}`} onClick={() => setTab(t.id)}>{t.label}</button>
         ))}
@@ -26,6 +30,7 @@ export default function AdminHome() {
       <div style={{ marginTop: 18 }}>
         {tab === 'overview' && <Overview />}
         {tab === 'jobs' && <PendingJobs />}
+        {tab === 'listed' && <ListedJobs />}
         {tab === 'access' && <AccessRequests />}
         {tab === 'pan' && <PanVerify />}
         {tab === 'users' && <Users />}
@@ -34,11 +39,22 @@ export default function AdminHome() {
   );
 }
 
+type StatModal = 'revenue' | 'subs' | 'jobs' | 'apps' | null;
+
 function Overview() {
+  const [modal, setModal] = useState<StatModal>(null);
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ['admin-stats'],
     queryFn: async () => (await api.get<any>('/admin/stats')).data,
   });
+
+  // Pro-subscriber list is loaded lazily when its modal opens.
+  const { data: usersData } = useQuery({
+    queryKey: ['admin-users'],
+    queryFn: async () => (await api.get<{ users: AdminUser[] }>('/admin/users?limit=100')).data,
+    enabled: modal === 'subs',
+  });
+
   if (isLoading) return <Loading />;
   if (isError || !data) return <ErrorState message="Could not load stats." onRetry={refetch} />;
 
@@ -49,6 +65,7 @@ function Overview() {
   const resumes = data.resumes ?? {};
   const listed = data.listed_jobs ?? {};
   const inr = (n: number) => `₹${(n ?? 0).toLocaleString('en-IN')}`;
+  const proUsers = (usersData?.users ?? []).filter((x) => x.subscription === 'pro');
 
   return (
     <>
@@ -62,8 +79,8 @@ function Overview() {
 
       <SectionLabel>Revenue</SectionLabel>
       <div className="pa-grid pa-grid-4">
-        <Stat label="Total revenue" value={inr(rev.monthly_inr)} accent="primary" />
-        <Stat label="Pro subscribers" value={rev.pro_subscribers ?? 0} />
+        <Stat label="Total revenue" value={inr(rev.monthly_inr)} accent="primary" onClick={() => setModal('revenue')} />
+        <Stat label="Pro subscribers" value={rev.pro_subscribers ?? 0} onClick={() => setModal('subs')} />
       </div>
 
       <SectionLabel>Listed jobs</SectionLabel>
@@ -76,13 +93,52 @@ function Overview() {
 
       <SectionLabel>Activity</SectionLabel>
       <div className="pa-grid pa-grid-4">
-        <Stat label="Active jobs" value={(jobs.total_active ?? 0).toLocaleString('en-IN')} />
-        <Stat label="Applications" value={apps.total ?? 0} />
+        <Stat label="Active jobs" value={(jobs.total_active ?? 0).toLocaleString('en-IN')} onClick={() => setModal('jobs')} />
+        <Stat label="Applications" value={apps.total ?? 0} onClick={() => setModal('apps')} />
         <Stat label="Resumes" value={resumes.total ?? 0} />
       </div>
+
+      {/* ── Detail modals ── */}
+      <Modal open={modal === 'revenue'} onClose={() => setModal(null)} title="Revenue breakdown">
+        <p className="pa-muted" style={{ fontSize: 13, marginBottom: 10 }}>Active Pro subscribers by plan.</p>
+        {Object.keys(rev.by_plan ?? {}).length === 0
+          ? <DetailRow k="No Pro subscribers yet" v="—" />
+          : Object.entries(rev.by_plan as Record<string, { count: number; price: number }>).map(([plan, d]) => (
+            <DetailRow key={plan}
+              k={plan === 'unknown' ? `Unknown plan × ${d.count}` : `${cap(plan)} × ${d.count}`}
+              v={plan === 'unknown' ? '?' : inr(d.count * d.price)} />
+          ))}
+        <DetailRow k={<strong>Total</strong>} v={<strong style={{ color: 'var(--primary)' }}>{inr(rev.monthly_inr)}</strong>} />
+      </Modal>
+
+      <Modal open={modal === 'subs'} onClose={() => setModal(null)} title="Pro subscribers">
+        {!usersData ? <Loading /> : proUsers.length === 0
+          ? <p className="pa-muted">No Pro subscribers in the recent list.</p>
+          : proUsers.map((p) => (
+            <DetailRow key={p.id}
+              k={<>{p.name || '(no name)'}<br /><span className="pa-muted" style={{ fontSize: 12 }}>{p.email}</span></>}
+              v={<span style={{ color: 'var(--primary)' }}>{p.pro_plan_type ? cap(p.pro_plan_type) : 'PRO'}</span>} />
+          ))}
+      </Modal>
+
+      <Modal open={modal === 'jobs'} onClose={() => setModal(null)} title="Active jobs by source">
+        <DetailRow k={<strong>Total active</strong>} v={<strong>{(jobs.total_active ?? 0).toLocaleString('en-IN')}</strong>} />
+        {Object.entries(jobs.by_source ?? {}).map(([src, count]) => (
+          <DetailRow key={src} k={src} v={String(count)} />
+        ))}
+      </Modal>
+
+      <Modal open={modal === 'apps'} onClose={() => setModal(null)} title="Applications by status">
+        <DetailRow k={<strong>Total</strong>} v={<strong>{apps.total ?? 0}</strong>} />
+        {Object.entries(apps.by_status ?? {}).map(([s, count]) => (
+          <DetailRow key={s} k={cap(s)} v={String(count)} />
+        ))}
+      </Modal>
     </>
   );
 }
+
+function cap(s: string) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
 function SectionLabel({ children }: { children: ReactNode }) {
   return <div className="pa-section-label">{children}</div>;
@@ -94,11 +150,13 @@ const ACCENT: Record<string, string> = {
   warning: 'var(--warning)',
 };
 
-function Stat({ label, value, accent }: { label: string; value: string | number; accent?: keyof typeof ACCENT }) {
+function Stat({ label, value, accent, onClick }: {
+  label: string; value: string | number; accent?: keyof typeof ACCENT; onClick?: () => void;
+}) {
   return (
-    <div className="pa-card pa-card-stat">
+    <div className={`pa-card pa-card-stat${onClick ? ' clickable' : ''}`} onClick={onClick}>
       <div className="pa-stat-num" style={accent ? { color: ACCENT[accent] } : undefined}>{value}</div>
-      <div className="pa-label" style={{ marginTop: 4 }}>{label}</div>
+      <div className="pa-label" style={{ marginTop: 4 }}>{label}{onClick ? <span className="pa-muted" style={{ fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}> · details</span> : null}</div>
     </div>
   );
 }
@@ -152,6 +210,80 @@ function PendingJobs() {
           </div>
         </div>
       ))}
+    </>
+  );
+}
+
+interface ProviderJob {
+  id: string; title: string; company: string; location: string;
+  review_status: string; is_active: boolean; job_type: string; remote_type: string;
+  provider_name: string; provider_email: string | null; posted_at: string | null;
+}
+
+const REVIEW_BADGE: Record<string, { label: string; cls: string }> = {
+  approved: { label: 'LIVE', cls: 'pa-badge-success' },
+  pending: { label: 'PENDING', cls: 'pa-badge-warning' },
+  rejected: { label: 'REJECTED', cls: 'pa-badge-neutral' },
+};
+
+function ListedJobs() {
+  const qc = useQueryClient();
+  const toast = useToast();
+  const [selected, setSelected] = useState<ProviderJob | null>(null);
+  const { data, isLoading, isError, refetch } = useQuery({
+    queryKey: ['admin-provider-jobs'],
+    queryFn: async () => (await api.get<ProviderJob[]>('/admin/provider-jobs')).data,
+  });
+  const del = useMutation({
+    mutationFn: (id: string) => api.delete(`/admin/jobs/${id}`),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin-provider-jobs'] });
+      qc.invalidateQueries({ queryKey: ['admin-stats'] });
+      setSelected(null);
+      toast('Listing deleted.');
+    },
+    onError: (e) => toast(apiError(e, 'Could not delete listing.')),
+  });
+
+  if (isLoading) return <Loading />;
+  if (isError || !data) return <ErrorState message="Could not load listings." onRetry={refetch} />;
+  if (data.length === 0) return <EmptyState icon="📭" title="No provider listings yet" sub="Jobs posted by employers appear here." />;
+
+  return (
+    <>
+      {data.map((job) => {
+        const badge = REVIEW_BADGE[job.review_status] ?? REVIEW_BADGE.pending;
+        return (
+          <div key={job.id} className="pa-card pa-between" style={{ cursor: 'pointer' }} onClick={() => setSelected(job)}>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ fontWeight: 700 }}>{job.title}</div>
+              <div className="pa-muted" style={{ fontSize: 13, marginTop: 2 }}>
+                {job.company}{job.location ? ` · ${job.location}` : ''} · by {job.provider_name}
+              </div>
+            </div>
+            <span className={`pa-badge ${badge.cls}`}>{badge.label}</span>
+          </div>
+        );
+      })}
+
+      <Modal open={!!selected} onClose={() => setSelected(null)} title="Listing detail">
+        {selected && (
+          <>
+            <DetailRow k="Title" v={selected.title} />
+            <DetailRow k="Company" v={selected.company} />
+            <DetailRow k="Location" v={selected.location || '—'} />
+            <DetailRow k="Type" v={[selected.job_type, selected.remote_type].filter(Boolean).join(' · ') || '—'} />
+            <DetailRow k="Status" v={selected.review_status} />
+            <DetailRow k="Posted by" v={selected.provider_name} />
+            <DetailRow k="Provider email" v={selected.provider_email || '—'} />
+            <DetailRow k="Posted at" v={selected.posted_at ? formatDate(selected.posted_at) : '—'} />
+            <Button variant="danger" block style={{ marginTop: 16 }} loading={del.isPending}
+              onClick={() => { if (confirm(`Delete "${selected.title}"?`)) del.mutate(selected.id); }}>
+              Delete listing
+            </Button>
+          </>
+        )}
+      </Modal>
     </>
   );
 }

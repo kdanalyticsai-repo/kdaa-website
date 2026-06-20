@@ -44,6 +44,29 @@ export function PasswordInput(props: InputHTMLAttributes<HTMLInputElement>) {
   );
 }
 
+// ── Modal ───────────────────────────────────────────────────────────────────
+export function Modal({
+  open, onClose, title, children,
+}: { open: boolean; onClose: () => void; title?: string; children: ReactNode }) {
+  if (!open) return null;
+  return (
+    <div className="pa-modal-overlay" onClick={onClose}>
+      <div className="pa-modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
+        <div className="pa-modal-head">
+          <div className="pa-modal-title">{title}</div>
+          <button className="pa-modal-close" onClick={onClose} aria-label="Close">✕</button>
+        </div>
+        <div className="pa-modal-body">{children}</div>
+      </div>
+    </div>
+  );
+}
+
+/** A label/value row for use inside a Modal. */
+export function DetailRow({ k, v }: { k: ReactNode; v: ReactNode }) {
+  return <div className="pa-detail-row"><span className="k">{k}</span><span className="v">{v}</span></div>;
+}
+
 // ── Field ───────────────────────────────────────────────────────────────────
 export function Field({
   label, error, hint, children,

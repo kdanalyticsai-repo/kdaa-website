@@ -34,18 +34,18 @@ export default function ProviderHome() {
 
   return (
     <div className="pa-content" style={{ maxWidth: 760 }}>
-      <div className="pa-card">
-        <div className="pa-row">
+      <div className="pa-hero">
+        <div className="pa-tile" style={{ position: 'relative' }}>
           <div className="pa-avatar">{initials}</div>
           <div style={{ minWidth: 0 }}>
-            <div style={{ fontWeight: 800, fontSize: 18 }}>{user.name || 'HR Manager'}</div>
-            <div className="pa-muted" style={{ fontSize: 14 }}>{user.email}</div>
+            <div className="pa-hero-title" style={{ fontSize: 20 }}>{user.name || 'HR Manager'}</div>
+            <div className="pa-hero-sub" style={{ marginTop: 2 }}>{user.email}</div>
             {profile.data?.company_name && (
-              <div style={{ fontSize: 14, marginTop: 2 }}>🏢 {profile.data.company_name}</div>
+              <div className="pa-hero-sub" style={{ marginTop: 2 }}>🏢 {profile.data.company_name}</div>
             )}
           </div>
         </div>
-        <div style={{ marginTop: 12 }}>{panBadge(user)}</div>
+        <div style={{ marginTop: 14, position: 'relative' }}>{panBadge(user)}</div>
       </div>
 
       <div className="pa-grid pa-grid-2">
