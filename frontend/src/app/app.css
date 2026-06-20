@@ -492,6 +492,66 @@ a.pa-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); bor
 .pa-card-stat.clickable { cursor: pointer; transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease; }
 .pa-card-stat.clickable:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--primary); }
 
+/* ── Bento metric cards (dashboard / insights) ── */
+.pa-bento { display: grid; gap: 20px; }
+.pa-bento-4 { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+.pa-metric {
+  background: var(--surface); border: 1px solid var(--border-subtle); border-radius: 18px;
+  padding: 22px; box-shadow: var(--shadow-sm); transition: transform .15s, box-shadow .15s;
+}
+.pa-metric:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.pa-metric-head { display: flex; align-items: center; justify-content: space-between; }
+.pa-icon-pill {
+  width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; flex-shrink: 0;
+}
+.pa-icon-pill .material-symbols-outlined { font-size: 26px; }
+.pa-icon-pill.primary { background: color-mix(in srgb, var(--primary) 10%, transparent); color: var(--primary); }
+.pa-icon-pill.cyan { background: color-mix(in srgb, var(--tertiary) 16%, transparent); color: var(--tertiary-ink); }
+.pa-icon-pill.violet { background: color-mix(in srgb, var(--primary-bright) 12%, transparent); color: var(--primary-bright); }
+.pa-icon-pill.danger { background: var(--danger-light); color: var(--danger); }
+.pa-metric-label { margin-top: 18px; font-size: 12px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; color: var(--text-muted); }
+.pa-metric-num { font-size: 34px; font-weight: 800; letter-spacing: -1px; margin-top: 4px; line-height: 1.1; }
+.pa-metric-num small { font-size: 16px; color: var(--text-muted); font-weight: 600; }
+.pa-trend { font-size: 12px; font-weight: 700; padding: 4px 9px; border-radius: 999px; display: inline-flex; align-items: center; gap: 3px; }
+.pa-trend.up { background: var(--success-light); color: var(--success); }
+
+.pa-dash-mid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 20px; align-items: start; }
+@media (max-width: 900px) { .pa-dash-mid { grid-template-columns: 1fr; } }
+
+/* ── Funnel ── */
+.pa-funnel-row { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.pa-funnel-row:last-child { margin-bottom: 0; }
+.pa-funnel-name { width: 92px; flex-shrink: 0; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; color: var(--text-muted); }
+.pa-funnel-track { flex: 1; height: 40px; border-radius: 999px; background: color-mix(in srgb, var(--primary) 8%, transparent); overflow: hidden; }
+.pa-funnel-fill { height: 100%; border-radius: 999px; display: flex; align-items: center; justify-content: flex-end; padding: 0 16px; font-size: 12px; font-weight: 700; color: #fff; white-space: nowrap; transition: width .8s cubic-bezier(.2,.8,.2,1); }
+
+/* ── Active application rows ── */
+.pa-app-row { display: flex; align-items: center; gap: 16px; padding: 14px 16px; border: 1px solid var(--border-subtle); border-radius: 14px; background: var(--surface); box-shadow: var(--shadow-sm); transition: box-shadow .15s; }
+.pa-app-row:hover { box-shadow: var(--shadow-md); text-decoration: none; }
+.pa-app-row + .pa-app-row { margin-top: 12px; }
+.pa-app-logo { width: 46px; height: 46px; border-radius: 12px; background: var(--surface-low); display: grid; place-items: center; color: var(--text-muted); flex-shrink: 0; }
+.pa-status-chip { padding: 5px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+
+/* ── Auth split-screen (landing / create account) ── */
+.pa-auth-split { min-height: 100vh; display: flex; align-items: center; justify-content: center; gap: 48px; padding: 32px; background: var(--bg); }
+.pa-auth-brandpanel { flex: 1; max-width: 440px; display: flex; flex-direction: column; gap: 18px; }
+.pa-auth-brand-row { display: flex; align-items: center; gap: 12px; }
+.pa-auth-brand-logo { width: 48px; height: 48px; border-radius: 14px; background: linear-gradient(135deg, var(--primary-bright), var(--primary)); display: grid; place-items: center; color: #fff; box-shadow: 0 8px 20px rgba(56, 0, 192, .3); }
+.pa-auth-brand-logo .material-symbols-outlined { font-size: 26px; }
+.pa-auth-brand-name { font-size: 28px; font-weight: 800; color: var(--primary); letter-spacing: -.5px; }
+.pa-auth-headline { font-size: 40px; font-weight: 800; line-height: 1.1; letter-spacing: -1px; color: var(--text); }
+.pa-auth-headline span { color: var(--primary); }
+.pa-auth-lead { font-size: 16px; color: var(--text-secondary); line-height: 1.6; max-width: 30rem; }
+.pa-auth-illus { margin-top: 6px; border-radius: 24px; height: 200px; background: linear-gradient(135deg, var(--primary-hero), var(--primary)); position: relative; overflow: hidden; box-shadow: var(--shadow-md); }
+.pa-auth-illus::before { content: ''; position: absolute; width: 260px; height: 260px; border-radius: 50%; background: var(--tertiary); opacity: .22; top: -90px; right: -60px; }
+.pa-auth-illus::after { content: ''; position: absolute; width: 150px; height: 150px; border-radius: 50%; background: var(--primary-bright); opacity: .45; bottom: -50px; left: 30px; filter: blur(8px); }
+.pa-auth-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+.pa-auth-formcard { width: 100%; max-width: 460px; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: 24px; padding: 36px 32px; box-shadow: var(--shadow-md); }
+@media (max-width: 920px) {
+  .pa-auth-split { flex-direction: column; gap: 24px; padding: 24px; }
+  .pa-auth-brandpanel { display: none; }
+}
+
 /* ── Mobile ── */
 @media (max-width: 860px) {
   .pa-hero { padding: 22px 20px; border-radius: 16px; }
