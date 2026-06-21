@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { api, apiError } from '@/app/lib/api';
+import { api, apiError, tokenStore } from '@/app/lib/api';
+import { API_URL } from '@/app/lib/config';
 import { Button, Spinner, useToast } from '@/app/components/ui';
 import { FeatureGate } from '@/app/components/FeatureGate';
 
 interface ChatMsg { role: string; content: string }
-interface ChatResponse { session_title: string; reply: string; messages: ChatMsg[] }
 interface SessionItem { id: string; title: string }
 
 const SUGGESTIONS = [
@@ -37,6 +37,7 @@ function ChatPanel() {
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [input, setInput] = useState('');
+  const [streaming, setStreaming] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
 
   const sessions = useQuery({
@@ -53,19 +54,79 @@ function ChatPanel() {
     onError: (e) => toast(apiError(e, 'Could not open conversation.')),
   });
 
-  const send = useMutation({
-    mutationFn: async (message: string) =>
-      (await api.post<ChatResponse>('/ai/chat', { message, session_id: sessionId ?? undefined })).data,
-    onMutate: (message) => {
-      setMessages((m) => [...m, { role: 'user', content: message }]);
-      setInput('');
-    },
-    onSuccess: (data) => {
-      setMessages(data.messages ?? []);
+  const sendMessage = async (message: string) => {
+    const text = message.trim();
+    if (!text || streaming) return;
+    setInput('');
+    setMessages((m) => [...m, { role: 'user', content: text }, { role: 'assistant', content: '' }]);
+    setStreaming(true);
+    const appendToLast = (chunk: string) =>
+      setMessages((m) => {
+        const copy = m.slice();
+        const last = copy[copy.length - 1];
+        if (last && last.role === 'assistant') copy[copy.length - 1] = { ...last, content: last.content + chunk };
+        return copy;
+      });
+    let gotToken = false;
+    try {
+      const res = await fetch(`${API_URL}/ai/chat/stream`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${tokenStore.getAccess()}` },
+        body: JSON.stringify({ message: text, session_id: sessionId ?? undefined }),
+      });
+      if (!res.ok || !res.body) throw new Error('stream failed');
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buf = '';
+      // eslint-disable-next-line no-constant-condition
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        buf += decoder.decode(value, { stream: true });
+        const blocks = buf.split('\n\n');
+        buf = blocks.pop() ?? '';
+        for (const block of blocks) {
+          if (!block.trim()) continue;
+          let event = 'message';
+          let dataStr = '';
+          for (const line of block.split('\n')) {
+            if (line.startsWith('event:')) event = line.slice(6).trim();
+            else if (line.startsWith('data:')) dataStr += line.slice(5).trim();
+          }
+          if (!dataStr) continue;
+          let payload: { text?: string; reply?: string; session_id?: string };
+          try { payload = JSON.parse(dataStr); } catch { continue; }
+          if (event === 'meta' && payload.session_id) setSessionId(payload.session_id);
+          else if (event === 'token' && payload.text) { gotToken = true; appendToLast(payload.text); }
+          else if (event === 'done' && !gotToken && payload.reply) appendToLast(payload.reply);
+        }
+      }
       qc.invalidateQueries({ queryKey: ['chat-sessions'] });
-    },
-    onError: (e) => { toast(apiError(e, 'Message failed. Try again.')); },
-  });
+    } catch {
+      // Streaming failed (e.g. route not deployed yet) — fall back to the one-shot endpoint
+      if (!gotToken) {
+        try {
+          const data = (await api.post<{ session_id?: string; reply: string }>(
+            '/ai/chat', { message: text, session_id: sessionId ?? undefined },
+          )).data;
+          if (data.session_id) setSessionId(data.session_id);
+          appendToLast(data.reply || 'I had trouble responding. Please try again.');
+          qc.invalidateQueries({ queryKey: ['chat-sessions'] });
+        } catch (e2) {
+          setMessages((m) => {
+            const copy = m.slice();
+            const last = copy[copy.length - 1];
+            if (last && last.role === 'assistant' && !last.content) copy.pop();
+            return copy;
+          });
+          toast(apiError(e2, 'Message failed. Try again.'));
+        }
+      }
+    } finally {
+      setStreaming(false);
+    }
+  };
 
   const remove = useMutation({
     mutationFn: (id: string) => api.delete(`/ai/chat/sessions/${id}`),
@@ -75,9 +136,9 @@ function ChatPanel() {
     },
   });
 
-  useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, send.isPending]);
+  useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, streaming]);
 
-  const submit = () => { const t = input.trim(); if (t && !send.isPending) send.mutate(t); };
+  const submit = () => { sendMessage(input); };
   const newChat = () => { setSessionId(null); setMessages([]); };
 
   return (
@@ -96,26 +157,31 @@ function ChatPanel() {
 
       <div className="pa-chat-main pa-card">
         <div className="pa-chat-messages">
-          {messages.length === 0 && !send.isPending && (
+          {messages.length === 0 && !streaming && (
             <div className="pa-chat-welcome">
               <div className="pa-coach-orb"><span className="material-symbols-outlined fill" style={{ fontSize: 30 }}>smart_toy</span></div>
               <div style={{ fontWeight: 800, fontSize: 18 }}>AICoach</div>
               <p className="pa-muted" style={{ margin: '6px 0 16px' }}>Start a conversation or pick a prompt:</p>
               {SUGGESTIONS.map((s) => (
                 <button key={s} className="pa-chip" style={{ display: 'block', margin: '6px auto', maxWidth: 360 }}
-                  onClick={() => send.mutate(s)}>{s}</button>
+                  onClick={() => sendMessage(s)}>{s}</button>
               ))}
             </div>
           )}
-          {messages.map((m, i) => (
-            <div key={i} className={`pa-msg pa-msg-${m.role === 'user' ? 'user' : 'ai'}`}>
-              {m.role !== 'user' && <span className="pa-msg-avatar">✦</span>}
-              <div className="pa-msg-bubble">{m.content}</div>
-            </div>
-          ))}
-          {send.isPending && (
-            <div className="pa-msg pa-msg-ai"><span className="pa-msg-avatar">✦</span><div className="pa-msg-bubble"><Spinner size={16} /></div></div>
-          )}
+          {messages.map((m, i) => {
+            const isAi = m.role !== 'user';
+            const isLast = i === messages.length - 1;
+            const waiting = streaming && isLast && isAi && !m.content;
+            return (
+              <div key={i} className={`pa-msg pa-msg-${isAi ? 'ai' : 'user'}`}>
+                {isAi && <span className="pa-msg-avatar">✦</span>}
+                <div className="pa-msg-bubble">
+                  {waiting ? <Spinner size={16} /> : m.content}
+                  {streaming && isLast && isAi && m.content && <span className="pa-typing-cursor">▍</span>}
+                </div>
+              </div>
+            );
+          })}
           <div ref={endRef} />
         </div>
 
@@ -123,7 +189,7 @@ function ChatPanel() {
           <textarea className="pa-textarea" rows={1} placeholder="Ask your coach…" value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submit(); } }} />
-          <Button loading={send.isPending} onClick={submit}>Send</Button>
+          <Button loading={streaming} onClick={submit}>Send</Button>
         </div>
       </div>
     </div>

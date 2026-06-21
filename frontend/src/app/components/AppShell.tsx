@@ -27,11 +27,13 @@ const PROVIDER_NAV: NavItem[] = [
   { to: '/provider/post', label: 'Post Job', icon: 'post_add' },
   { to: '/provider/applicants', label: 'Applicants', icon: 'groups' },
   { to: '/provider/profile', label: 'Company', icon: 'domain' },
+  { to: '/profile', label: 'Profile', icon: 'person', end: true },
 ];
 
 const ADMIN_NAV: NavItem[] = [
   { to: '/admin', label: 'Admin', icon: 'shield', end: true },
   { to: '/jobs', label: 'Jobs', icon: 'work' },
+  { to: '/profile', label: 'Profile', icon: 'person', end: true },
 ];
 
 function Icon({ name, fill }: { name: string; fill?: boolean }) {
@@ -91,6 +93,16 @@ export function AppShell({ children }: { children: ReactNode }) {
               <span className="pa-pro-btn">Upgrade to Pro</span>
             </Link>
           )}
+          {user?.role === 'job_provider' && (
+            <Link to="/provider/post" className="pa-pro-card">
+              <div className="pa-pro-eyebrow">EMPLOYER</div>
+              <div className="pa-pro-title">Reach admin-verified candidates</div>
+              <span className="pa-pro-btn">+ Post a Job</span>
+            </Link>
+          )}
+          <a href="mailto:info@kdaanalytics.com" className="pa-nav-link">
+            <Icon name="help" /><span>Help &amp; Support</span>
+          </a>
           <NavLink to="/settings" className={({ isActive }) => `pa-nav-link${isActive ? ' active' : ''}`}>
             <Icon name="settings" /><span>Settings</span>
           </NavLink>

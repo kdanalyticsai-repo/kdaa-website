@@ -35,7 +35,7 @@ export default function ResetPassword() {
     <div className="pa-auth-wrap">
       <form className="pa-auth-card" onSubmit={onSubmit}>
         <div className="pa-auth-title">Enter reset code</div>
-        <div className="pa-auth-sub">Check your email for the 6-digit code</div>
+        <div className="pa-auth-sub">Check your email or mobile SMS for the 6-digit code — either one works</div>
         <Field label="Email">
           <input className="pa-input" type="email" value={email}
             onChange={(e) => setEmail(e.target.value)} required />

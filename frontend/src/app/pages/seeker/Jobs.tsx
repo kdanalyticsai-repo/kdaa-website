@@ -60,6 +60,22 @@ export default function Jobs() {
     onError: () => toast('Could not update saved jobs.'),
   });
 
+  const syncJobs = useMutation({
+    mutationFn: async () => (await api.post<{ synced?: number; total_in_db?: number }>('/jobs/sync-all')).data,
+    onSuccess: (d) => {
+      qc.invalidateQueries({ queryKey: ['jobs'] });
+      const added = d?.synced ?? 0;
+      toast(added > 0 ? `${added} new job${added === 1 ? '' : 's'} synced from live sources.` : 'You already have the latest listings.');
+    },
+    onError: () => toast('Could not sync live jobs. Please try again.'),
+  });
+
+  const recompute = useMutation({
+    mutationFn: () => api.post('/jobs/compute-matches'),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['jobs'] }); toast('Match scores recomputed.'); },
+    onError: () => toast('Could not recompute matches.'),
+  });
+
   const runSearch = () => setApplied({ q: search.trim(), location: location.trim(), remote, postedDays });
 
   const jobs = data?.jobs ?? [];
@@ -70,8 +86,20 @@ export default function Jobs() {
 
   return (
     <div className="pa-content">
-      <h1 className="pa-page-title">Find jobs</h1>
-      <p className="pa-page-sub">{data ? `${data.total} openings` : 'Search live openings'}</p>
+      <div className="pa-between" style={{ flexWrap: 'wrap', gap: 12 }}>
+        <div>
+          <h1 className="pa-page-title">Find jobs</h1>
+          <p className="pa-page-sub">{data ? `${data.total} openings` : 'Search live openings'}</p>
+        </div>
+        <div className="pa-row" style={{ flexWrap: 'wrap' }}>
+          <Button size="sm" variant="ghost" loading={syncJobs.isPending} onClick={() => syncJobs.mutate()}>
+            <span className="material-symbols-outlined" style={{ fontSize: 18 }}>sync</span> Sync Live Jobs
+          </Button>
+          <Button size="sm" variant="ghost" loading={recompute.isPending} onClick={() => recompute.mutate()}>
+            <span className="material-symbols-outlined" style={{ fontSize: 18 }}>auto_awesome</span> Recompute
+          </Button>
+        </div>
+      </div>
 
       <div className="pa-card" style={{ marginTop: 16 }}>
         <div className="pa-row" style={{ flexWrap: 'wrap' }}>
