@@ -75,16 +75,57 @@
 .bottom {
   border-top: 1px solid var(--border);
   padding-top: 2rem;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   font-size: 0.82rem;
   color: var(--muted);
+}
+
+.bottom > p { justify-self: start; }
+
+.social {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.socialLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.socialIcons {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.socialIcons a {
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.socialIcons a:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(0, 212, 255, 0.06);
 }
 
 .legal {
   display: flex;
   gap: 1.5rem;
+  justify-self: end;
 }
 .legal a {
   color: var(--muted);
@@ -98,7 +139,17 @@
   .brand { grid-column: 1/-1; }
 }
 
+@media (max-width: 700px) {
+  .bottom {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 1.25rem;
+    text-align: center;
+  }
+  .bottom > p { justify-self: center; }
+  .legal { justify-self: center; }
+}
+
 @media (max-width: 500px) {
   .top { grid-template-columns: 1fr; }
-  .bottom { flex-direction: column; gap: 1rem; text-align: center; }
 }
