@@ -24,7 +24,7 @@ export default function VerifyPhone() {
       await api.post('/auth/send-phone-otp', { phone: full });
       setPhone(full);
       setPhase('otp');
-      toast('Verification code sent.');
+      toast('Code sent to your email & SMS.');
     } catch (err) {
       setError(apiError(err));
     } finally { setBusy(false); }
@@ -48,7 +48,7 @@ export default function VerifyPhone() {
       {phase === 'phone' ? (
         <form className="pa-auth-card" onSubmit={sendOtp}>
           <div className="pa-auth-title">Verify your phone</div>
-          <div className="pa-auth-sub">We'll send a 6-digit code to your email and (where available) your phone</div>
+          <div className="pa-auth-sub">We'll send a 6-digit code to your email and mobile SMS — either one works</div>
           <Field label="Mobile number" error={error}>
             <input className="pa-input" inputMode="tel" placeholder="+91 9876543210" value={phone}
               onChange={(e) => setPhone(e.target.value)} required />
@@ -61,7 +61,7 @@ export default function VerifyPhone() {
       ) : (
         <form className="pa-auth-card" onSubmit={verify}>
           <div className="pa-auth-title">Enter the code</div>
-          <div className="pa-auth-sub">Sent to your email and {phone}. Check your inbox if no SMS arrives.</div>
+          <div className="pa-auth-sub">Check your email or mobile SMS ({phone}) for the code — either one works</div>
           <Field label="6-digit code" error={error}>
             <input className="pa-input" inputMode="numeric" maxLength={6} value={otp}
               onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))} required />

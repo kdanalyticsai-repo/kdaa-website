@@ -27,7 +27,7 @@ export default function ForgotPassword() {
     <div className="pa-auth-wrap">
       <form className="pa-auth-card" onSubmit={onSubmit}>
         <div className="pa-auth-title">Reset your password</div>
-        <div className="pa-auth-sub">We'll email you a 6-digit reset code</div>
+        <div className="pa-auth-sub">We'll send a 6-digit reset code to your email and mobile (SMS)</div>
         <Field label="Email" error={error}>
           <input className="pa-input" type="email" value={email}
             onChange={(e) => setEmail(e.target.value)} required />
