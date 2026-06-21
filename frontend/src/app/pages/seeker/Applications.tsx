@@ -34,7 +34,7 @@ export default function Applications() {
 
   return (
     <div className="pa-content">
-      <div className="pa-between">
+      <div className="pa-between" style={{ flexWrap: 'wrap', gap: 12 }}>
         <div>
           <h1 className="pa-page-title">Applications</h1>
           <p className="pa-page-sub">Track every job you’ve applied to</p>

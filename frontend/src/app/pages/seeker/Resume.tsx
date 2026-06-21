@@ -67,12 +67,10 @@ export default function Resume() {
 
   return (
     <div className="pa-content">
-      <div className="pa-between">
-        <div>
-          <h1 className="pa-page-title">Resume Hub</h1>
-          <p className="pa-page-sub">Upload your CV — we’ll score it for ATS and power AI tailoring.</p>
-        </div>
-        <Button loading={uploading} onClick={() => fileRef.current?.click()}>
+      <div style={{ textAlign: 'center' }}>
+        <h1 className="pa-page-title">Resume Hub</h1>
+        <p className="pa-page-sub" style={{ maxWidth: 520, margin: '6px auto 0' }}>Upload your CV — we’ll score it for ATS and power AI tailoring.</p>
+        <Button loading={uploading} onClick={() => fileRef.current?.click()} style={{ marginTop: 16 }}>
           <span className="material-symbols-outlined" style={{ fontSize: 20 }}>upload_file</span> Upload resume
         </Button>
         <input ref={fileRef} type="file" accept=".pdf,.doc,.docx" hidden onChange={onFile} />

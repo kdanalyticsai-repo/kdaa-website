@@ -68,7 +68,7 @@ export default function Profile() {
                 {!editing && <Button size="sm" variant="ghost" onClick={() => setEditing(true)}>Edit profile</Button>}
               </div>
               {!editing && (
-                <div className="pa-bento" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px 24px', marginTop: 18 }}>
+                <div className="pa-bento" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '10px 24px', marginTop: 18 }}>
                   <ContactRow icon="mail" value={user.email} />
                   {user.phone && <ContactRow icon="call" value={user.phone} />}
                 </div>
