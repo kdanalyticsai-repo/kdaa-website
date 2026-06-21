@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { NavLink, useNavigate, Link } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { useAuthStore } from '@/app/stores/authStore';
 import { InstallAppButton } from '@/app/components/InstallAppButton';
 
@@ -42,8 +42,6 @@ function Icon({ name, fill }: { name: string; fill?: boolean }) {
 
 export function AppShell({ children }: { children: ReactNode }) {
   const user = useAuthStore((s) => s.user);
-  const logout = useAuthStore((s) => s.logout);
-  const navigate = useNavigate();
 
   const nav = user?.role === 'job_provider' ? PROVIDER_NAV
     : user?.role === 'admin' ? ADMIN_NAV
@@ -55,11 +53,6 @@ export function AppShell({ children }: { children: ReactNode }) {
   const roleLabel = user?.role === 'job_provider' ? 'Employer'
     : user?.role === 'admin' ? 'Admin' : 'Job Seeker';
 
-  const handleLogout = async () => {
-    await logout();
-    navigate('/login', { replace: true });
-  };
-
   return (
     <div className="pa-shell">
       <aside className="pa-sidebar">
@@ -67,7 +60,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <span className="pa-brand-logo"><Icon name="rocket_launch" fill /></span>
           <span>
             <span className="pa-brand-name">ProAICV</span>
-            <span className="pa-brand-tag">Career Intelligence</span>
+            <span className="pa-brand-tag">{user?.role === 'job_provider' ? 'Hire Smarter' : 'Career Intelligence'}</span>
           </span>
         </NavLink>
 
@@ -100,15 +93,12 @@ export function AppShell({ children }: { children: ReactNode }) {
               <span className="pa-pro-btn">+ Post a Job</span>
             </Link>
           )}
-          <a href="mailto:info@kdaanalytics.com" className="pa-nav-link">
+          <a href="mailto:info@kdaanalytics.com?subject=ProAICV%20Support" className="pa-nav-link" title="Email us at info@kdaanalytics.com">
             <Icon name="help" /><span>Help &amp; Support</span>
           </a>
           <NavLink to="/settings" className={({ isActive }) => `pa-nav-link${isActive ? ' active' : ''}`}>
             <Icon name="settings" /><span>Settings</span>
           </NavLink>
-          <button className="pa-nav-link pa-nav-danger" onClick={handleLogout}>
-            <Icon name="logout" /><span>Logout</span>
-          </button>
         </div>
       </aside>
 

@@ -29,10 +29,10 @@ export default function Login() {
     } catch (err: any) {
       if (err?.isRoleMismatch) {
         const actualProvider = err.actualRole === 'job_provider';
-        setError(`This email is registered as ${actualProvider ? 'an Employer' : 'a Job Seeker'}.`);
+        setError(`This email is registered as a ${actualProvider ? 'Job Provider' : 'Job Seeker'}.`);
         setSwitchTo({
           to: `/login?role=${actualProvider ? 'job_provider' : 'job_seeker'}`,
-          label: `Sign in as ${actualProvider ? 'Employer' : 'Job Seeker'}`,
+          label: `Sign in as ${actualProvider ? 'Job Provider' : 'Job Seeker'}`,
         });
       } else {
         setError(apiError(err, 'Invalid email or password.'));

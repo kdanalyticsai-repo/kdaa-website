@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { api, apiError } from '@/app/lib/api';
 import { useAuthStore } from '@/app/stores/authStore';
@@ -17,7 +17,14 @@ interface SettingLink { to: string; icon: string; title: string; sub: string; ct
 export default function Profile() {
   const user = useAuthStore((s) => s.user);
   const setUser = useAuthStore((s) => s.setUser);
+  const logout = useAuthStore((s) => s.logout);
+  const navigate = useNavigate();
   const toast = useToast();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login', { replace: true });
+  };
   const usage = useUsage();
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(user?.name ?? '');
@@ -118,6 +125,18 @@ export default function Profile() {
             <span className="arrow">{s.cta} <Icon name="arrow_forward" /></span>
           </Link>
         ))}
+      </div>
+
+      {/* Sign out */}
+      <div style={{ marginTop: 32, paddingTop: 24, borderTop: '1px solid var(--border)' }}>
+        <button
+          onClick={handleLogout}
+          className="pa-btn pa-btn-sm"
+          style={{ color: 'var(--danger)', background: 'transparent', border: '1.5px solid var(--danger)', borderRadius: 999, display: 'flex', alignItems: 'center', gap: 8, fontWeight: 600, padding: '8px 20px' }}
+        >
+          <Icon name="logout" />
+          Sign out
+        </button>
       </div>
     </div>
   );

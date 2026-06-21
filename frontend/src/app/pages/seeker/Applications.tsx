@@ -105,27 +105,32 @@ function LogModal({ onClose }: { onClose: () => void }) {
     setError(''); save.mutate();
   };
 
+  const searchQuery = [title.trim(), company.trim()].filter(Boolean).join(' ');
+  const searchQ = encodeURIComponent(searchQuery ? `${searchQuery} jobs` : 'jobs in India');
+
   return (
     <div style={overlay} onClick={onClose}>
       <div className="pa-card" style={{ maxWidth: 460, width: '100%' }} onClick={(e) => e.stopPropagation()}>
-        <h3 style={{ fontSize: 18, marginBottom: 14 }}>Log an application</h3>
-        <Field label="Job title *"><input className="pa-input" value={title} onChange={(e) => setTitle(e.target.value)} /></Field>
-        <Field label="Company *"><input className="pa-input" value={company} onChange={(e) => setCompany(e.target.value)} /></Field>
+        <h3 style={{ fontSize: 18, marginBottom: 4 }}>Log an application</h3>
+        <p className="pa-muted" style={{ fontSize: 13, marginBottom: 14 }}>Search for the job first, paste the URL below, then save.</p>
+
+        <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+          <a className="pa-btn pa-btn-sm" target="_blank" rel="noreferrer"
+            href={`https://www.google.com/search?q=${searchQ}`}
+            style={{ flex: 1, justifyContent: 'center', background: 'var(--surface-2)', color: 'var(--primary)', border: '1.5px solid var(--primary)', borderRadius: 10, fontWeight: 600 }}>
+            <span className="material-symbols-outlined" style={{ fontSize: 16 }}>travel_explore</span> Google
+          </a>
+          <a className="pa-btn pa-btn-sm" target="_blank" rel="noreferrer"
+            href={`https://duckduckgo.com/?q=${searchQ}`}
+            style={{ flex: 1, justifyContent: 'center', background: 'var(--surface-2)', color: 'var(--tertiary-ink)', border: '1.5px solid var(--tertiary)', borderRadius: 10, fontWeight: 600 }}>
+            <span className="material-symbols-outlined" style={{ fontSize: 16 }}>travel_explore</span> DuckDuckGo
+          </a>
+        </div>
+
+        <Field label="Job title *"><input className="pa-input" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Software Engineer" /></Field>
+        <Field label="Company *"><input className="pa-input" value={company} onChange={(e) => setCompany(e.target.value)} placeholder="e.g. Infosys" /></Field>
         <Field label="Location"><input className="pa-input" value={location} onChange={(e) => setLocation(e.target.value)} /></Field>
         <Field label="Job posting URL" error={error}><input className="pa-input" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://…" /></Field>
-        {(title.trim() || company.trim()) && (
-          <div className="pa-row" style={{ gap: 8, marginTop: -8, marginBottom: 14, flexWrap: 'wrap' }}>
-            <span className="pa-muted" style={{ fontSize: 12 }}>Find the link:</span>
-            <a className="pa-btn pa-btn-ghost pa-btn-sm" target="_blank" rel="noreferrer"
-              href={`https://www.google.com/search?q=${encodeURIComponent([title, company].filter(Boolean).join(' ') + ' job')}`}>
-              <span className="material-symbols-outlined" style={{ fontSize: 16 }}>travel_explore</span> Google
-            </a>
-            <a className="pa-btn pa-btn-ghost pa-btn-sm" target="_blank" rel="noreferrer"
-              href={`https://duckduckgo.com/?q=${encodeURIComponent([title, company].filter(Boolean).join(' ') + ' job')}`}>
-              <span className="material-symbols-outlined" style={{ fontSize: 16 }}>travel_explore</span> DuckDuckGo
-            </a>
-          </div>
-        )}
         <div className="pa-row" style={{ marginTop: 6 }}>
           <Button variant="ghost" block onClick={onClose}>Cancel</Button>
           <Button block loading={save.isPending} onClick={submit}>Save</Button>
