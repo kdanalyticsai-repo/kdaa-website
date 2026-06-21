@@ -33,15 +33,15 @@ function SectionValue({ value }: { value: unknown }) {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
         {(value as Record<string, unknown>[]).map((item, i) => (
           <div key={i} style={{ paddingLeft: 12, borderLeft: '2px solid var(--primary)', color: 'var(--text-secondary)' }}>
-            {(item.title || item.company) && (
+            {!!(item.title || item.company) && (
               <div style={{ fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>
-                {[item.title, item.company].filter(Boolean).join(' · ')}
+                {[item.title as string, item.company as string].filter(Boolean).join(' · ')}
               </div>
             )}
             {Array.isArray(item.bullets) && (item.bullets as string[]).map((b, j) => (
               <div key={j} style={{ lineHeight: 1.65, fontSize: 13 }}>• {b}</div>
             ))}
-            {typeof item.summary === 'string' && <div style={{ lineHeight: 1.65, fontSize: 13 }}>{item.summary}</div>}
+            {typeof item.summary === 'string' && <div style={{ lineHeight: 1.65, fontSize: 13 }}>{item.summary as string}</div>}
           </div>
         ))}
       </div>
