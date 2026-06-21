@@ -16,6 +16,7 @@ export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [switchTo, setSwitchTo] = useState<{ to: string; label: string } | null>(null);
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
@@ -25,14 +26,26 @@ export default function Register() {
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError(''); setSwitchTo(null);
     if (password.length < 8) { setError('Password must be at least 8 characters.'); return; }
     setBusy(true);
     try {
       await register(email.trim(), password, name.trim());
       navigate('/', { replace: true });
     } catch (err: any) {
-      setError(apiError(err, 'Could not create your account.'));
+      const msg = apiError(err, 'Could not create your account.');
+      // Email already taken — offer to sign in; the login page will show the role if different
+      if (/already (registered|exist|taken)|email.*in use/i.test(msg)) {
+        const otherRole = pendingRole === 'job_provider' ? 'job_seeker' : 'job_provider';
+        const otherLabel = pendingRole === 'job_provider' ? 'Job Seeker' : 'Job Provider';
+        setError(`This email is already registered as a ${otherLabel}.`);
+        setSwitchTo({
+          to: `/login?role=${otherRole}`,
+          label: `Sign in as ${otherLabel}`,
+        });
+      } else {
+        setError(msg);
+      }
     } finally {
       setBusy(false);
     }
@@ -59,6 +72,11 @@ export default function Register() {
           <PasswordInput autoComplete="new-password" value={password}
             onChange={(e) => setPassword(e.target.value)} required />
         </Field>
+        {switchTo && (
+          <div style={{ marginTop: -8, marginBottom: 12 }}>
+            <Link to={switchTo.to} style={{ fontSize: 13, fontWeight: 700 }}>{switchTo.label} →</Link>
+          </div>
+        )}
 
         <Button type="submit" block loading={busy}>Create account</Button>
 
