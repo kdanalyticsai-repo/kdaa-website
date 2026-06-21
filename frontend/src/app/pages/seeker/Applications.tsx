@@ -114,16 +114,20 @@ function LogModal({ onClose }: { onClose: () => void }) {
         <h3 style={{ fontSize: 18, marginBottom: 4 }}>Log an application</h3>
         <p className="pa-muted" style={{ fontSize: 13, marginBottom: 14 }}>Search for the job first, paste the URL below, then save.</p>
 
-        <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
-          <a className="pa-btn pa-btn-sm" target="_blank" rel="noreferrer"
-            href={`https://www.google.com/search?q=${searchQ}`}
-            style={{ flex: 1, justifyContent: 'center', background: 'var(--surface-2)', color: 'var(--primary)', border: '1.5px solid var(--primary)', borderRadius: 10, fontWeight: 600 }}>
-            <span className="material-symbols-outlined" style={{ fontSize: 16 }}>travel_explore</span> Google
+        <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
+          <a target="_blank" rel="noreferrer" href={`https://www.google.com/search?q=${searchQ}`}
+            style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '9px 14px', borderRadius: 12, border: '1.5px solid #dadce0', background: '#fff', color: '#3c4043', fontWeight: 600, fontSize: 13, textDecoration: 'none', boxShadow: '0 1px 3px rgba(0,0,0,0.08)', transition: 'box-shadow .15s' }}
+            onMouseEnter={(e) => (e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)')}
+            onMouseLeave={(e) => (e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.08)')}>
+            <svg width="16" height="16" viewBox="0 0 48 48"><path fill="#4285F4" d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"/><path fill="#34A853" d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.32-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"/><path fill="#FBBC05" d="M11.68 28.18A13.86 13.86 0 0 1 10.8 24c0-1.45.25-2.86.68-4.18v-5.7H4.34A23.93 23.93 0 0 0 0 24c0 3.86.92 7.51 2.56 10.73l7.12-5.52-.01-.03z"/><path fill="#EA4335" d="M24 9.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 3.18 29.93 1 24 1 15.4 1 7.96 5.93 4.34 13.12l7.34 5.7C13.42 13.62 18.27 9.75 24 9.75z"/></svg>
+            Google
           </a>
-          <a className="pa-btn pa-btn-sm" target="_blank" rel="noreferrer"
-            href={`https://duckduckgo.com/?q=${searchQ}`}
-            style={{ flex: 1, justifyContent: 'center', background: 'var(--surface-2)', color: 'var(--tertiary-ink)', border: '1.5px solid var(--tertiary)', borderRadius: 10, fontWeight: 600 }}>
-            <span className="material-symbols-outlined" style={{ fontSize: 16 }}>travel_explore</span> DuckDuckGo
+          <a target="_blank" rel="noreferrer" href={`https://duckduckgo.com/?q=${searchQ}`}
+            style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '9px 14px', borderRadius: 12, border: '1.5px solid #de5833', background: '#fff', color: '#de5833', fontWeight: 600, fontSize: 13, textDecoration: 'none', boxShadow: '0 1px 3px rgba(0,0,0,0.08)', transition: 'box-shadow .15s' }}
+            onMouseEnter={(e) => (e.currentTarget.style.boxShadow = '0 2px 8px rgba(222,88,51,0.25)')}
+            onMouseLeave={(e) => (e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.08)')}>
+            <svg width="16" height="16" viewBox="0 0 128 128"><circle cx="64" cy="64" r="64" fill="#de5833"/><ellipse cx="64" cy="58" rx="28" ry="30" fill="#fff"/><circle cx="54" cy="52" r="7" fill="#3d3d3d"/><circle cx="57" cy="50" r="2.5" fill="#fff"/><circle cx="74" cy="52" r="7" fill="#3d3d3d"/><circle cx="77" cy="50" r="2.5" fill="#fff"/><path d="M52 70 Q64 80 76 70" stroke="#de5833" strokeWidth="3.5" fill="none" strokeLinecap="round"/></svg>
+            DuckDuckGo
           </a>
         </div>
 
