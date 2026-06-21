@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { api } from '@/app/lib/api';
+import { api, apiError } from '@/app/lib/api';
 import { Button, Loading } from '@/app/components/ui';
 import { FeatureGate } from '@/app/components/FeatureGate';
 import { AiToolError } from '@/app/components/AiToolError';
@@ -46,8 +46,21 @@ export default function Tailor() {
               <Button loading={run.isPending} onClick={() => run.mutate()}>Tailor my resume</Button>
             </>
           )}
-          {run.isPending && <Loading label="Tailoring your resume…" />}
-          {run.isError && <AiToolError error={run.error} fallback="Could not tailor resume." onRetry={() => run.mutate()} />}
+          {run.isPending && <Loading label="Tailoring your resume… this may take 20–30 seconds" />}
+          {run.isError && (() => {
+            const msg = apiError(run.error, '');
+            if (/upgrade_required|pro subscription/i.test(msg) || (run.error as any)?.response?.status === 403) {
+              return (
+                <div style={{ textAlign: 'center', padding: '32px 0' }}>
+                  <div style={{ fontSize: 32, marginBottom: 12 }}>✦</div>
+                  <div style={{ fontWeight: 800, fontSize: 18, marginBottom: 8 }}>Upgrade to Pro to tailor your resume</div>
+                  <p className="pa-muted" style={{ marginBottom: 16 }}>AI resume tailoring is a Pro feature.</p>
+                  <Button onClick={() => navigate('/paywall')}>Upgrade to Pro</Button>
+                </div>
+              );
+            }
+            return <AiToolError error={run.error} fallback="Could not tailor resume. Please try again." onRetry={() => run.mutate()} />;
+          })()}
 
           {run.data && (
             <div>

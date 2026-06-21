@@ -4,6 +4,7 @@ import { queryClient } from './lib/queryClient';
 import { ToastProvider } from './components/ui';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { AppShell } from './components/AppShell';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import './app.css';
 
 // Auth pages
@@ -64,6 +65,7 @@ function Shell({ children, roles, requireOnboarded = true }: {
  */
 export default function AppRoot() {
   return (
+    <ErrorBoundary>
     <QueryClientProvider client={queryClient}>
       <ToastProvider>
         <div className="proaicv-app">
@@ -120,5 +122,6 @@ export default function AppRoot() {
         </div>
       </ToastProvider>
     </QueryClientProvider>
+  </ErrorBoundary>
   );
 }
