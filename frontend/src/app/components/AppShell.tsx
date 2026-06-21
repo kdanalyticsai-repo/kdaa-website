@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { NavLink, useNavigate, Link } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { useAuthStore } from '@/app/stores/authStore';
 import { InstallAppButton } from '@/app/components/InstallAppButton';
 
@@ -42,8 +42,6 @@ function Icon({ name, fill }: { name: string; fill?: boolean }) {
 
 export function AppShell({ children }: { children: ReactNode }) {
   const user = useAuthStore((s) => s.user);
-  const logout = useAuthStore((s) => s.logout);
-  const navigate = useNavigate();
 
   const nav = user?.role === 'job_provider' ? PROVIDER_NAV
     : user?.role === 'admin' ? ADMIN_NAV
@@ -54,11 +52,6 @@ export function AppShell({ children }: { children: ReactNode }) {
   const initials = (user?.name || user?.email || '?').slice(0, 2).toUpperCase();
   const roleLabel = user?.role === 'job_provider' ? 'Employer'
     : user?.role === 'admin' ? 'Admin' : 'Job Seeker';
-
-  const handleLogout = async () => {
-    await logout();
-    navigate('/login', { replace: true });
-  };
 
   return (
     <div className="pa-shell">
@@ -106,9 +99,6 @@ export function AppShell({ children }: { children: ReactNode }) {
           <NavLink to="/settings" className={({ isActive }) => `pa-nav-link${isActive ? ' active' : ''}`}>
             <Icon name="settings" /><span>Settings</span>
           </NavLink>
-          <button className="pa-nav-link pa-nav-danger" onClick={handleLogout}>
-            <Icon name="logout" /><span>Logout</span>
-          </button>
         </div>
       </aside>
 
