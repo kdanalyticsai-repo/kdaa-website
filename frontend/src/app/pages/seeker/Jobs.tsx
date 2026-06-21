@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/app/lib/api';
+import { useAuthStore } from '@/app/stores/authStore';
 import { formatSalary, timeAgo } from '@/app/lib/format';
 import { Button, Loading, EmptyState, ErrorState, useToast } from '@/app/components/ui';
 
@@ -30,6 +31,7 @@ const QUICK_COMPANIES = ['TCS', 'HCL', 'IBM', 'Havells', 'Tata Power'];
 export default function Jobs() {
   const qc = useQueryClient();
   const toast = useToast();
+  const user = useAuthStore((s) => s.user);
   const [params] = useSearchParams();
   const initialQ = params.get('q') ?? '';
   const [search, setSearch] = useState(initialQ);
@@ -70,11 +72,25 @@ export default function Jobs() {
     onError: () => toast('Could not sync live jobs. Please try again.'),
   });
 
+  const { data: resumeData } = useQuery({
+    queryKey: ['resumes-check'],
+    queryFn: async () => (await api.get<{ resumes: { id: string }[] }>('/resumes')).data,
+  });
+  const hasResume = (resumeData?.resumes?.length ?? 0) > 0;
+
   const recompute = useMutation({
     mutationFn: () => api.post('/jobs/compute-matches'),
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['jobs'] }); toast('Match scores recomputed.'); },
     onError: () => toast('Could not recompute matches.'),
   });
+
+  const handleRecompute = () => {
+    if (!hasResume) {
+      toast('Upload a resume to recompute the match percentage.');
+      return;
+    }
+    recompute.mutate();
+  };
 
   const runSearch = () => setApplied({ q: search.trim(), location: location.trim(), remote, postedDays });
 
@@ -91,13 +107,25 @@ export default function Jobs() {
           <h1 className="pa-page-title">Find jobs</h1>
           <p className="pa-page-sub">{data ? `${data.total} openings` : 'Search live openings'}</p>
         </div>
-        <div className="pa-row" style={{ flexWrap: 'wrap' }}>
-          <Button size="sm" variant="ghost" loading={syncJobs.isPending} onClick={() => syncJobs.mutate()}>
-            <span className="material-symbols-outlined" style={{ fontSize: 18 }}>sync</span> Sync Live Jobs
-          </Button>
-          <Button size="sm" variant="ghost" loading={recompute.isPending} onClick={() => recompute.mutate()}>
-            <span className="material-symbols-outlined" style={{ fontSize: 18 }}>auto_awesome</span> Recompute
-          </Button>
+        <div className="pa-row" style={{ flexWrap: 'wrap', gap: 8 }}>
+          <button
+            className="pa-btn pa-btn-sm"
+            style={{ background: 'var(--surface-2)', color: 'var(--primary)', border: '1.5px solid var(--primary)', borderRadius: 999, display: 'flex', alignItems: 'center', gap: 6, fontWeight: 600 }}
+            disabled={syncJobs.isPending}
+            onClick={() => syncJobs.mutate()}
+          >
+            <span className="material-symbols-outlined" style={{ fontSize: 17 }}>{syncJobs.isPending ? 'hourglass_top' : 'sync'}</span>
+            {syncJobs.isPending ? 'Syncing…' : 'Sync Live Jobs'}
+          </button>
+          <button
+            className="pa-btn pa-btn-sm"
+            style={{ background: 'var(--surface-2)', color: 'var(--tertiary-ink)', border: '1.5px solid var(--tertiary)', borderRadius: 999, display: 'flex', alignItems: 'center', gap: 6, fontWeight: 600 }}
+            disabled={recompute.isPending}
+            onClick={handleRecompute}
+          >
+            <span className="material-symbols-outlined" style={{ fontSize: 17 }}>auto_awesome</span>
+            {recompute.isPending ? 'Computing…' : 'Recompute'}
+          </button>
         </div>
       </div>
 

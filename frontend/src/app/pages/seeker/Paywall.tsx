@@ -87,7 +87,7 @@ export default function Paywall() {
           Continue with {PLANS.find((p) => p.id === selected)?.label} · {PLANS.find((p) => p.id === selected)?.price}
         </Button>
         <p className="pa-muted" style={{ fontSize: 12, textAlign: 'center', marginTop: 10 }}>
-          Secure payment via Razorpay. Cancel anytime.
+          Secure payment via Razorpay. Contact us for refund queries.
         </p>
       </div>
     </div>
