@@ -6,11 +6,63 @@ import { FeatureGate } from '@/app/components/FeatureGate';
 import { AiToolError } from '@/app/components/AiToolError';
 
 interface TailorResult {
-  tailored_sections?: Record<string, string> | null;
+  tailored_sections?: Record<string, unknown> | null;
   changes?: string[] | null;
   keywords_added: string[];
   ats_score_before?: number | null;
   ats_score_after?: number | null;
+}
+
+function SectionValue({ value }: { value: unknown }) {
+  if (!value) return null;
+  // Plain string
+  if (typeof value === 'string') {
+    return <div style={{ whiteSpace: 'pre-wrap', color: 'var(--text-secondary)', lineHeight: 1.7 }}>{value}</div>;
+  }
+  // Array of strings (e.g. skills list)
+  if (Array.isArray(value) && value.every((v) => typeof v === 'string')) {
+    return (
+      <ul style={{ paddingLeft: 18, color: 'var(--text-secondary)', lineHeight: 1.7 }}>
+        {(value as string[]).map((s, i) => <li key={i}>{s}</li>)}
+      </ul>
+    );
+  }
+  // Array of experience objects {title, company, bullets, ...}
+  if (Array.isArray(value)) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+        {(value as Record<string, unknown>[]).map((item, i) => (
+          <div key={i} style={{ paddingLeft: 12, borderLeft: '2px solid var(--primary)', color: 'var(--text-secondary)' }}>
+            {(item.title || item.company) && (
+              <div style={{ fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>
+                {[item.title, item.company].filter(Boolean).join(' · ')}
+              </div>
+            )}
+            {Array.isArray(item.bullets) && (item.bullets as string[]).map((b, j) => (
+              <div key={j} style={{ lineHeight: 1.65, fontSize: 13 }}>• {b}</div>
+            ))}
+            {typeof item.summary === 'string' && <div style={{ lineHeight: 1.65, fontSize: 13 }}>{item.summary}</div>}
+          </div>
+        ))}
+      </div>
+    );
+  }
+  // Object (e.g. skills {technical: [], soft: []})
+  if (typeof value === 'object') {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {Object.entries(value as Record<string, unknown>).map(([k, v]) => (
+          <div key={k}>
+            <span style={{ fontWeight: 600, textTransform: 'capitalize', color: 'var(--text)' }}>{k}: </span>
+            <span style={{ color: 'var(--text-secondary)' }}>
+              {Array.isArray(v) ? (v as string[]).join(', ') : String(v)}
+            </span>
+          </div>
+        ))}
+      </div>
+    );
+  }
+  return <span style={{ color: 'var(--text-secondary)' }}>{String(value)}</span>;
 }
 
 export default function Tailor() {
@@ -96,10 +148,10 @@ export default function Tailor() {
                 </div>
               )}
 
-              {run.data.tailored_sections && Object.entries(run.data.tailored_sections).map(([section, text]) => (
+              {run.data.tailored_sections && Object.entries(run.data.tailored_sections).map(([section, value]) => (
                 <div key={section} style={{ marginBottom: 16 }}>
                   <h3 style={{ fontSize: 15, marginBottom: 8, textTransform: 'capitalize' }}>{section.replace(/_/g, ' ')}</h3>
-                  <div style={{ whiteSpace: 'pre-wrap', color: 'var(--text-secondary)', lineHeight: 1.7 }}>{text}</div>
+                  <SectionValue value={value} />
                 </div>
               ))}
 
