@@ -4,6 +4,7 @@ import { useAuthStore } from '@/app/stores/authStore';
 import { apiError } from '@/app/lib/api';
 import { Button, Field, PasswordInput } from '@/app/components/ui';
 import { AuthShell } from '@/app/components/AuthShell';
+import { homePathForRole } from '@/app/components/AppShell';
 
 export default function Register() {
   const register = useAuthStore((s) => s.register);
@@ -31,7 +32,8 @@ export default function Register() {
     setBusy(true);
     try {
       await register(email.trim(), password, name.trim());
-      navigate('/', { replace: true });
+      const user = useAuthStore.getState().user;
+      navigate(homePathForRole(user?.role), { replace: true });
     } catch (err: any) {
       const msg = apiError(err, 'Could not create your account.');
       // Use the backend's role-aware message directly; extract which role to sign in as
@@ -45,9 +47,9 @@ export default function Register() {
           setError(`This email is already registered as a ${existingLabel}.`);
           setSwitchTo({ to: `/login?role=${existingRole}`, label: `Sign in as ${existingLabel}` });
         } else {
-          // Same-role conflict: "Email already registered. Please sign in instead."
+          // Same-role conflict: no role info in message, send to login with current role
           setError('This email is already registered.');
-          setSwitchTo({ to: `/login?role=${pendingRole}`, label: `Sign in as ${pendingRole === 'job_provider' ? 'Job Provider' : 'Job Seeker'}` });
+          setSwitchTo({ to: `/login?role=${pendingRole}`, label: `Sign in as ${pendingRole === 'job_provider' ? 'Employer' : 'Job Seeker'}` });
         }
       } else {
         setError(msg);
