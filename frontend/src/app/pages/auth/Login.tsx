@@ -4,6 +4,7 @@ import { useAuthStore } from '@/app/stores/authStore';
 import { apiError } from '@/app/lib/api';
 import { Button, Field, PasswordInput } from '@/app/components/ui';
 import { AuthShell } from '@/app/components/AuthShell';
+import { homePathForRole } from '@/app/components/AppShell';
 
 export default function Login() {
   const login = useAuthStore((s) => s.login);
@@ -25,7 +26,8 @@ export default function Login() {
     setBusy(true);
     try {
       await login(email.trim(), password, role);
-      navigate('/', { replace: true });
+      const user = useAuthStore.getState().user;
+      navigate(homePathForRole(user?.role), { replace: true });
     } catch (err: any) {
       if (err?.isRoleMismatch) {
         const actualProvider = err.actualRole === 'job_provider';
