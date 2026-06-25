@@ -36,13 +36,21 @@ export default function Register() {
       navigate(homePathForRole(user?.role), { replace: true });
     } catch (err: any) {
       const msg = apiError(err, 'Could not create your account.');
-      // Email already taken — send to login with the same role; login will detect any role mismatch
-      if (/already (registered|exist|taken)|email.*in use/i.test(msg)) {
-        setError('This email is already registered. Please sign in.');
-        setSwitchTo({
-          to: `/login?role=${pendingRole}`,
-          label: `Sign in as ${pendingRole === 'job_provider' ? 'Employer' : 'Job Seeker'}`,
-        });
+      // Use the backend's role-aware message directly; extract which role to sign in as
+      if (/already registered/i.test(msg)) {
+        const asProvider = /job provider/i.test(msg);
+        const asSeeker = /job seeker/i.test(msg);
+        // Different-role conflict: backend says which role the existing account is
+        if (asProvider || asSeeker) {
+          const existingRole = asProvider ? 'job_provider' : 'job_seeker';
+          const existingLabel = asProvider ? 'Job Provider' : 'Job Seeker';
+          setError(`This email is already registered as a ${existingLabel}.`);
+          setSwitchTo({ to: `/login?role=${existingRole}`, label: `Sign in as ${existingLabel}` });
+        } else {
+          // Same-role conflict: no role info in message, send to login with current role
+          setError('This email is already registered.');
+          setSwitchTo({ to: `/login?role=${pendingRole}`, label: `Sign in as ${pendingRole === 'job_provider' ? 'Employer' : 'Job Seeker'}` });
+        }
       } else {
         setError(msg);
       }
